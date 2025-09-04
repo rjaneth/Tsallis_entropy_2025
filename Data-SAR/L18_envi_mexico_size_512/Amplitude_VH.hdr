@@ -1,0 +1,15 @@
+ENVI
+description = {Sentinel-1 EW Level-1 GRD Product - Unit: amplitude}
+samples = 512
+lines = 512
+bands = 1
+header offset = 0
+file type = ENVI Standard
+data type = 4
+interleave = bsq
+byte order = 1
+band names = { Amplitude_VH }
+map info = {Geographic Lat/Lon,257.5,257.5,-105.24324852173552,20.585544048587167,3.5932611364780653E-4,3.5932611364780653E-4,WGS84,units=Degrees}
+coordinate system string = {GEOGCS["WGS84(DD)", DATUM["WGS84", SPHEROID["WGS84", 6378137.0, 298.257223563]], PRIMEM["Greenwich", 0.0], UNIT["degree", 0.017453292519943295], AXIS["Geodetic longitude", EAST], AXIS["Geodetic latitude", NORTH]]}
+data gain values = {1.0}
+data offset values = {0.0}

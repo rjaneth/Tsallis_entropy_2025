@@ -1,0 +1,15 @@
+ENVI
+description = {Intensity from complex data - Unit: intensity}
+samples = 1100
+lines = 1100
+bands = 1
+header offset = 0
+file type = ENVI Standard
+data type = 4
+interleave = bsq
+byte order = 1
+band names = { Intensity_HH }
+map info = {UTM,551.5,551.5,685108.6846844499,5914401.888461174,1.3544137895962394,1.3544137895962394,29,North,World Geodetic System 1984,units=Meters}
+coordinate system string = {PROJCS["UTM Zone 29 / World Geodetic System 1984", GEOGCS["World Geodetic System 1984", DATUM["World Geodetic System 1984", SPHEROID["WGS 84", 6378137.0, 298.257223563, AUTHORITY["EPSG","7030"]], AUTHORITY["EPSG","6326"]], PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], UNIT["degree", 0.017453292519943295], AXIS["Geodetic longitude", EAST], AXIS["Geodetic latitude", NORTH]], PROJECTION["Transverse_Mercator"], PARAMETER["central_meridian", -9.0], PARAMETER["latitude_of_origin", 0.0], PARAMETER["scale_factor", 0.9996], PARAMETER["false_easting", 500000.0], PARAMETER["false_northing", 0.0], UNIT["m", 1.0], AXIS["Easting", EAST], AXIS["Northing", NORTH]]}
+data gain values = {1.0}
+data offset values = {0.0}

@@ -1,0 +1,1410 @@
+---
+title:  Heterogeneity Detection in SAR Imagery using Tsallis Entropy with Adaptive Windowing
+format:
+  ieee-pdf:
+    pdf-engine: pdflatex # xelatex
+    fig-dir: "Figures-R1"
+    keep-tex: true  
+    classoption: lettersize
+    tex-author-no-affiliation: true
+    #conference: true # comment this line to use journal
+    #journaltype: conference # comment this line to use journal
+    fig-cap-location: bottom # to crossref figure
+    link-citations: true
+    colorlinks: true
+    linkcolor: black # equations
+    citecolor: black # cites
+    urlcolor: black
+  #ieee-html: default
+author:
+  - name: Author 1
+    email: janeth.alpala@ufpe.br
+    orcid: 0000-0002-0265-6236
+  - name: Author 2
+    email: email@
+    orcid: 0000-0000
+  - name: Author 3
+    affiliations:
+      - name: Universidade Federal de Pernambuco
+        department: Departamento de Estatística
+        city: Recife
+        country: Brazil
+        postal-code: 50670-901
+    email: abraao@de.ufpe.br
+    orcid: 0000-0003-2673-219X
+  - name: Author 4
+    affiliations:
+      - name: Victoria University of Wellington
+        department: School of Mathematics and Statistics
+        city: Wellington
+        country: New Zealand
+        postal-code: 6140
+    orcid: 0000-0002-8002-5341
+    email: alejandro.frery@vuw.ac.nz
+    #membership: Fellow, IEEE
+    attributes:
+      corresponding: true
+    note: |
+      Author 1 is with the Departamento de Estatística, Universidade Federal de Pernambuco, Recife, 50670-901 PE, Brazil (e-mails: janeth.alpala@ufpe.br).
+
+      Author 2 is with the School of Mathematics and Statistics, Victoria University of Wellington, Wellington, 6140, New Zealand (e-mail: alejandro.frery@vuw.ac.nz). \emph{Corresponding author: Alejandro C. Frery.}
+
+      This research, including its outputs, e.g., this manuscript, was executed in Quarto and is fully reproducible. We used RStudio version 2024.12.1+563, and R version 4.4.2. Data and code are available at: <https://github.com/rjaneth/renyi-entropy>
+    # bio: |
+    #   Use `IEEEbiographynophoto` and the author name
+    #   as the argument followed by the biography text.
+    # note: "Template created June 23, 2023; revised `r format(Sys.Date(),format='%B %d, %Y')`."
+abstract: |
+  Detecting heterogeneity in synthetic aperture radar (SAR) imagery is essential for reliable interpretation in remote sensing applications. 
+  We propose a statistical test based on a non-parametric estimator of Tsallis entropy, a non-additive generalization of Shannon’s formulation that provides enhanced sensitivity to heavy-tailed data. 
+  To improve accuracy with small samples, the estimator is refined through a bootstrap correction. 
+   In addition, we integrate the test within an adaptive windowing strategy that adjusts window size locally: larger in homogeneous regions to stabilize estimation, and smaller in heterogeneous areas to preserve structural details. 
+  This combination yields an unsupervised and interpretable procedure that produces $p$-value maps highlighting heterogeneous areas. 
+  Experimental results with both simulated and real SAR images demonstrate the robustness of the method in detecting texture variability and distinguishing between homogeneous and heterogeneous regions.
+
+keywords: [Tsallis entropy, Gamma distribution, heterogeneity, SAR, hypothesis tests, bootstrap]
+ 
+#funding: 
+ # statement: "The `quarto-ieee` "
+pageheader:
+  left: IEEE Geoscience and Remote Sensing Letters, Month Year
+  right: #'D. Folio:  A Sample Article Using quarto-ieee'
+  
+header-includes:
+   #- \usepackage[english]{babel}
+   - \usepackage{bm,bbm}
+   - \usepackage{mathrsfs}
+   - \usepackage{nccmath}
+   - \usepackage{amssymb}
+   - \usepackage{mathtools}
+   - \usepackage{siunitx}
+   - \usepackage{graphicx}
+   - \usepackage{url}
+   - \usepackage[T1]{fontenc}
+   - \usepackage{booktabs}
+   - \usepackage{color}
+   - \usepackage{hyperref}
+   #- \hypersetup{draft} #Desactiva enlaces y referencias cruzadas
+   - \usepackage{float} # position figures
+   - \usepackage{array}
+   - \usepackage{multirow}
+   - \usepackage{wrapfig}
+   - \usepackage{colortbl}
+   - \usepackage{pdflscape}
+   - \usepackage{xcolor}
+   - \usepackage{tikz}
+   - \usetikzlibrary{shapes, arrows.meta, positioning}
+#bibliography: references.bib
+bibliography: references.bib
+
+# execute:
+#   echo: false
+#   eval: true
+
+---
+```{r setup, include=FALSE}
+
+#knitr::opts_chunk$set(echo = FALSE, cache = TRUE)
+knitr::opts_chunk$set(
+  echo = FALSE,
+  cache = TRUE,
+  fig.path = "Figures/"
+) # unique path to save all code-generated and external figures
+
+# Configurar CRAN
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+
+# install and load packages only if they are missing
+install_and_load <- function(packages) {
+  missing_packages <- packages[!(packages %in% installed.packages()[, "Package"])]
+  if (length(missing_packages)) {
+    install.packages(missing_packages, dependencies = TRUE)
+  }
+  invisible(lapply(packages, library, character.only = TRUE))
+}
+
+#  packages
+required_packages <- c(
+ "ggplot2", "reshape2", "knitr", "pandoc", "gridExtra", 
+  "gtools", "stats4", "rmutil", "scales", "tidyr", "invgamma", 
+  "tidyverse", "RColorBrewer", "ggsci", "carData", "ggpubr",  "patchwork", "dplyr", 
+  "kableExtra", "ggthemes", "latex2exp", "e1071", "viridis", "nortest", "bookdown","terra", "sf", "pROC", "purrr"
+)
+
+# Install and load only missing packages
+install_and_load(required_packages)
+
+
+theme_set(theme_minimal() +
+            theme(text = element_text(family = "serif"),
+                  legend.position = "bottom"))
+
+
+
+# External functions
+source("./Code/gamma_sar_sample.R")
+source("./Code/gi0_sample.R")
+source("./Code/al_omari_1_estimator.R")
+source("./Code/bootstrap_al_omari_1_estimator.R")
+source("./Code/renyi_entropy_estimator_v1.R")
+source("./Code/bootstrap_renyi_entropy_estimator_v1.R")
+source("./Code/entropy_renyi_gamma_sar.R")
+source("./Code/functions_sample_bias_mse.R")
+source("./Code/functions_sample_bias_mse_1.R")
+#source("./Code/read_ENVI_images.R")
+
+```
+\renewcommand{\tablename}{TABLE}
+# Introduction
+[S]{.IEEEPARstart}[ynthetic]{}
+ Aperture Radar  (SAR) technology has become a key tool in remote sensing, offering high-resolution imaging capabilities independent of solar illumination and weather conditions, which enables continuous and reliable Earth observation&nbsp;[@Mondini2021; @Zeng2020]. SAR images are widely applied in environmental monitoring, disaster assessment, agriculture, urban planning, and maritime surveillance, among other fields&nbsp;[@Akbarizadeh2012; @Moreira2013; @Mu2019; @Yu2023]. However, the effective use of SAR data is hindered by speckle noise, a granular interference inherent to coherent imaging systems&nbsp;[@Argenti2013; @Choi2019]. Speckle appears as multiplicative, non-Gaussian noise, making statistical modeling and image interpretation particularly challenging&nbsp;[@Baraha2023].
+
+Among the statistical models used for SAR intensities, the $\mathcal{G}_I^0$ distribution is widely recognized for its ability to capture different levels of scene heterogeneity. It generalizes the Gamma distribution, which represents fully developed speckle in homogeneous regions&nbsp;[@Frery1997; @Ferreira2020]. While these models are effective, parameter estimation becomes unstable when applied to small local windows, which are often required to preserve spatial resolution. This limitation motivates alternative methodologies that avoid heavy reliance on parametric estimation.
+
+Entropy has long been used as a measure of uncertainty in random phenomena, with Shannon’s entropy&nbsp;[@Shannon1948] being the most classical form. Beyond this, Tsallis entropy&nbsp;[@Tsallis1988] offers a non-additive generalization that introduces a parameter $\lambda$, allowing greater flexibility in capturing deviations from homogeneity and better sensitivity to heavy-tailed data. This makes it especially appealing for SAR analysis, where both homogeneous and highly heterogeneous areas coexist. Recent studies have shown the value of entropy-based methods in tasks such as edge detection, segmentation, and despeckling&nbsp;[@Nascimento2014; @Nobre2016; @Chan2022], motivating their extension to hypothesis testing in SAR imagery.
+
+In this work, we propose a statistical test based on a nonparametric estimator of Tsallis entropy to distinguish between homogeneous and heterogeneous regions in SAR data. The test compares the estimated Tsallis entropy with its theoretical value under the Gamma model assumption. To improve performance in practice, we incorporate a bootstrap procedure that reduces bias in small samples. In addition, we embed the test within an adaptive windowing framework, inspired by the method of Park et al.&nbsp;[@Park1999]. Instead of relying on fixed sliding windows (e.g., $7 \times 7$), the adaptive procedure adjusts the window size locally: it enlarges in homogeneous regions to improve statistical stability, and shrinks in heterogeneous regions to avoid mixing different structures and to preserve local details.
+
+The proposed method is unsupervised, does not require training data, and produces interpretable $p$-value maps, making it suitable for scenarios where ground-truth information is scarce or unavailable.  
+
+The remainder of this paper is organized as follows. Section&nbsp;\ref{sec:pre} reviews the statistical models for SAR data and introduces Tsallis entropy. Section&nbsp;\ref{sec:met} describes the proposed test and the adaptive windowing strategy. Section&nbsp;\ref{sec:app} reports experiments with simulated and real SAR images. Section&nbsp;\ref{sec:conclusion} concludes the paper.
+
+
+# PRELIMINARIES {#sec:pre} 
+
+## Statistical Modeling of Intensity SAR Data
+
+Statistical modeling plays a central role in the analysis of SAR imagery, where speckle is an inherent feature. For SAR intensity data, two main probability models are employed: the SAR-Gamma distribution ($\Gamma_{\text{SAR}}$), a reparameterization of the classical Gamma law suited to fully developed speckle, and the $\mathcal{G}^0_I$ distribution, which can describe varying levels of heterogeneity&nbsp;[@Frery1997].
+
+We denote $Z \sim \Gamma_{\mathrm{SAR}}(L, \mu)$ and $Z \sim \mathcal{G}_I^0(\alpha, \gamma, L)$ when the random variable $Z$ follows the respective distributions, characterized by the following probability density functions (pdfs):
+\begin{equation}
+	f_{\Gamma_{\text{SAR}}}\bigl(z;L, \mu \bigr) 
+    = \frac{L^L}{\Gamma(L)\,\mu^L} z^{L-1} 
+    \exp \biggl(-\frac{Lz}{\mu}\biggr)
+    \mathbbm 1_{\mathbbm R_+}(z) \label{E:gamma1}
+\end{equation}
+and
+\begin{align}
+ f_{\mathcal{G}^0_I}\bigl(z;  \alpha,\gamma, L \bigr) &=\frac{L^L\Gamma(L-\alpha)}{\gamma^{\alpha}\Gamma(-\alpha)\Gamma(L)}\frac{z^{L-1}}{(\gamma+Lz)^{L-\alpha}} \mathbbm{1}_{\mathbb{R}_+}(z), \label{E:gi01}
+\end{align}
+where $\mu > 0$ is the mean intensity, $\gamma > 0$ is a scale parameter, $\alpha < 0$ controls the degree of texture (roughness), $L \geq 1$ is the number of looks (either nominal or estimated, thus not restricted to integer values), $\Gamma(\cdot)$ is
+the gamma function, 
+and $\mathbbm 1_{A}(z)$ is the indicator function
+of the set $A$.
+
+The $r$th order moments of the $\mathcal{G}_I^0$ model are
+\begin{equation}
+E\big(Z^r\big)  = \left(\frac{\gamma}{L}\right)^r\frac{\Gamma(-\alpha-r)}{\Gamma(-\alpha)}\frac{\Gamma(L+r)}{\Gamma(L)}, 
+    \label{E:rmom}
+\end{equation}
+provided that $\alpha <-r$, and infinite otherwise.
+Therefore, assuming $\alpha<-1$, its expected value is
+\begin{equation}
+    \mu=\left(\frac{\gamma}{L}\right)\frac{\Gamma(-\alpha-1)}{\Gamma(-\alpha)}\frac{\Gamma(L+1)}{\Gamma(L)}=-\frac{\gamma}{\alpha+1}.
+    \label{E:mean1}
+\end{equation} 
+
+Although the $\mathcal{G}_I^0$ distribution is defined by the parameters $\alpha$ and $\gamma$, in the SAR literature&nbsp;[@Nascimento2010] the texture $\alpha$ and the mean $\mu$ are usually used. Reparameterizing&nbsp;\eqref{E:gi01} with $\mu$, and denoting this model as $Z \sim \mathcal{G}_I^0(\alpha, \mu, L)$ we obtain:
+\begin{multline}
+    f_{\mathcal{G}^0_I}\bigl(z; \mu, \alpha, L \bigr) 
+    = \frac{L^L\,\Gamma(L-\alpha)}
+    {\bigl[-\mu(\alpha+1)\bigr]^{\alpha} \Gamma(-\alpha)\,\Gamma(L)}\\
+    \frac{z^{L-1}}
+    {\bigl[-\mu(\alpha+1)+Lz\bigr]^{L-\alpha}}
+    \mathbbm 1_{\mathbbm R_+}(z). \label{E:gi02}
+\end{multline}
+The $\Gamma_{\mathrm{SAR}}$ model is a particular case of the $\mathcal{G}^0_I$ distribution, as demonstrated in&nbsp;[@Frery1997]. Specifically, for a given $\mu$ fixed,
+$$
+f_{\mathcal{G}^0_I}\big(z; \mu, \alpha, L\big)
+\longrightarrow 
+f_{\Gamma_{\text{SAR}}}(z;L, \mu) \quad \text{ when } \alpha\to-\infty.
+$$
+
+
+## Tsallis Entropy
+Originally proposed by Havrda and Charvát&nbsp;[-@Havrda1967] in the context of information theory, and later extended by Tsallis&nbsp;[-@Tsallis1988] to emphasize its non-extensive features in statistical physics.
+
+For a continuous random variable $Z$ with pdf $f(z)$, the Tsallis entropy of order $\lambda \in \mathbbm R_+ \setminus \{1\}$ is defined as:
+\begin{equation}
+\label{eq:tsallis}
+T_\lambda(Z) = \frac{1}{\lambda - 1} \Bigl[ 1 - \int_{\mathcal{B}} \bigl(f(z)\bigr)^{\lambda} \,\mathrm{d}z \Bigr],
+\end{equation}
+where $\mathcal{B} \subseteq \mathbb{R}$ denotes the support of $f(z)$.  
+In the limit $\lambda \to 1$, we obtain $T_\lambda(Z) \to H(Z)$, making Tsallis a one-parameter generalization of Shannon entropy.
+
+Using&nbsp;\eqref{eq:tsallis}, we derive closed-form expressions for the Tsallis entropy of the $\Gamma_{\mathrm{SAR}}$ and the $\mathcal{G}^0_I$ distributions:
+
+\begin{multline}
+\label{eq:gammasar-Tsallis}
+T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(L,\mu)\bigr)=
+\frac{1}{\lambda-1}\Bigl\{1-
+\exp\bigl[
+(1-\lambda)\ln\mu\\
++(\lambda-1)\ln L
++\ln\Gamma\bigl(\lambda(L-1)+1\bigr) \\
+-\lambda\ln\Gamma(L)
+-(\lambda(L-1)+1)\ln\lambda
+\bigr]\Bigr\} 
+\end{multline}
+and
+\begin{multline}
+\label{eq:GI0-Tsallis}
+  T_\lambda\bigl(\mathcal{G}^0_I(\mu,\alpha,L)\bigr) = T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(L,\mu)\bigr)\;+\;\\
+  \frac{1}{\lambda-1}\,
+  \exp\Bigl[
+  (1-\lambda)\ln\mu
+  +(\lambda-1)\ln L\\
+  +\ln\Gamma\bigl(\lambda(L-1)+1\bigr)
+  -\lambda\ln\Gamma(L)
+  \Bigr] \\
+  {}\Bigl\{1-
+  \exp\bigl[
+  (1-\lambda)\ln(-\alpha-1)
+  +\lambda\ln\Gamma(L-\alpha)\\
+  -\lambda\ln\Gamma(-\alpha) 
+  +\ln\Gamma\bigl(\lambda(1-\alpha)-1\bigr)\\
+  -\ln\Gamma\bigl(\lambda(L-\alpha)\bigr)
+  \bigr]\Bigr\}.
+\end{multline}
+Equation&nbsp;\eqref{eq:GI0-Tsallis} can be interpreted as:
+\begin{equation*}
+  T_\lambda(\mathcal{G}^0_I)
+  =
+  \underbrace{T_\lambda \bigl(\Gamma_{\mathrm{SAR}}\bigr)}_{\text{baseline entropy}}
+  \hspace{1.8em} + \hspace{-1.8em}
+  \underbrace{\Delta_\alpha}_{\text{excess entropy caused by texture}}\hspace{-4.0em},
+\end{equation*}
+the extra term $\Delta_\alpha$ captures how much entropy increases due to texture, caused by the roughness parameter $\alpha$. When $\alpha \to -\infty$ (fully developed speckle), the excess term tends to zero, and Equation \eqref{eq:GI0-Tsallis} reduces to the homogeneous case in \eqref{eq:gammasar-Tsallis}, i.e.,
+$$
+\lim_{\alpha \to -\infty} T_{\lambda}\bigl(\mathcal{G}^0_I(\mu, \alpha, L)\bigr) =  T_{\lambda}\bigl(\Gamma_{\mathrm{SAR}}(L, \mu)\bigr).
+$$ 
+
+@fig-tsallis-convergence_L18 illustrates the convergence of the Tsallis entropy for different values of $\alpha$ and $L \in \{5,18\}$. In every case, the dashed curves of $T_\lambda(\mathcal{G}^0_I)$ approach the solid black curve of $T_\lambda(\Gamma_{\mathrm{SAR}})$, confirming the limiting behavior.
+
+
+```{r fig-tsallis-convergence_L18, echo=FALSE, message=FALSE, warning=FALSE, fig.pos="H",  fig.cap="Tsallis entropy $T_{\\lambda}(\\mathcal{G}^0_I)$ converges to $T_{\\lambda}(\\Gamma_{\\mathrm{SAR}})$ as $\\alpha$ decreases.", fig.width=8.5, fig.height=5}
+# fig.fullwidth = TRUE, out.width="95%"
+
+
+
+#  (Gamma SAR - GI0)
+tsallis_gammasar_log <- function(mu, L, lambda) {
+  (1 - exp((1 - lambda)*log(mu) +
+             (lambda - 1)*log(L) +
+             lgamma(lambda*(L - 1) + 1) -
+             lambda*lgamma(L) -
+             (lambda*(L - 1) + 1)*log(lambda))) /
+    (lambda - 1)
+}
+
+tsallis_gi0 <- function(alpha, mu, L, lambda) {
+  (1 - exp((1 - lambda)*log(mu) +
+             (lambda - 1)*log(L) +
+             (1 - lambda)*log(-alpha - 1) +
+             lgamma(lambda*(L - 1) + 1) -
+             lambda*lgamma(L) +
+             lambda*(lgamma(L - alpha) - lgamma(-alpha)) +
+             lgamma(lambda*(1 - alpha) - 1) -
+             lgamma(lambda*(L - alpha)))) / (lambda - 1)
+}
+
+plot_tsallis <- function(L, lambda) {
+  mu <- seq(0.1, 10, length.out = 500)
+  alphas <- c(-2, -6, -20, -1000)
+  alpha_labels <- c(expression(alpha == -2), expression(alpha == -6), expression(alpha == -20), expression(alpha == -1000))
+
+  muEntropy <- data.frame()
+  for (alpha in alphas) {
+    entropies_GI0 <- tsallis_gi0(alpha, mu, L, lambda)
+    muEntropy <- rbind(muEntropy, data.frame(mu = mu, Entropy = entropies_GI0, alpha = as.factor(alpha)))
+  }
+
+  muEntropy.molten <- melt(muEntropy, id.vars = c("mu", "alpha"))
+  entropies_gamma <- tsallis_gammasar_log(mu, L, lambda)
+  Entropy_gamma <- data.frame(mu, Entropy_Gamma = entropies_gamma)
+
+  ggplot() +
+    geom_line(data = Entropy_gamma, aes(x = mu, y = Entropy_Gamma), color = "black", linewidth = 1.8) +
+    geom_line(data = muEntropy.molten, aes(x = mu, y = value, color = alpha), linetype = "longdash", linewidth = 1.5, alpha=.7) +
+    scale_color_manual(values = pal_lancet()(4), labels = alpha_labels) +
+    labs(color = "Roughness", x = expression(mu), y = "Tsallis Entropy") +
+    annotate("text",
+             x = max(mu) + 0.5,
+             y = max(Entropy_gamma$Entropy_Gamma) - 0.4,
+             label = TeX("${italic(T)}_{\\lambda}(\\Gamma_{\\tiny{SAR}})$"),
+             hjust = 1, vjust = 1, size = 4.1) +
+    theme_minimal(base_family = "serif") +
+    theme(
+      legend.position = "bottom",
+      plot.title = element_text(hjust = 0.5, size = 14),
+      axis.text = element_text(size = 14),
+        axis.title = element_text(size = 14),
+      legend.text = element_text(size = 14),
+            legend.title = element_text(size = 14),
+      panel.grid.minor = element_blank()
+    ) +
+    coord_cartesian(xlim = c(0, 10), ylim = c(0, 5)) +
+    ggtitle(bquote(L == .(L) ~ ", " ~ lambda == .(lambda)))
+}
+
+p1 <- plot_tsallis(5, 0.85)
+p2 <- plot_tsallis(18, 0.85)
+(p1 | p2) + plot_layout(guides = "collect") & theme(legend.position = "bottom")
+```
+
+For the highly heterogeneous case ($\alpha=-2$), entropy values are very similar for $L=5$ and $L=18$, since texture dominates over speckle. In contrast, in the homogeneous limit ($\alpha \to -\infty$), texture effects vanish and entropy is mainly determined by speckle. With a low number of looks, speckle is strong and increases the uncertainty, which raises the entropy values. However, the curves for different $\alpha$ values appear more concentrated, since the contribution of texture to entropy is masked by the dominant speckle. As the number of looks increases, speckle is progressively reduced and entropy decreases. This reduction of speckle makes the excess entropy $\Delta_\alpha$ more evident, resulting in more separated curves across $\alpha$.
+
+
+## Non-parametric Estimation of Tsallis Entropy
+\label{subsec:tsallis-np}
+
+Following the spacing-based approach of Vasicek&nbsp;[-@vasicek1976test] and Ebrahimi et al.&nbsp;[-@Ebrahimi1994] for Shannon entropy, and the methodology for Rényi entropy proposed by Al-Labadi et al.&nbsp;[-@AlLabadi2024], we derive a nonparametric estimator for Tsallis entropy.
+
+Let $Q(p)=F^{-1}(p)$ denote the quantile function for $p\in(0,1)$. From \eqref{eq:tsallis}, the inner integral can be expressed as an expectation under $Z\sim f$:
+$$
+\int_{\mathcal B} f(z)^\lambda\,\mathrm{d}z
+=\int_{\mathcal B} f(z)^{\lambda-1} f(z)\,\mathrm{d}z
+=\mathbb{E}\!\left[f(Z)^{\lambda-1}\right].
+$$
+Using the change of variables $p=F(z)$ (hence $\mathrm{d}p=f(z)\,\mathrm{d}z$) and the identity $f(Q(p))=1/Q'(p)$, we obtain
+$$
+  \mathbb{E}\!\left[f(Z)^{\lambda-1}\right]
+  = \int_{0}^{1} \bigl(Q'(p)\bigr)^{1-\lambda}\,\mathrm{d}p,
+$$
+which yields the representation
+\begin{equation}
+  T_\lambda(Z)
+  =\frac{1}{\lambda-1}
+     \left\{
+       1-\int_{0}^{1}\bigl(Q'(p)\bigr)^{1-\lambda}\,\mathrm{d}p
+     \right\}.
+  \label{eq:Tsallis-quantile}
+\end{equation}
+Let $\bm{Z}=(Z_1,\dots,Z_n)$ be an i.i.d.\ sample from $F$, with order statistics $Z_{(1)}\le\cdots\le Z_{(n)}$. For a window size $m\in\{1,\dots,\lfloor (n-1)/2\rfloor\}$, define the $m$-spacing
+$$
+D_{i,m}:=Z_{(i+m)}-Z_{(i-m)},\qquad i=1,\dots,n,
+$$
+with boundary conventions $Z_{(i-m)}:=Z_{(1)}$ if $i\le m$ and $Z_{(i+m)}:=Z_{(n)}$ if $i\ge n-m$. The $m$-spacing density estimator at $Z_{(i)}$ is
+\begin{equation}
+\widehat f_n\bigl(Z_{(i)}\bigr)
+=\frac{c_i\, (m/n)}{Z_{(i+m)}-Z_{(i-m)}}\,,\qquad i=1,\dots,n,
+\label{eq:density-spacing}
+\end{equation}
+where
+$$
+c_i=
+\begin{cases}
+\dfrac{m+i-1}{m}, & 1\le i\le m,\\[6pt]
+2, & m+1\le i\le n-m,\\[6pt]
+\dfrac{n+m-i}{m}, & n-m+1\le i\le n.
+\end{cases}
+$$
+By construction, $\widehat f_n(Z_{(i)})\approx f(Z_{(i)})$. Since $f(Q(p))\,Q'(p)=1$, taking the reciprocal yields an estimator of the quantile derivative:
+\begin{equation}
+\widehat{Q'}(p_i)
+\;=\; \frac{1}{\widehat f_n(Z_{(i)})}
+\;=\; \frac{D_{i,m}}{c_i\, (m/n)}\,,
+\qquad p_i \in (0,1).
+\label{eq:Qprime-hat}
+\end{equation}
+Approximating the integral in \eqref{eq:Tsallis-quantile} by a Riemann sum over the grid $p_i=i/n$ and inserting $\widehat{Q'}(p_i)$ from \eqref{eq:Qprime-hat} yields the nonparametric Tsallis entropy estimator:
+\begin{align}
+  \widehat T_{\lambda}(\bm{Z})
+  &=\frac{1}{\lambda-1}\left\{
+1-\frac{1}{n}\sum_{i=1}^{n}\bigl[\widehat{Q'}(p_i)\bigr]^{\,1-\lambda}
+\right\}, \nonumber\\[4pt]
+  &= \frac{1}{\lambda-1}
+  \left\{
+    1-\frac{1}{n}
+       \sum_{i=1}^{n}
+       \left(
+         \frac{Z_{(i+m)}-Z_{(i-m)}}{c_i\, (m/n)}
+       \right)^{1-\lambda}
+  \right\}.
+  \label{eq:Tsallis-spacing-estimator}
+\end{align}
+As $\lambda\to 1$, $T_\lambda$ converges to Shannon entropy and $\widehat T_{\lambda}$ recovers the Vasicek estimator&nbsp;[-@vasicek1976test].
+This estimator is asymptotically consistent, i.e., it converges in
+probability to the true value when $m,n\rightarrow\infty$ and
+$m/n\rightarrow0$. 
+We use the heuristic spacing $m=\left[\sqrt{n}+0.5\right]$.
+
+
+
+# PROPOSED METHODOLOGY {#sec:met}
+
+## Finding an optimal value of $\lambda$
+
+We aim to determine the optimal order $\lambda$ for the Tsallis entropy estimator using simulated samples of size $n = 49$ from  $Z\sim \Gamma_{\text{SAR}}(5,1)$.
+We computed the bias and the mean squared error (MSE) for varying $\lambda$ via a Monte Carlo experiment.
+
+As shown in Fig.&nbsp;\ref{fig-optimal_order-tsallis}, for $L>1$ we found that $\lambda=0.85$ yields the lowest MSE while maintaining a low bias, thus providing a favorable trade-off between bias and variance.
+
+```{r fig-optimal_order-tsallis,  echo=FALSE, message=FALSE, warning=FALSE,  out.width="95%",  fig.pos="H", fig.cap="Bias and MSE as a function of $\\lambda$, for the Tsallis entropy estimator, with $n = 49$, $L = 5$.", fig.width=5, fig.height=3}
+#fig.show="hide", 
+# eval=FALSE,  # 
+
+data <- data.frame(
+  Lambda = c(0.8,  0.85, 0.9, 0.95, 1.1, 1.5),
+  Bias = c(-0.094,  0.00047, 0.009, 0.04,0.3, 0.6),
+  MSE = c(0.0215,  0.022, 0.023, 0.026, 0.029, 0.031)
+)
+
+
+data <- data[order(data$Lambda), ]
+
+bias_plot <- ggplot(data, aes(x = Lambda, y = Bias)) +
+  geom_line(color = "#8E44AD", linewidth = 1.0) +  
+  geom_point(color = "#8E44AD", size = 3) +  
+  geom_hline(yintercept = 0, color = "gray50", linetype = "dashed", linewidth = 0.5) +
+  #annotate("text", x = max(data$Lambda) - 0.1, y = max(data$Bias), 
+         #  label = "Bias", color = "#00AFBB", fontface = "italic", hjust = 1.0) +
+  #scale_x_continuous(breaks = data$Lambda, labels = data$Lambda) +
+  scale_x_continuous(breaks = data$Lambda, labels = data$Lambda, minor_breaks = NULL)+
+  scale_y_continuous(minor_breaks = NULL)+
+  labs(x = expression(lambda), y = "Bias") +
+  theme_minimal() +
+  theme(text = element_text(family = "serif"),
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 12))
+
+
+mse_plot <- ggplot(data, aes(x = Lambda, y = MSE)) +
+  geom_line(color = "#27AE60", linewidth = 1.0) +  
+  geom_point(color = "#27AE60", size = 3) +
+  #geom_hline(yintercept = 0, color = "gray50", linetype = "dashed", linewidth = 0.5) +
+  #annotate("text", x = max(data$Lambda) - 0.1, y = max(data$MSE), 
+           #label = "MSE", color = "#E69F00", fontface = "italic", hjust = 1.0) +
+   #scale_x_continuous(breaks = data$Lambda, labels = data$Lambda) + 
+  scale_x_continuous(breaks = data$Lambda, labels = data$Lambda, minor_breaks = NULL)+
+  scale_y_continuous(minor_breaks = NULL)+
+  labs(x = expression(lambda), y = "MSE") +
+  theme_minimal() +
+  theme(text = element_text(family = "serif"),
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 12))
+
+
+grid.arrange(bias_plot, mse_plot, nrow = 2)
+
+```
+
+## Bootstrap Correction for Entropy Estimator
+
+Following Refs.&nbsp;[@Frery2024;@Alpala2024;@Alpala2025], we refine the non-parametric entropy estimator $\widehat{T}_{\lambda}$ in&nbsp;\eqref{eq:Tsallis-spacing-estimator} with bootstrap, obtaining $\widetilde{T}_{\lambda}$:
+\begin{equation*}
+\widetilde{T}_{\lambda} = 2\widehat{T}_{\lambda}(\bm{Z}) - \frac{1}{B} \sum_{b=1}^{B} \widehat{T}_{\lambda}(\bm{Z}^{(b)}),
+\end{equation*}
+where $B$ is the number of bootstrap replications, and $\bm{Z}^{(b)}$ denotes  the $b$-th resampled dataset obtained by drawing $n$ observations with replacement from $\bm{Z}$.
+
+A Monte Carlo study with $1000$ replications for each sample size $n \in \{9, 25, 49, 81, 121\}$ from the $\Gamma_{\text{SAR}}$ (5,1) confirms that for $\lambda=0.85$, the bootstrap-corrected estimator $\widetilde{T}_{\lambda}$ ($B=200$) reduces both bias and MSE compared to the original $\widehat{T}_{\lambda}$, with significant improvements for small sample sizes, as shown in Fig.&nbsp;\ref{fig-bias_mse_Tsallis}.
+
+```{r Simulated_data_bias_tt, echo=FALSE, message=FALSE }
+set.seed(1234567890, kind = "Mersenne-Twister")
+#cache = TRUE, autodep = TRUE
+
+file_name_tsallis <- "./Data/results_tsallis_jj.Rdata"
+
+if (file.exists(file_name_tsallis)) {
+
+  load(file_name_tsallis)
+  message("Loaded existing results from results_tsallis_jj.Rdata")
+
+} else {
+  # Parámetros
+  sample_sizes <- c(9, 25, 49, 81, 121)
+  R <- 50
+  B <- 200
+  mu <- 1
+  L <- 5
+  lambda_values <- c(0.85)
+
+  estimators <- list(
+    "Tsallis Estimator" = tsallis_estimator_optimized,
+    "Tsallis Estimator Bootstrap" = bootstrap_tsallis_entropy_optimized
+  )
+
+  results_tsallis <- calculate_bias_mse_tsallis(sample_sizes, R, B, mu, L, lambda_values, estimators)
+
+  save(results_tsallis, file = file_name_tsallis)
+  message("Simulations for Tsallis completed and results saved.")
+}
+
+```
+
+
+```{r}
+generate_plot_tsallisn <- function(results_df, lambda_values, selected_estimators, ncol = 1, nrow = 6) {
+  library(ggplot2)
+  library(patchwork)
+  
+  plot_list <- list()
+  
+  for (lambda_val in lambda_values) {
+    df <- results_df[results_df$Lambda == lambda_val, ]
+    df_filtered <- df[df$Estimator %in% names(selected_estimators), ]
+    df_filtered$Estimator <- selected_estimators[df_filtered$Estimator]
+    df_filtered$Estimator <- as.character(df_filtered$Estimator)
+    
+    plot_bias <- ggplot(df_filtered, aes(x = n, y = Bias, color = Estimator)) +
+      geom_hline(yintercept = 0, color = "gray50", linetype = "dashed", linewidth = 0.5) +
+      geom_point(size = 3.2) +
+      geom_line(linetype = "solid", linewidth = 1.5, alpha = 0.8) +
+      labs(y = "Bias", x = expression(italic(n))) +
+      scale_x_continuous(breaks = unique(df_filtered$n), minor_breaks = NULL) +
+      scale_y_continuous(minor_breaks = NULL) +
+      scale_color_manual(values = c("#7570b3", "#e7298a"), labels = TeX(df_filtered$Estimator)) +
+      ggtitle(bquote(lambda == .(lambda_val))) +
+      theme_minimal() +
+      theme(text = element_text(family = "serif"),
+            axis.text = element_text(size = 11),
+            axis.title = element_text(size = 12),
+            plot.title = element_text(size = 11, hjust = 0),
+            legend.position = "bottom",
+            legend.box = "horizontal",
+            legend.text = element_text(size = 12),
+            legend.title = element_text(size = 12)) +
+      guides(color = guide_legend(nrow = 1))
+    
+    plot_mse <- ggplot(df_filtered, aes(x = n, y = MSE, color = Estimator)) +
+      geom_hline(yintercept = 0, color = "gray50", linetype = "dashed", linewidth = 0.5) +
+      geom_point(size = 3.2) +
+      geom_line(linetype = "solid", linewidth = 1.5, alpha = 0.8) +
+      labs(y = "MSE", x = expression(italic(n))) +
+      scale_x_continuous(breaks = unique(df_filtered$n), minor_breaks = NULL) +
+      scale_y_continuous(minor_breaks = NULL) +
+      scale_color_manual(values = c("#7570b3", "#e7298a"), labels = TeX(df_filtered$Estimator)) +
+      theme_minimal() +
+      theme(text = element_text(family = "serif"),
+            axis.text = element_text(size = 11),
+            axis.title = element_text(size = 12),
+            legend.position = "bottom",
+            legend.box = "horizontal",
+            legend.text = element_text(size = 12),
+            legend.title = element_text(size = 12)) +
+      guides(color = guide_legend(nrow = 1))
+    
+    combined_plot <- plot_bias / plot_mse
+    plot_list[[as.character(lambda_val)]] <- combined_plot
+  }
+  
+  combined_plot_all <- wrap_plots(plot_list, ncol = ncol, nrow = nrow) +
+    plot_layout(guides = "collect")
+  
+  return(combined_plot_all)
+}
+```
+
+```{r fig-bias_mse_Tsallis,  echo=FALSE, message=FALSE, warning=FALSE,  out.width="90%",  fig.pos="H",  fig.cap="Bias and MSE of the Tsallis entropy estimators for $\\Gamma_{\\text{SAR}}$, with $L=5$", fig.width=5.5, fig.height=4}
+
+
+theme_set(theme_minimal() +
+            theme(text = element_text(family = "serif"),
+                  legend.position = "bottom"))
+
+# Cargar resultados simulados
+load("./Data/results_tsallis_jj.Rdata")
+
+lambda_values <- 0.85
+estimators_to_plot_tsallis <- c("Tsallis Estimator", "Tsallis Estimator Bootstrap")
+
+# Etiquetas LaTeX para leyenda
+latex_estimator_names_tsallis <- c(
+  "Tsallis Estimator" = expression("$\\widehat{italic(T)}_{\\lambda}$"),
+  "Tsallis Estimator Bootstrap" = expression("$\\widetilde{italic(T)}_{\\lambda}$")
+)
+
+selected_estimators_latex_tsallis <- latex_estimator_names_tsallis[estimators_to_plot_tsallis]
+
+# Graficar
+combined_plot_tsallis <- generate_plot_tsallisn(
+  results_tsallis,
+  lambda_values,
+  selected_estimators_latex_tsallis,
+  ncol = 1,
+  nrow = 1
+)
+
+print(combined_plot_tsallis)
+
+
+
+```
+
+
+From this point forward, all subsequent simulations and comparisons will be based on the improved bootstrap estimator: $\widetilde{T}_{\lambda}$.
+
+
+## Hypothesis Testing 
+
+We test whether the observed data come from a homogeneous ($\Gamma_{\text{SAR}}$) or a heterogeneous ($\mathcal{G}^0_I$) region, as follows:
+\begin{equation}\label{eq:hypothesis_test}
+\begin{cases}
+\mathcal{H}_0: \mathbb{E}[\widetilde{T}_{\lambda}] = T_{\lambda}(\Gamma_{\text{SAR}}) & \text{(Homogeneous region)}, \\[6pt]
+\mathcal{H}_1: \mathbb{E}[\widetilde{T}_{\lambda}] = T_{\lambda}(\mathcal{G}^0_I) & \text{(Heterogeneous region)}.
+\end{cases}
+\end{equation}
+  
+Under $\mathcal{H}_0$, the expected value of the entropy estimator should match the theoretical $T_{\lambda}(\Gamma_{\text{SAR}})$. 
+Significant deviations indicate heterogeneity.
+
+## The Proposed Test
+
+We propose a test statistic that identifies the discrepancy between estimated and theoretical entropy under homogeneity. Since $L\geq1$ is known, we define the test statistic as follows:
+\begin{multline}
+\label{eq-test-tsallis}
+S_{\widetilde{T}_{\lambda}}(\bm{Z}; L) = \widetilde{T}_{\lambda} - \biggl\{ \frac{1}{\lambda - 1} \Bigl[ 1 -
+\exp\Bigl(
+(1 - \lambda)\ln \widehat{\mu}\\
++ (\lambda - 1)\ln L
++ \ln\Gamma\bigl(\lambda(L - 1) + 1\bigr) \\
+- \lambda\ln\Gamma(L)
+- \bigl(\lambda(L - 1) + 1\bigr)\ln \lambda
+\Bigr) \Bigr] \biggr\},
+\end{multline}
+where $\widehat{\mu} = \frac{1}{n} \sum_{i=1}^n Z_i$ is the sample mean.
+
+This statistic can be interpreted as:
+$$
+S_{\widetilde T_\lambda} 
+= 
+\underbrace{\widetilde T_\lambda}_{\text{estimated}} 
+\;-\;
+\underbrace{T_\lambda\bigl(\Gamma_{\mathrm{SAR}}\bigr)}_{\text{theoretical under } H_0}\hspace{-0.5em},
+$$
+the difference between the estimated entropy and the expected value under homogeneity. Values close to zero indicate that the region behaves like fully developed speckle, while large positive values signal excess entropy and, thus, heterogeneity.
+This formulation avoids the need to estimate $\mathcal{G}^0_I$ parameters  such as $\alpha$, offering a simple, interpretable, and statistically grounded test. Moreover, the method remains effective for small samples, aided by the bootstrap bias correction.
+
+
+Fig. \ref{fig-densities-tsallis4} shows the empirical distribution of $S_{\widetilde{T}_{\lambda}}$ under $\mathcal{H}_0$, obtained from $10^4$ Monte Carlo simulations with varying sample sizes ($n \in \{49,81,121\}$), $\lambda = 0.85$, and $L \in \{5,18\}$. The empirical densities are tightly concentrated around zero, confirming that under $\mathcal{H}_0$ the test statistic has mean approximately $0$; at the same time, their moderately heavy tails reveal sensitivity to departures from homogeneity, which is desirable for detecting subtle texture.
+
+
+```{r Simulated_density-tsallis2, echo=FALSE, message=FALSE}
+set.seed(1234567890, kind = "Mersenne-Twister")
+
+R <- 10000
+mu <- 1
+B <- 50
+
+lambda <- 0.9
+
+sample.size <- c(49, 81, 121)
+L_values <- c(5, 18)
+
+all_summary_stats <- list()
+all_TestStatistics <- list()
+
+# 
+for (L in L_values) {
+  
+  
+  file_name <- paste0("./Data/resultsT2_", L, ".Rdata")
+  
+  
+  if (file.exists(file_name)) {
+    load(file_name)
+    message(paste("Loaded existing data for L =", L))
+  } else {
+    
+    TestStatistics1 <- list()  
+    summary_stats <- data.frame(
+      LValue = character(),
+      SampleSize = numeric(),
+      Mean = numeric(),
+      SD = numeric()
+      #Variance = numeric(),
+      #Skewness = numeric(),
+     # Kurtosis = numeric(),
+      #adpvalue = numeric()
+    )  
+  
+    # Para cada tamaño de muestra
+    for (s in sample.size) {
+      TestStat1 <- numeric(R)
+    
+      for (r in 1:R) {
+        z <- gamma_sar_sample(L, mu, s)
+        TestStat1[r]  <- bootstrap_tsallis_entropy_optimized(z, B, lambda) -((1 - exp((1 - lambda)*log(mean(z)) +
+             (lambda - 1)*log(L) +
+             lgamma(lambda*(L - 1) + 1) -
+             lambda*lgamma(L) -
+             (lambda*(L - 1) + 1)*log(lambda))) / (lambda - 1))
+      }
+    
+      TestStatistics1[[as.character(s)]] <- data.frame(
+        "SampleSize" = rep(s, R), 
+        "Test_Statistics" = TestStat1
+      )
+
+      mean_val <- mean(TestStat1)
+      sd_val <- sd(TestStat1)
+      #var_val <- var(TestStat1)
+     # skewness_val <- skewness(TestStat1)
+     # kurtosis_val <- kurtosis(TestStat1)
+     # ad_p_value <- ad.test(TestStatistics1[[as.character(s)]]$Test_Statistics)$p.value
+    
+      summary_stats <- rbind(summary_stats, data.frame(
+        LValue = as.character(L),
+        SampleSize = s,
+        Mean = mean_val,
+        SD = sd_val
+      #  Variance = var_val,
+       # Skewness = skewness_val,
+       # Kurtosis = kurtosis_val,
+       # adpvalue = ad_p_value
+      )) 
+    }
+    
+    all_TestStatistics[[as.character(L)]] <- TestStatistics1
+    all_summary_stats[[as.character(L)]] <- summary_stats
+    
+    
+    save(all_TestStatistics, all_summary_stats, file = file_name)
+    message(paste("Saved new results for L =", L))
+  }
+}
+
+```
+
+```{r fig-densities-tsallis4,  echo=FALSE, message=FALSE, warning=FALSE,  out.width="99%", fig.pos="H",  fig.cap="Empirical densities of $S_{\\widetilde{T}_{\\lambda}}(\\bm{Z}; L)$ under $\\mathcal{H}_0$, with $\\lambda=0.85$.", fig.width=9, fig.height=4.5}
+#fig.show="hide", 
+# eval=FALSE,  #
+
+theme_set(theme_minimal() +
+            theme(text = element_text(family = "serif"),
+                  legend.position = "bottom",
+                  legend.text = element_text(angle = 0, vjust = 0.5)))
+
+x_limits <- c(-0.5, 0.5)  # Límites del eje X
+x_breaks <- seq(-0.4, 0.4, by = 0.2)  # Ticks del eje X
+y_limits <- c(0, 7)       # Límites del eje Y
+
+
+selected_L_values <- c(5, 18)
+
+all_plots <- list()
+
+for (L in selected_L_values) {
+  load(paste0("./Data/resultsT2_", L, ".Rdata"))
+
+  combined_data <- do.call(rbind, all_TestStatistics[[as.character(L)]])
+  combined_data$L <- L
+  
+  
+  combined_data$CurveOrder <- factor(combined_data$SampleSize, levels = rev(sample.size))
+  
+  
+  combined_data$LegendOrder <- factor(combined_data$SampleSize, levels = sample.size)
+  
+    p <- ggplot(combined_data, aes(x = Test_Statistics, col = LegendOrder, linetype = LegendOrder, group = CurveOrder)) +
+  geom_line(stat = "density", linewidth = 1.5) +
+  scale_color_brewer(palette = "Set1", name = "Sample Size") +
+  scale_linetype_manual(values = rep("solid", length(sample.size)), name = "Sample Size") +
+  scale_x_continuous(limits = x_limits, breaks = x_breaks, minor_breaks = NULL) +
+  scale_y_continuous(limits = y_limits, minor_breaks = NULL) +
+  labs(
+      x = expression("Test Statistic" ~ S[widetilde(italic(T))[lambda]](italic(bold(Z))* ";" **phantom(" ")* italic(L))), 
+      y = "Density"
+  ) +
+  ggtitle(bquote(italic(L) == .(L))) +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16, margin = margin(b = 2)),
+    axis.text = element_text(size = 16),     
+    axis.title = element_text(size = 16),    
+    legend.text = element_text(size = 16),   
+    legend.title = element_text(size = 16)
+  )
+
+
+  
+  all_plots[[as.character(L)]] <- p
+}
+
+
+combined_plot <- wrap_plots(all_plots, ncol = 2, nrow = 1) +
+  plot_layout(guides = "collect")
+
+print(combined_plot)
+
+
+```
+Under the asymptotic properties of the entropy estimators [@vasicek1976test;@VanEs1992], for sufficiently large samples, $S_{\widetilde{T}}(\bm{Z};L)$ follows an asymptotic normal distribution:
+$$
+  S_{\widetilde{T}}(\mathbf Z;L)\;
+  \overset{\mathcal{D}}{\underset{n \to \infty}{\longrightarrow}}\;
+  \mathcal N\!\bigl(\mu_S,\sigma_S^{2}\bigr),
+$$
+where $\xrightarrow{\mathcal{D}}$ denotes convergence in distribution.
+
+Here, $\mu_S = \mathbb{E}[S_{\widetilde{T}}(\bm{Z};L)]$ and $\sigma^2_S = \mathrm{Var}[S_{\widetilde{T}}(\bm{Z};L)]$ are the theoretical mean and variance of the test statistic under $\mathcal{H}_0$. This asymptotic normality can be explained by noting that the entropy estimator (and hence $S_{\widetilde{T}}$) can be expressed as a sum or average of numerous observations; therefore, by the Central Limit Theorem and the delta method, its sampling distribution approaches a Gaussian form for large $n$.
+
+In practice, we estimate $\widehat{\mu}_S$ and $\widehat{\sigma}_S$ via Monte Carlo under $\mathcal{H}_0$.
+\begin{equation*}
+\varepsilon = \frac{{S_{\widetilde{T}}(\bm{Z}; L) - \widehat{\mu}_S}}{{\widehat{\sigma}_S}},
+\end{equation*} 
+which is asymptotically standard normal distributed for large $n$. Consequently, two-sided $p$-values are obtained as $2\Phi(-|\varepsilon|)$, where $\Phi(\cdot)$ is the cumulative distribution function of the standard normal distribution.
+
+The practical procedure is as follows: first, compute the test statistic $S_{\widetilde{T}}(\bm{Z}; L)$ for the observed data; then standardize it using the estimated mean and standard deviation $(\widehat{\mu}_S, \widehat{\sigma}_S)$; next, compute the $p$-value as $2\Phi(-|\varepsilon|)$; and finally, make a decision by comparing the $p$-value with the threshold $0.05$, as illustrated in Fig.&nbsp;\ref{fig:entropy-diagram-test}.
+
+```{=latex}
+\begin{figure}[H]
+    \centering
+\begin{tikzpicture}[
+  node distance=1.5cm and 1.5cm,
+  box/.style={
+    rectangle, draw=black, fill=teal!20,
+    minimum width=3.5cm, minimum height=1.2cm,
+    align=center, font=\small, text=black, font=\bfseries
+  },
+  arrow/.style={
+    -{Stealth[length=2mm, width=1.2mm]},
+    semithick
+  }
+]
+  % fila superior
+  \node[box] (raw) {1. Calculate\\test statistic\\ $S(\bm{Z})$};
+  \node[box,right=of raw] (std) {2. Standardize\\test statistic\\ $\varepsilon=(S-\hat\mu_S)/\hat\sigma_S$};
+  
+  % fila inferior
+  \node[box,below=of raw] (pval) {4. Make decision\\Reject if\\ $p<0.05$};
+  \node[box,right=of pval] (dec) {3. Compute \\ $p$-value \\ $2\Phi(-|\varepsilon|)$};
+
+  % flechas
+  \draw[arrow] (raw.east) -- (std.west);
+  \draw[arrow] (std.south) -- (dec.north);   % de 2 hacia abajo al 4
+  \draw[arrow] (dec.west) -- (pval.east);    % de 4 a 3
+ % \draw[arrow] (pval.north) -- (raw.south);  % de 3 hacia arriba al 1 (opcional, si quieres ciclo)
+\end{tikzpicture}
+    \caption{Workflow of the entropy‐based hypothesis test.}
+    \label{fig:entropy-diagram-test}
+\end{figure}
+```
+
+
+## Size and Power Analysis of the Proposed Test
+
+The statistical validity and effectiveness of the proposed Tsallis entropy–based test was examined through two fundamental properties: \emph{size} and \emph{power}. These provide insight into the probability of incorrect decisions in hypothesis testing.
+
+The size of a statistical test, also known as the Type&nbsp;I&nbsp;error rate, refers to the probability of incorrectly rejecting the null hypothesis $\mathcal{H}_0$ when it is in fact true. In hypothesis testing, practitioners typically specify a nominal significance level, commonly set at \SI{1}{\percent}, \SI{5}{\percent}, and \SI{10}{\percent}, which represent acceptable probabilities of committing a Type&nbsp;I error. A well-calibrated test should reproduce these levels empirically across sample sizes and conditions.
+
+To assess this, we performed $1000$ Monte Carlo replications under $\mathcal{H}_0$ with data from a $\Gamma_{\text{SAR}}$ distribution ($\mu=1$), computing the test statistic via a bootstrap entropy estimator ($B=100$, $\lambda=0.85$). The empirical size was then estimated as the proportion of replications in which the null hypothesis was incorrectly rejected. The observed Type&nbsp;I error rates remained close to the nominal levels, confirming the validity and proper calibration of the proposed procedures.
+
+The power of a test is its probability of correctly rejecting $\mathcal{H}_0$ when it is false. Equivalently, it equals $1-\beta$, where $\beta$ is the Type&nbsp;II error rate. High power thus indicates strong sensitivity to departures from $\mathcal{H}_0$. To assess power, we simulated data under the alternative hypothesis $\mathcal{H}_1$, assuming a $\mathcal{G}^0_I$ distribution with $\mu=1$ and $\alpha=-2$. Again, $1000$ Monte Carlo replications were performed for each configuration of sample size and $L$, and the test statistic was computed using the bootstrap estimator ($B=100$, $\lambda=0.85$).
+
+As expected, power increased with both the sample size and the number of looks, confirming the effectiveness of the Tsallis entropy–based test in detecting departures from the null hypothesis.
+
+The complete results for both size and power are reported in Table \ref{tab:size-power-tsallis}.
+
+```{r Simulated_error_type_I-tsallis1, echo=FALSE, message=FALSE}
+if (!file.exists("./Data/type_I_results-tsallis1.Rdata")) {
+  
+  message("AFile type_I_results-tsallis1.Rdata not found. Generating results...")
+
+  set.seed(1234567890, kind = "Mersenne-Twister")
+
+  calculate_p_value <- function(test_statistic, mu_W, sigma_W, alpha_nominal) {
+    epsilon <- test_statistic / sigma_W
+    p_value <- 2 * (1 - pnorm(abs(epsilon)))
+    return(p_value < alpha_nominal)  
+  }
+
+  R <- 500
+  mu <- 1
+  B <- 100
+  lambda <- 0.85
+  L_values <- c(5, 8, 18)
+  sample_sizes <- c(25, 49, 81, 121)
+  alpha_nominals <- c(0.01, 0.05, 0.1)
+  results <- data.frame()
+
+  for (L in L_values) {
+    for (alpha_nominal in alpha_nominals) {
+      TestStatistics <- NULL
+      mean_entropy <- numeric(length(sample_sizes))
+      sd_entropy <- numeric(length(sample_sizes))
+      
+      for (s in sample_sizes) {
+        TestStat <- numeric(R)
+        
+        for (r in 1:R) {
+          z <- gamma_sar_sample(L, mu, s)
+          TestStat[r] <- bootstrap_tsallis_entropy_optimized(z, B, lambda) -((1 - exp((1 - lambda)*log(mean(z)) +
+             (lambda - 1)*log(L) +
+             lgamma(lambda*(L - 1) + 1) -
+             lambda*lgamma(L) -
+             (lambda*(L - 1) + 1)*log(lambda))) / (lambda - 1))
+        }
+        
+        mean_entropy[sample_sizes == s] <- mean(TestStat)
+        sd_entropy[sample_sizes == s] <- sd(TestStat)
+        
+        TestStatistics <- rbind(
+          TestStatistics,
+          data.frame(
+            "L" = rep(L, R),
+            "Sample_Size" = rep(s, R),
+            "Test_Statistics" = TestStat
+          )
+        )
+      }
+      
+      mu_W <- mean_entropy
+      sigma_W <- sqrt(sd_entropy^2)
+      
+      p_values <- apply(TestStatistics, 1, function(row) {
+        calculate_p_value(
+          row["Test_Statistics"],
+          mu_W[sample_sizes == row["Sample_Size"]],
+          sigma_W[sample_sizes == row["Sample_Size"]],
+          alpha_nominal
+        )
+      })
+      
+      result <- data.frame(
+        "L" = TestStatistics$L,
+        "Sample_Size" = TestStatistics$Sample_Size,
+        "Alpha_Nominal" = alpha_nominal,
+        "P_Value" = p_values
+      )
+      results <- rbind(results, result)
+    }
+  }
+  
+  
+  save(results, file = "./Data/type_I_results-tsallis1.Rdata")
+  
+} else {
+  
+  
+  message("File type_I_results-tsallis1.Rdata found. Generating results...")
+  load("./Data/type_I_results-tsallis1.Rdata")
+  
+}
+```
+
+
+```{r Simulated_power-tsallis1, echo=FALSE, message=FALSE}
+
+if (!file.exists("./Data/results_power-tsallis1.Rdata")) {
+  
+  message("File results_power-tsallis1 not found. Generating results...")
+
+  set.seed(1234567890, kind = "Mersenne-Twister")
+
+  calculate_p_value <- function(test_statistic, mu_W, sigma_W) {
+    epsilon <- test_statistic  / sigma_W
+    p_value <- 2 * (1 - pnorm(abs(epsilon)))
+    return(p_value)
+  }
+
+  calculate_type_II_error_rate <- function(p_values, alpha_nominal) {
+    type_II_error_rate <- sum(p_values >= alpha_nominal) / length(p_values)
+    return(type_II_error_rate)
+  }
+
+  calculate_power <- function(R, mu, L_values, B, lambda, sample_sizes, alpha_nominals) {
+    results <- data.frame()
+    
+    for (L in L_values) {
+      for (alpha_nominal in alpha_nominals) {
+        TestStatistics <- list()
+        mean_entropy <- numeric(length(sample_sizes))
+        sd_entropy <- numeric(length(sample_sizes))
+        
+        for (s in sample_sizes) {
+          TestStat <- numeric(R)
+          
+          for (r in 1:R) {
+            z <- gi0_sample(mu, -2, L, s)
+            TestStat[r] <- bootstrap_tsallis_entropy_optimized(z, B, lambda) -((1 - exp((1 - lambda)*log(mean(z)) +
+             (lambda - 1)*log(L) +
+             lgamma(lambda*(L - 1) + 1) -
+             lambda*lgamma(L) -
+             (lambda*(L - 1) + 1)*log(lambda))) / (lambda - 1))
+          }
+          
+          mean_entropy[sample_sizes == s] <- mean(TestStat)
+          sd_entropy[sample_sizes == s] <- sd(TestStat)
+          TestStatistics[[as.character(s)]] <- TestStat
+        }
+        
+        mu_W <- mean_entropy  
+        sigma_W <- sqrt(sd_entropy^2)
+        
+        p_values <- lapply(TestStatistics, function(TestStat) {
+          apply(
+            data.frame("Test_Statistics" = TestStat),
+            1,
+            function(row) {
+              calculate_p_value(row["Test_Statistics"], mu_W, sigma_W[as.numeric(names(TestStatistics)) == as.numeric(s)])
+            }
+          )
+        })
+        
+        type_II_error_rates <- sapply(p_values, function(p_values_for_size) {
+          calculate_type_II_error_rate(p_values_for_size, alpha_nominal)
+        })
+        
+        power <- 1 - type_II_error_rates
+        
+        result_row <- data.frame(
+          L = L,
+          alpha_nominal = alpha_nominal,
+          Sample_Size = sample_sizes,
+          power = power
+        )
+        
+        results <- rbind(results, result_row)
+      }
+    }
+    
+    return(results)
+  }
+
+  
+  R <- 500
+  mu <- 1
+  L_values <- c(5, 8, 18)
+  B <- 100
+  lambda <- 0.85
+  sample_sizes <- c(25, 49, 81, 121)
+  alpha_nominals <- c(0.01, 0.05, 0.1)
+
+  
+  results_power <- calculate_power(R, mu, L_values, B, lambda, sample_sizes, alpha_nominals)
+
+  
+  save(results_power, file = "./Data/results_power-tsallis1.Rdata")
+  
+} else {
+  
+  
+  message("File results_power-tsallis1.Rdata found. Generating results...")
+  load("./Data/results_power-tsallis1.Rdata")
+  
+}
+```
+
+
+\renewcommand{\arraystretch}{1}
+```{r Table_size_and_power-tsallis0, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+suppressMessages({
+  suppressWarnings({
+
+   
+    load("./Data/type_I_results-tsallis.Rdata")
+    type_I_error_rates <- tapply(
+      results$P_Value, 
+      INDEX = list(results$L, results$Sample_Size, results$Alpha_Nominal),
+      FUN = function(p_values) sum(p_values) / length(p_values)
+    )
+
+    type_I_error_results <- as.data.frame(as.table(type_I_error_rates))
+    colnames(type_I_error_results) <- c("L", "Sample_Size", "Alpha_Nominal", "Type_I_Error_Rate")
+
+    spread_results <- type_I_error_results %>%
+      pivot_wider(names_from = Alpha_Nominal, values_from = Type_I_Error_Rate)
+
+    load("./Data/results_power-tsallis.Rdata")
+
+    summary_stats <- results_power %>%
+      pivot_wider(names_from = alpha_nominal, values_from = power)
+
+    combined_results <- merge(spread_results, summary_stats, by = c("L", "Sample_Size")) %>%
+      arrange(L, Sample_Size)
+
+    selected_columns <- c("L", "Sample_Size", grep("^0\\.", colnames(combined_results), value = TRUE))
+
+    if (length(selected_columns) == 8) {
+      combined_results <- combined_results[, selected_columns, drop = FALSE]
+      colnames(combined_results) <- c("$\\bm{L}$", "$\\bm{n}$", 
+  "$\\hphantom{00}\\SI{1}{\\percent}$", 
+  "$\\hphantom{00}\\SI{5}{\\percent}$", 
+  "$\\hphantom{00}\\SI{10}{\\percent}$", 
+  "$\\hphantom{00}\\SI{1}{\\percent}$", 
+  "$\\hphantom{00}\\SI{5}{\\percent}$", 
+  "$\\hphantom{00}\\SI{10}{\\percent}$")
+    }
+
+    combined_results[] <- lapply(combined_results, function(x) {
+      if (is.numeric(x)) {
+        if (all(x %% 1 == 0)) {
+          sprintf("$%d$", x)  # Para enteros en formato LaTeX
+        } else {
+          ifelse(
+            x < 0, 
+            sprintf("$%.3f$", x),
+            sprintf("$\\phantom{-}%.3f$", x)
+          )
+        }
+      } else {
+        x
+      }
+    })
+
+  })
+})
+
+table_combined_result <- knitr::kable(
+  combined_results,
+  caption = "Size and Power of the $S_{\\widetilde{T}_{\\lambda}}(\\bm{Z})$ test statistic (Tsallis).",
+  format = "latex",
+  booktabs = TRUE,
+  align = "cccccccc",
+  escape = FALSE,
+  digits = 3,
+  label = "size-power-tsallis",
+  centering = FALSE,
+  table.envir = "table", 
+  position="H", 
+  linesep = ""
+) %>%
+  add_header_above(c(" " = 2, "Size" = 3,  "Power" = 3)) %>%
+  collapse_rows(columns = 1:2, latex_hline = "major", valign = "middle") %>%
+  row_spec(0, align = "c") %>%
+  kable_styling(latex_options = "scale_down", font_size = 10) %>%
+  kable_styling(full_width = T)
+
+print(table_combined_result)
+```
+
+
+## Adaptive Windows with Tsallis Entropy
+
+Our approach builds on the adaptive windowing algorithm for SAR images proposed by Park et al. [@Park1999], which adjusts the analysis window size according to the local homogeneity of the scene. For each pixel $(i,j)$, the coefficient of variation  is computed over the border of the current window,
+\begin{equation}
+C_{ij} = \frac{\sigma_{ij}}{\mu_{ij}},
+\end{equation}
+where $\mu_{ij}$ and $\sigma_{ij}$ are calculated using only the border pixels $b_{ij}$ of the window $w_{ij}$. In  homogeneous areas, $C_{ij} \approx \sigma_n$, with
+\begin{equation}
+\sigma_n = \frac{0.523}{\sqrt{L}}.
+\end{equation}
+The homogeneity criterion is defined by comparing $C_{ij}$ with an adaptive threshold  $U_{ij}$, given by
+\begin{equation}
+U_{ij} = \eta\left( 1 + \sqrt{\frac{1 + 2\sigma_n^2}{8(W_{ij} - 1)}} \right)\sigma_n,
+\end{equation}
+where $W_{ij} = 2N_{ij} + 1$ is the current window side length (with radius $N_{ij}$), and $\eta$ is a tuning parameter controlling the degree of smoothing. Values close to $\eta=1.0$ provide limited speckle suppression, while larger values increase smoothing and yield stronger noise reduction. 
+
+The window radius $N_{ij}$ is updated dynamically and locally as follows:
+$$
+N_{i,j+1} =
+\begin{cases}
+\min(N_{ij} + 1, N_{\max}), & \text{if } C_{ij} \leq U_{ij}, \\
+\max(N_{ij} - 1, N_{\min}), & \text{if } C_{ij} > U_{ij},
+\end{cases}
+$$
+here, $N_{\max}$ and $N_{\min}$ denote the maximum and minimum window size, respectively. 
+<!-- In homogeneous regions the window size increases, provided it does not exceed $N_{\max}$, which enhances speckle reduction and stabilizes the estimates. Conversely, in heterogeneous regions the window size decreases, but not below $N_{\min}$, thereby preserving edges and preventing the mixing of different classes. -->
+
+
+<!-- Once the window radius $N_{ij}$ has been determined for pixel $(i,j)$, the corresponding full window is extracted and the proposed statistical test \eqref{eq-test-tsallis} is applied to obtain the local statistic at $(i,j)$. This procedure produces two outputs: (i) a map of test statistics over the image and (ii) a window-size map $W_{ij}$ that records the locally selected window side, with larger values in homogeneous regions and smaller values in heterogeneous areas. For inference, each value of the test statistic is standardized using the empirical mean and standard deviation of the image, and two-sided $p$-values are then computed. -->
+
+The procedure can be summarized as:  
+
+- **Homogeneous regions** ($C_{ij} \leq U_{ij}$): the window grows, up to $N_{\max}$, which enhances speckle reduction and stabilizes the estimates.  
+- **Heterogeneous regions** ($C_{ij} > U_{ij}$): the window shrinks, down to $N_{\min}$, which preserves edges and prevents the mixing of different classes.  
+
+Once the window radius $N_{ij}$ has been determined for pixel $(i,j)$, the corresponding full window is extracted and the proposed test in \eqref{eq-test-tsallis} is applied to obtain the local statistic. This produces two outputs: 
+
+- a map of test statistics over the image, and  
+- a window-size map $W_{ij}$, which records the locally selected window side (larger in homogeneous regions, smaller in heterogeneous ones).  
+
+For inference, each value of the test statistic is standardized using the empirical mean and standard deviation of the image, and two-sided $p$-values are then computed.  
+
+This adaptive strategy has several advantages. It is locally responsive to image texture, using small windows in heterogeneous areas and larger ones in homogeneous zones. This ensures edge preservation and statistical stability, while the parameter $\eta$ controls the balance between smoothness and detail preservation. Moreover, the framework is extensible and can be applied with any entropy estimator.
+
+
+
+# RESULTS  {#sec:app}
+
+## Analysis with Simulated Data {#sec-sim2}
+
+Figure&nbsp;\ref{fig:sim_Phantom_1} presents the structural design of the synthetic phantom with dimensions of
+$500\times500$ pixels, proposed by  Gomez et al.&nbsp;[@Gomez2017] as a tool to assess the performance of speckle-reduction filters. This layout serves as a base template to generate the simulated images shown in Figures&nbsp;\ref{fig:sim_Phantom_2}.
+
+Each region is filled with data simulated from the $\mathcal{G}^0_I$ distribution&nbsp;\eqref{E:gi02}, using different combinations of the roughness parameter $\alpha$ and the mean $\mu$, as indicated by the labels in each quadrant of the image. Light regions correspond to textured observations (heterogeneous), while darker regions represent textureless areas (homogeneous).
+
+
+The $\alpha$ parameter of the $G_I^0$ distribution is essential for
+interpreting texture characteristics. Values near zero greater than
+$-3$ suggest extremely textured targets, such as urban
+zones&nbsp;[@Frery2019a]. As the value decreases, it indicates regions
+with moderate texture (in the $\left[-6,-3\right]$ region), related to
+forest zones, while values below $-6$ correspond to textureless
+regions, such as pasture, agricultural fields, and water
+bodies&nbsp;[@Neto2023].
+
+The proposed Tsallis-based test statistic, $S_{\widetilde{T}_\lambda}$, was applied to the simulated image using the adaptive windowing strategy with side lengths ranging from $5\times 5$ (minimum) to $11\times 11$ (maximum), with the smoothing parameter set to $\eta = 5$. Figure&nbsp;\ref{fig:pvalueL9} displays the resulting $p$-value map for $L=9$. 
+```{=latex}
+\begin{figure*}[hbt]
+    \centering
+     \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{./Figures/Phantom1.png}
+        \caption{Phantom}
+        \label{fig:sim_Phantom_1}
+    \end{subfigure}
+   \hspace{0.00001\textwidth}
+    \begin{subfigure}{0.35\textwidth}
+        \includegraphics[width=\linewidth]{./Figures/Phantom4_L9.pdf}
+        \caption{Simulated image}
+        \label{fig:sim_Phantom_2}
+    \end{subfigure}
+   \hspace{0.00001\textwidth}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{./Figures/p-values_tsallis_L9_B200_eta_5_5x11_085_inv.png}
+        \caption{$p$-value map  }
+        \label{fig:pvalueL9}
+    \end{subfigure}
+    \caption{Results on simulated data using the test statistic $S_{\widetilde{T}_{\lambda}}$ with adaptive windows ranging from $5\times5$ to $11\times11$. The image has size $500\times500$ pixels, with $L=9$.}
+
+    \label{fig:simL9}
+\end{figure*}
+```
+
+The color gradient provides an interpretable scale: dark red regions ($p \approx 0$) indicate strong evidence of heterogeneity, consistently appearing in highly textured zones such as those with $\alpha > -3$, while dark blue regions ($p \approx 1$) correspond to homogeneous areas, typically observed for very low $\alpha$ values (e.g., $\alpha < -6$). 
+Intermediate colors, such as yellow and green ($p \approx 0.2$–$0.6$), represent transitional responses that capture moderately textured areas (e.g., $-6 \leq \alpha \leq -3$), whereas light blue tones ($p \approx 0.7$–$0.9$) occur in regions that are close to homogeneous but still contain subtle texture variations. 
+This gradation of colors highlights the sensitivity of the proposed test: instead of producing only binary outcomes, it provides a continuous measure of heterogeneity across the image, allowing areas with intermediate texture levels to be represented by intermediate $p$-values that reflect the gradual transition between homogeneous and heterogeneous scattering conditions.
+
+
+
+
+
+## Applications to SAR Data
+
+The selected scenes, acquired in HH polarization, correspond to the outskirts of Munich and  Dublin Port (Ireland), as shown in Figs.&nbsp;\ref{fig:munich-sar}-\ref{fig:dublin-sar}. 
+Corresponding optical images (Figs.&nbsp;\ref{fig:munich-o}–\ref{fig:dublin-o}) illustrate land cover context.
+
+Table&nbsp;\ref{tab:table_param} details the SAR acquisition parameters.
+\renewcommand{\arraystretch}{2.5}   
+```{r parameters_sar, echo=FALSE, message=FALSE, warning=FALSE}
+
+SAR_data <- data.frame(
+  Site = c("Munich", "Dublin" ),
+  Mission = c("UAVSAR", "TanDEM-X"),
+  Band = c("L", "X"),
+  Size = c( "$1024\\times1024$", "$1100\\times1100$"),
+  L = c( 12, 16),
+  Resol = c( "$4.9\\times7.2$", "$1.35\\times1.35$"),
+  Date = c("16-04-2015", "03-09-2017")
+)
+
+colnames(SAR_data) <- c(
+  "\\textbf{Scene}", "\\textbf{Mission}", "\\textbf{Band}", 
+  "\\textbf{Size (pixels)}", "$\\bm{L}$", 
+  "\\textbf{Resolution [m]}", "\\textbf{Acquisition Date}"
+)
+
+SAR_data[] <- lapply(SAR_data, function(x) {
+  if (is.numeric(x)) {
+    if (all(x %% 1 == 0)) {
+      formatted_numbers <- sprintf("$%d$", x)
+    } else {
+      formatted_numbers <- ifelse(x < 0, sprintf("$%.1f$", x), sprintf("$\\phantom{-}%.1f$", x))
+    }
+    return(formatted_numbers)
+  } else {
+    return(x)
+  }
+})
+
+kable(SAR_data, 
+      format = "latex",
+      booktabs = TRUE,
+      align = "ccccccc",
+      escape = FALSE,
+      digits = 2,
+      label = "table_param",
+      centering = TRUE,
+      caption = "Parameters of selected SAR images",
+      table.envir = "table", position = "H") %>%
+  row_spec(0, align = "c") %>%
+  kable_styling(latex_options = "scale_down", font_size = 22) %>% 
+  kable_styling(full_width = TRUE) %>%
+  column_spec(1, width = "3.0cm") %>%
+  column_spec(2, width = "4.5cm") %>%
+  column_spec(3, width = "1.5cm") %>%
+  column_spec(4, width = "4cm") %>%
+  column_spec(5, width = "1.5cm") %>%
+  column_spec(6, width = "4.0cm") %>%
+  column_spec(7, width = "4.5cm")
+
+```
+We applied the proposed test statistic $S_{\widetilde{T}_{\lambda}}$ to real SAR data using adaptive local sliding windows ranging from $5 \times 5$ to $11 \times 11$, with the smoothing parameter set to $\eta = 5$. The results are illustrated in Figures&nbsp;\ref{fig:munichp}–\ref{fig:dublinp}, which display the original SAR image, the corresponding optical reference, and the resulting $p$-value maps.
+```{=latex}
+\begin{figure*}[hbt]
+    \centering
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{./Figures/munich_1024.png}
+        \caption{Simulated image}
+        \label{fig:munich-sar}
+    \end{subfigure}
+        \hspace{0.001\textwidth}
+    \begin{subfigure}{0.235\textwidth}
+        \includegraphics[width=\linewidth]{./Figures/munich_optical.png}
+        \caption{Optical image}
+        \label{fig:munich-o}
+    \end{subfigure}
+   \hspace{0.001\textwidth}
+    \begin{subfigure}{0.315\textwidth}
+        \includegraphics[width=\linewidth]{./Figures/p-values_munich50.png}
+        \caption{$p$-value map   }
+        \label{fig:munichp}
+    \end{subfigure}
+    \caption{Results on SAR data-Munich with the test $\small{S_{\widetilde{T}_{\lambda}}}$ and adaptive windows ($5\times5$ to $11\times11$). }
+    \label{fig:munich}
+\end{figure*}
+```
+
+
+```{=latex}
+\begin{figure*}[hbt]
+    \centering
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{./Figures/dublin_1100_hh.png}
+        \caption{Simulated image}
+        \label{fig:dublin-sar}
+    \end{subfigure}
+    \hspace{0.00001\textwidth}
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{./Figures/dublin.png}
+        \caption{Optical image   }
+        \label{fig:dublin-o}
+    \end{subfigure}
+   \hspace{0.00001\textwidth}
+    \begin{subfigure}{0.31\textwidth}
+        \includegraphics[width=\linewidth]{./Figures/p-values_dublin5v1.png}
+        \caption{$p$-value map   }
+        \label{fig:dublinp}
+    \end{subfigure}
+   \caption{Results on SAR data-Dublin with the test $\small{S_{\widetilde{T}_{\lambda}}}$ and adaptive windows ($5\times5$ to $11\times11$). }
+    \label{fig:dublin}
+\end{figure*}
+```
+
+The $p$-value maps provide a clear separation between homogeneous and heterogeneous areas. Dark-red tones ($p < 0.05$) cluster around highly textured features, including urban blocks, industrial and harbor facilities, and road networks. These regions exhibit strong departures from homogeneity, consistent with the expected scattering variability in built environments. Intermediate tones (green and yellow, $0.2 < p < 0.6$) appear in semi-structured areas such as agricultural fields and mixed land covers, reflecting moderate texture. By contrast, blue tones ($p \approx 1$) dominate in smooth regions such as open water bodies, uniform pastures, and large homogeneous crop zones, where the data behave in accordance with the null hypothesis.
+
+The adaptive nature of the windowing plays a key role in these results. Larger windows are automatically selected in homogeneous regions, enhancing stability and noise suppression, while smaller windows are used in heterogeneous areas, ensuring edge preservation and avoiding class mixing. This balance allows the method to capture fine-scale details such as canals, field boundaries, and narrow urban structures, while still providing robust detection of broader homogeneous areas.
+
+
+
+
+
+
+
+
+# Conclusions {#sec:conclusion}
+
+
+
+
+
+
+::: {.content-visible when-format="pdf"}
+# References {-}
+:::
+
+<!-- [^issues-1023]: ["_[longtable not compatible with 2-column LaTeX documents](https://github.com/jgm/pandoc/issues/1023>)_",  -->
+
+<!-- [^issues-2275]: See the issue here <https://github.com/quarto-dev/quarto-cli/issues/2275> -->
+
+<!-- [IEEEXplore<sup>®</sup>]: <https://ieeexplore.ieee.org/> -->

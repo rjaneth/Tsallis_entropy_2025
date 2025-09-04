@@ -1,0 +1,15 @@
+ENVI
+description = {(expression was 'C11') - Unit: 1}
+samples = 600
+lines = 600
+bands = 1
+header offset = 0
+file type = ENVI Standard
+data type = 4
+interleave = bsq
+byte order = 1
+band names = { Intensity_HH }
+map info = {Arbitrary,301.5,301.5,-90.0672628488977,29.90061959389175,5.4996381579138404E-5,5.4996381579138404E-5,WGS84,units=Meters}
+coordinate system string = {GEOGCS["WGS84(DD)", DATUM["WGS84", SPHEROID["WGS84", 6378137.0, 298.257223563]], PRIMEM["Greenwich", 0.0], UNIT["degree", 0.017453292519943295], AXIS["Geodetic longitude", EAST], AXIS["Geodetic latitude", NORTH], AUTHORITY["EPSG","4326"]]}
+data gain values = {1.0}
+data offset values = {0.0}

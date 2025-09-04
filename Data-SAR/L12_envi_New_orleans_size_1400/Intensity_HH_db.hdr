@@ -1,0 +1,13 @@
+ENVI
+description = {(expression was 'Intensity_HH==0 ? 0 : 10 * log10(abs(Intensity_HH))') - Unit: _db}
+samples = 1400
+lines = 1400
+bands = 1
+header offset = 0
+file type = ENVI Standard
+data type = 4
+interleave = bsq
+byte order = 1
+band names = { Intensity_HH_db }
+data gain values = {1.0}
+data offset values = {0.0}

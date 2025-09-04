@@ -1,0 +1,24 @@
+\IEEEauthorblockN{$by-author.name.literal$}
+$for(by-author.affiliations/first)$
+\IEEEauthorblockA{
+$if(by-author.affiliations.department)$
+\textit{$by-author.affiliations.department$}\\
+$endif$
+$if(by-author.affiliations.name)$
+\textit{$by-author.affiliations.name$}\\
+$endif$
+$if(by-author.affiliations.city)$
+$by-author.affiliations.city$, $by-author.affiliations.country$\\
+$else$
+$if(by-author.affiliations.country)$
+$by-author.affiliations.country$\\
+$endif$
+$endif$
+$if(by-author.email)$
+$by-author.email$
+$endif$
+$if(by-author.orcid)$
+\orcidlink{$by-author.orcid$}
+$endif$
+}
+$endfor$
