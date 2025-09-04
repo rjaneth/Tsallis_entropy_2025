@@ -53,12 +53,12 @@ message(sprintf("Plan: %s with %d worker(s).",
 input_type <- "sim"   # "envi" or "sim"
 
 # ENVI paths (used when input_type == "envi")
-img_path <- "../Data/Data-SAR/L16_envi_dublin_size_1100/Intensity_HH.img"
-hdr_path <- "../Data/Data-SAR/L16_envi_dublin_size_1100/Intensity_HH.hdr"
+img_path <- "./Data-SAR/L16_envi_dublin_size_1100/Intensity_HH.img"
+hdr_path <- "./Data-SAR/L16_envi_dublin_size_1100/Intensity_HH.hdr"
 
 # Simulated RData (used when input_type == "sim")
-sim_rdata <- "../Data-SAR/L9_simulated_image_500.Rdata"
-sim_var   <- NULL    # e.g., "Z" if you know the object name; otherwise NULL
+sim_rdata <- "./Data-SAR/L9_simulated_image_500.Rdata"
+sim_var   <- "Z"    # e.g., "Z" if you know the object name; otherwise NULL
 
 # Tsallis / SAR parameters
 L       <- 9
@@ -210,7 +210,7 @@ difference_values <- t(sapply(res_list, `[[`, "stat"))
 L_map             <- t(sapply(res_list, `[[`, "Ls"))
 
 # --- Save results ---------------------------------------------------------------
-outdir  <- "../Data"
+outdir  <- "./Data"
 if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
 outfile <- sprintf("%s/%s_adaptive_tsallis_with_Lmap_B%d_eta_%d_%dx%d_%s.Rdata",
                    outdir,

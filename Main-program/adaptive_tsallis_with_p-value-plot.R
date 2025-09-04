@@ -67,9 +67,9 @@ get_script_dir <- function() {
 
 SCRIPT_DIR   <- get_script_dir()
 PROJECT_DIR  <- normalizePath(file.path(SCRIPT_DIR, ".."), winslash = "/", mustWork = FALSE)
-CODE_DIR     <- file.path(PROJECT_DIR, "Code")
-DATA_DIR     <- file.path(PROJECT_DIR, "Data")
-DATA_SAR_DIR <- file.path(PROJECT_DIR, "Data-SAR")
+CODE_DIR     <- file.path(PROJECT_DIR, "./Code")
+DATA_DIR     <- file.path(PROJECT_DIR, "./Data")
+DATA_SAR_DIR <- file.path(PROJECT_DIR, "./Data-SAR")
 
 cat("SCRIPT_DIR  :", SCRIPT_DIR,   "\n")
 cat("PROJECT_DIR :", PROJECT_DIR,  "\n")
@@ -101,14 +101,14 @@ hdr_path <- file.path(DATA_SAR_DIR, "L16_envi_dublin_size_1100", "Intensity_HH.h
 
 # Simulated RData (used when input_type == "sim")
 # sim_var is optional: the object name inside the .RData. If NULL, auto-detects.
-sim_rdata <- file.path(DATA_DIR, "L5_simulated_image_500.Rdata")
-sim_var   <- NULL   # e.g., "Z" if you know it; otherwise leave NULL
+sim_rdata <- file.path(DATA_SAR_DIR, "L5_simulated_image_500.Rdata")
+sim_var   <- "Z" #NULL   # e.g., "Z" if you know it; otherwise leave NULL
 
 # Tsallis / SAR parameters
 L       <- 5            # number of looks
 lambda  <- 0.85         # Tsallis order
-B       <- 11            # bootstrap replicates
-W_min   <- 50            # minimum window size (odd)
+B       <- 100            # bootstrap replicates
+W_min   <- 5            # minimum window size (odd)
 W_max   <- 11           # maximum window size (odd)
 eta     <- 5           # smoothing parameter for growth/shrink
 sigma_n <- 0.523 / sqrt(L)
@@ -289,23 +289,20 @@ cat("Window-size frequencies:\n"); print(table(L_map))
 
 # --- Plots: L_map and p-values -------------------------------------------------
 #if (viz_available) {
-  # Using imagematrix_visualizer helpers (if present in Code/)
-  # Binary mask at alpha = p_thr
-  mask_title <- sprintf("H (p < %.2f) — %s", p_thr, input_label)
-  imagematrixPNG(imagematrix(p_values < p_thr),
-                 name = file.path(DATA_DIR, sprintf("H_mask_p%.2f_%s_%dx%d.png",
-                                                    p_thr, input_label, W_min, W_max)))
-  # Color p-values (viridis-H by default in your helper)
-  imagematrix_colorPNG(
-    imagematrix_color(p_values),
-    name           = file.path(DATA_DIR, sprintf("pvalues_color_%s_%dx%d.png",
-                                                 input_label, W_min, W_max)),
-    palette_option = "viridis-H",
-    legend_width_px = 540,
-    scale_factor = 2,
-    direction = -1
-  )
-  # Original L_map quicklook
-  imagematrixPNG(imagematrix(L_map),
-                 name = file.path(DATA_DIR, sprintf("L_map_%s_%dx%d.png",
-                                                    input_label, W_min, W_max)))
+# Using imagematrix_visualizer helpers (if present in Code/)
+# Binary mask at alpha = p_thr
+mask_title <- sprintf("H (p < %.2f) — %s", p_thr, input_label)
+imagematrixPNG(imagematrix(p_values < p_thr),
+               name = file.path(DATA_DIR, sprintf("H_mask_p%.2f_%s_%dx%d.png",
+                                                  p_thr, input_label, W_min, W_max)))
+# Color p-values (viridis-H by default in your helper)
+imagematrix_colorPNG(
+  imagematrix_color(p_values),
+  name           = file.path(DATA_DIR, sprintf("pvalues_color_%s_%dx%d.png",
+                                               input_label, W_min, W_max)),
+  palette_option = "viridis-H",
+  legend_width_px = 540,
+  scale_factor = 2,
+  direction = -1
+)
+
