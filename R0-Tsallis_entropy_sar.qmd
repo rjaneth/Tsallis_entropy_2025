@@ -16,6 +16,8 @@ format:
     citecolor: black # cites
     urlcolor: black
   #ieee-html: default
+crossref:
+    fig-title: Figure
 author:
   - name: Author 1
     email: janeth.alpala@ufpe.br
@@ -55,14 +57,15 @@ author:
     #   as the argument followed by the biography text.
     # note: "Template created June 23, 2023; revised `r format(Sys.Date(),format='%B %d, %Y')`."
 abstract: |
-  Detecting heterogeneity in synthetic aperture radar (SAR) imagery is essential for reliable interpretation in remote sensing applications. 
+  Detecting heterogeneity in Synthetic Aperture Radar (SAR) imagery is essential for reliable interpretation in remote sensing applications. 
   We propose a statistical test based on a non-parametric estimator of Tsallis entropy, a non-additive generalization of Shannon’s formulation that provides enhanced sensitivity to heavy-tailed data. 
   To improve accuracy with small samples, the estimator is refined through a bootstrap correction. 
    In addition, we integrate the test within an adaptive windowing strategy that adjusts window size locally: larger in homogeneous regions to stabilize estimation, and smaller in heterogeneous areas to preserve structural details. 
   This combination yields an unsupervised and interpretable procedure that produces $p$-value maps highlighting heterogeneous areas. 
   Experimental results with both simulated and real SAR images demonstrate the robustness of the method in detecting texture variability and distinguishing between homogeneous and heterogeneous regions.
 
-keywords: [Tsallis entropy, Gamma distribution, heterogeneity, SAR, hypothesis tests, bootstrap]
+keywords: [Tsallis entropy, Gamma distribution, GI0 distribution, heterogeneity, SAR, hypothesis test]
+#, bootstrap]
  
 #funding: 
  # statement: "The `quarto-ieee` "
@@ -163,7 +166,7 @@ Among the statistical models used for SAR intensities, the $\mathcal{G}_I^0$ dis
 
 Entropy has long been used as a measure of uncertainty in random phenomena, with Shannon’s entropy&nbsp;[@Shannon1948] being the most classical form. Beyond this, Tsallis entropy&nbsp;[@Tsallis1988] offers a non-additive generalization that introduces a parameter $\lambda$, allowing greater flexibility in capturing deviations from homogeneity and better sensitivity to heavy-tailed data. This makes it especially appealing for SAR analysis, where both homogeneous and highly heterogeneous areas coexist. Recent studies have shown the value of entropy-based methods in tasks such as edge detection, segmentation, and despeckling&nbsp;[@Nascimento2014; @Nobre2016; @Chan2022], motivating their extension to hypothesis testing in SAR imagery.
 
-In this work, we propose a statistical test based on a nonparametric estimator of Tsallis entropy to distinguish between homogeneous and heterogeneous regions in SAR data. The test compares the estimated Tsallis entropy with its theoretical value under the Gamma model assumption. To improve performance in practice, we incorporate a bootstrap procedure that reduces bias in small samples. In addition, we embed the test within an adaptive windowing framework, inspired by the method of Park et al.&nbsp;[@Park1999]. Instead of relying on fixed sliding windows (e.g., $7 \times 7$), the adaptive procedure adjusts the window size locally: it enlarges in homogeneous regions to improve statistical stability, and shrinks in heterogeneous regions to avoid mixing different structures and to preserve local details.
+In this work, we propose a statistical test based on a nonparametric estimator of Tsallis entropy to distinguish between homogeneous and heterogeneous regions in SAR data. The test compares the estimated Tsallis entropy with its theoretical value under the Gamma model assumption. To improve performance in practice, we incorporate a bootstrap procedure that reduces bias in small samples. In addition, we embed the test within an adaptive windowing framework, inspired by the method of Park et al.&nbsp;[@Park1999]. Instead of relying on size-fixed sliding windows (e.g., $7 \times 7$), the adaptive procedure adjusts the window size locally: it enlarges in homogeneous regions to improve statistical stability, and shrinks in heterogeneous regions to avoid mixing different structures and to preserve local details.
 
 The proposed method is unsupervised, does not require training data, and produces interpretable $p$-value maps, making it suitable for scenarios where ground-truth information is scarce or unavailable.  
 
@@ -176,11 +179,11 @@ The remainder of this paper is organized as follows. Section&nbsp;\ref{sec:pre} 
 
 Statistical modeling plays a central role in the analysis of SAR imagery, where speckle is an inherent feature. For SAR intensity data, two main probability models are employed: the SAR-Gamma distribution ($\Gamma_{\text{SAR}}$), a reparameterization of the classical Gamma law suited to fully developed speckle, and the $\mathcal{G}^0_I$ distribution, which can describe varying levels of heterogeneity&nbsp;[@Frery1997].
 
-We denote $Z \sim \Gamma_{\mathrm{SAR}}(L, \mu)$ and $Z \sim \mathcal{G}_I^0(\alpha, \gamma, L)$ when the random variable $Z$ follows the respective distributions, characterized by the following probability density functions (pdfs):
+We denote $Z \sim \Gamma_{\mathrm{SAR}}(\mu, L)$ and $Z \sim \mathcal{G}_I^0(\alpha, \gamma, L)$ when the random variable $Z$ follows the respective distributions, characterized by the following probability density functions (pdfs):
 \begin{equation}
-	f_{\Gamma_{\text{SAR}}}\bigl(z;L, \mu \bigr) 
+	f_{\Gamma_{\text{SAR}}}\bigl(z;\mu, L\bigr) 
     = \frac{L^L}{\Gamma(L)\,\mu^L} z^{L-1} 
-    \exp \biggl(-\frac{Lz}{\mu}\biggr)
+    \exp \biggl(-\frac{Lz}{\mu}\biggr),
     \mathbbm 1_{\mathbbm R_+}(z) \label{E:gamma1}
 \end{equation}
 and
@@ -189,7 +192,7 @@ and
 \end{align}
 where $\mu > 0$ is the mean intensity, $\gamma > 0$ is a scale parameter, $\alpha < 0$ controls the degree of texture (roughness), $L \geq 1$ is the number of looks (either nominal or estimated, thus not restricted to integer values), $\Gamma(\cdot)$ is
 the gamma function, 
-and $\mathbbm 1_{A}(z)$ is the indicator function
+and $\mathbbm 1_{A}(\cdot)$ is the indicator function
 of the set $A$.
 
 The $r$th order moments of the $\mathcal{G}_I^0$ model are
@@ -217,26 +220,26 @@ The $\Gamma_{\mathrm{SAR}}$ model is a particular case of the $\mathcal{G}^0_I$ 
 $$
 f_{\mathcal{G}^0_I}\big(z; \mu, \alpha, L\big)
 \longrightarrow 
-f_{\Gamma_{\text{SAR}}}(z;L, \mu) \quad \text{ when } \alpha\to-\infty.
+f_{\Gamma_{\text{SAR}}}(z;\mu, L) \quad \text{ when } \alpha\to-\infty.
 $$
 
 
 ## Tsallis Entropy
-Originally proposed by Havrda and Charvát&nbsp;[-@Havrda1967] in the context of information theory, and later extended by Tsallis&nbsp;[-@Tsallis1988] to emphasize its non-extensive features in statistical physics.
+Tsallis entropy was originally proposed by Havrda and Charvát&nbsp;[-@Havrda1967] in the context of information theory, and later extended by Tsallis&nbsp;[-@Tsallis1988] to emphasize its non-extensive features in statistical physics.
 
 For a continuous random variable $Z$ with pdf $f(z)$, the Tsallis entropy of order $\lambda \in \mathbbm R_+ \setminus \{1\}$ is defined as:
 \begin{equation}
 \label{eq:tsallis}
 T_\lambda(Z) = \frac{1}{\lambda - 1} \Bigl[ 1 - \int_{\mathcal{B}} \bigl(f(z)\bigr)^{\lambda} \,\mathrm{d}z \Bigr],
 \end{equation}
-where $\mathcal{B} \subseteq \mathbb{R}$ denotes the support of $f(z)$.  
+where $\mathcal{B} \subseteq \mathbb{R}$ denotes the support of $f(z)$. 
 In the limit $\lambda \to 1$, we obtain $T_\lambda(Z) \to H(Z)$, making Tsallis a one-parameter generalization of Shannon entropy.
 
 Using&nbsp;\eqref{eq:tsallis}, we derive closed-form expressions for the Tsallis entropy of the $\Gamma_{\mathrm{SAR}}$ and the $\mathcal{G}^0_I$ distributions:
 
 \begin{multline}
 \label{eq:gammasar-Tsallis}
-T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(L,\mu)\bigr)=
+T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr)=
 \frac{1}{\lambda-1}\Bigl\{1-
 \exp\bigl[
 (1-\lambda)\ln\mu\\
@@ -244,12 +247,12 @@ T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(L,\mu)\bigr)=
 +\ln\Gamma\bigl(\lambda(L-1)+1\bigr) \\
 -\lambda\ln\Gamma(L)
 -(\lambda(L-1)+1)\ln\lambda
-\bigr]\Bigr\} 
+\bigr]\Bigr\}, 
 \end{multline}
 and
 \begin{multline}
 \label{eq:GI0-Tsallis}
-  T_\lambda\bigl(\mathcal{G}^0_I(\mu,\alpha,L)\bigr) = T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(L,\mu)\bigr)\;+\;\\
+  T_\lambda\bigl(\mathcal{G}^0_I(\mu,\alpha,L)\bigr) = T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr)\;+\;\\
   \frac{1}{\lambda-1}\,
   \exp\Bigl[
   (1-\lambda)\ln\mu
@@ -272,11 +275,11 @@ Equation&nbsp;\eqref{eq:GI0-Tsallis} can be interpreted as:
   =
   \underbrace{T_\lambda \bigl(\Gamma_{\mathrm{SAR}}\bigr)}_{\text{baseline entropy}}
   \hspace{1.8em} + \hspace{-1.8em}
-  \underbrace{\Delta_\alpha}_{\text{excess entropy caused by texture}}\hspace{-4.0em},
+  \underbrace{\Delta_\alpha}_{\text{entropy excess caused by texture}}\hspace{-4.0em},
 \end{equation*}
-the extra term $\Delta_\alpha$ captures how much entropy increases due to texture, caused by the roughness parameter $\alpha$. When $\alpha \to -\infty$ (fully developed speckle), the excess term tends to zero, and Equation \eqref{eq:GI0-Tsallis} reduces to the homogeneous case in \eqref{eq:gammasar-Tsallis}, i.e.,
+where the extra term $\Delta_\alpha$ captures how much entropy increases due to the texture level, caused by the roughness parameter $\alpha$. When $\alpha \to -\infty$ (fully developed speckle), the excess term tends to zero, and Equation \eqref{eq:GI0-Tsallis} reduces to the homogeneous case as in \eqref{eq:gammasar-Tsallis}, \emph{i.e.},
 $$
-\lim_{\alpha \to -\infty} T_{\lambda}\bigl(\mathcal{G}^0_I(\mu, \alpha, L)\bigr) =  T_{\lambda}\bigl(\Gamma_{\mathrm{SAR}}(L, \mu)\bigr).
+\lim_{\alpha \to -\infty} T_{\lambda}\bigl(\mathcal{G}^0_I(\mu, \alpha, L)\bigr) =  T_{\lambda}\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr).
 $$ 
 
 @fig-tsallis-convergence_L18 illustrates the convergence of the Tsallis entropy for different values of $\alpha$ and $L \in \{5,18\}$. In every case, the dashed curves of $T_\lambda(\mathcal{G}^0_I)$ approach the solid black curve of $T_\lambda(\Gamma_{\mathrm{SAR}})$, confirming the limiting behavior.
@@ -310,8 +313,10 @@ tsallis_gi0 <- function(alpha, mu, L, lambda) {
 
 plot_tsallis <- function(L, lambda) {
   mu <- seq(0.1, 10, length.out = 500)
-  alphas <- c(-2, -6, -20, -1000)
-  alpha_labels <- c(expression(alpha == -2), expression(alpha == -6), expression(alpha == -20), expression(alpha == -1000))
+  # alphas <- c(-2, -6, -20, -1000)
+  alphas <- c(-1000, -20, -6, -2)
+  # alpha_labels <- c(expression(alpha == -2), expression(alpha == -6), expression(alpha == -20), expression(alpha == -1000))
+  alpha_labels <- c(expression(alpha == -1000), expression(alpha == -20), expression(alpha == -6), expression(alpha == -2))
 
   muEntropy <- data.frame()
   for (alpha in alphas) {
@@ -326,7 +331,7 @@ plot_tsallis <- function(L, lambda) {
   ggplot() +
     geom_line(data = Entropy_gamma, aes(x = mu, y = Entropy_Gamma), color = "black", linewidth = 1.8) +
     geom_line(data = muEntropy.molten, aes(x = mu, y = value, color = alpha), linetype = "longdash", linewidth = 1.5, alpha=.7) +
-    scale_color_manual(values = pal_lancet()(4), labels = alpha_labels) +
+    scale_color_manual(values = rev(pal_lancet()(4)), labels = alpha_labels) +
     labs(color = "Roughness", x = expression(mu), y = "Tsallis Entropy") +
     annotate("text",
              x = max(mu) + 0.5,
@@ -352,7 +357,7 @@ p2 <- plot_tsallis(18, 0.85)
 (p1 | p2) + plot_layout(guides = "collect") & theme(legend.position = "bottom")
 ```
 
-For the highly heterogeneous case ($\alpha=-2$), entropy values are very similar for $L=5$ and $L=18$, since texture dominates over speckle. In contrast, in the homogeneous limit ($\alpha \to -\infty$), texture effects vanish and entropy is mainly determined by speckle. With a low number of looks, speckle is strong and increases the uncertainty, which raises the entropy values. However, the curves for different $\alpha$ values appear more concentrated, since the contribution of texture to entropy is masked by the dominant speckle. As the number of looks increases, speckle is progressively reduced and entropy decreases. This reduction of speckle makes the excess entropy $\Delta_\alpha$ more evident, resulting in more separated curves across $\alpha$.
+For the highly heterogeneous case ($\alpha=-2$), entropy values are very similar for $L=5$ and $L=18$, since texture dominates over speckle. In contrast, in the homogeneous limit ($\alpha \to -\infty$), texture effects vanish and entropy is mainly determined by speckle. With a low number of looks, speckle is strong and increases the uncertainty, which raises the entropy values. However, the curves for different $\alpha$ values appear more concentrated, since the contribution of texture to entropy is masked by the dominant speckle. As the number of looks increases, speckle is progressively reduced and entropy decreases. This reduction of speckle makes the entropy excess $\Delta_\alpha$ more evident, resulting in more separated curves across $\alpha$.
 
 
 ## Non-parametric Estimation of Tsallis Entropy
@@ -360,7 +365,7 @@ For the highly heterogeneous case ($\alpha=-2$), entropy values are very similar
 
 Following the spacing-based approach of Vasicek&nbsp;[-@vasicek1976test] and Ebrahimi et al.&nbsp;[-@Ebrahimi1994] for Shannon entropy, and the methodology for Rényi entropy proposed by Al-Labadi et al.&nbsp;[-@AlLabadi2024], we derive a nonparametric estimator for Tsallis entropy.
 
-Let $Q(p)=F^{-1}(p)$ denote the quantile function for $p\in(0,1)$. From \eqref{eq:tsallis}, the inner integral can be expressed as an expectation under $Z\sim f$:
+Let $Q(p)=F^{-1}(p)$ denote the quantile function for $p\in(0,1)$. From \eqref{eq:tsallis}, the inner integral can be expressed as an expectation under a random variable $Z$ with pdf $f$:
 $$
 \int_{\mathcal B} f(z)^\lambda\,\mathrm{d}z
 =\int_{\mathcal B} f(z)^{\lambda-1} f(z)\,\mathrm{d}z
@@ -380,30 +385,30 @@ which yields the representation
      \right\}.
   \label{eq:Tsallis-quantile}
 \end{equation}
-Let $\bm{Z}=(Z_1,\dots,Z_n)$ be an i.i.d.\ sample from $F$, with order statistics $Z_{(1)}\le\cdots\le Z_{(n)}$. For a window size $m\in\{1,\dots,\lfloor (n-1)/2\rfloor\}$, define the $m$-spacing
+Let $\bm{Z}=(Z_1,Z_2,\dots,Z_n)$ be an i.i.d.\ sample from $F$, with order statistics $Z_{(1)}\le Z_{(2)} \le \cdots\le Z_{(n)}$. For a window size $m\in\{1,\dots,\lfloor (n-1)/2\rfloor\}$, define the $m$-spacing
 $$
-D_{i,m}:=Z_{(i+m)}-Z_{(i-m)},\qquad i=1,\dots,n,
+D_{i,m}:=Z_{(i+m)}-Z_{(i-m)},\qquad i=1,2,\dots,n,
 $$
-with boundary conventions $Z_{(i-m)}:=Z_{(1)}$ if $i\le m$ and $Z_{(i+m)}:=Z_{(n)}$ if $i\ge n-m$. The $m$-spacing density estimator at $Z_{(i)}$ is
+with boundary conventions $Z_{(i-m)}:=Z_{(1)}$ if $i\le m$ and $Z_{(i+m)}:=Z_{(n)}$ if $i\ge n-m$, where $\lfloor \cdot \rfloor$ denotes the floor function. The $m$-spacing density estimator at $Z_{(i)}$ is
 \begin{equation}
 \widehat f_n\bigl(Z_{(i)}\bigr)
-=\frac{c_i\, (m/n)}{Z_{(i+m)}-Z_{(i-m)}}\,,\qquad i=1,\dots,n,
+=\frac{(m/n) \, c_i}{Z_{(i+m)}-Z_{(i-m)}}\,,\qquad i=1,2,\dots,n,
 \label{eq:density-spacing}
 \end{equation}
 where
 $$
 c_i=
 \begin{cases}
-\dfrac{m+i-1}{m}, & 1\le i\le m,\\[6pt]
-2, & m+1\le i\le n-m,\\[6pt]
-\dfrac{n+m-i}{m}, & n-m+1\le i\le n.
+\dfrac{m+i-1}{m} & \text{if } \; 1\le i\le m,\\[6pt]
+2 & \text{if } \; m+1\le i\le n-m,\\[6pt]
+\dfrac{n+m-i}{m} & \text{if } \; n-m+1\le i\le n.
 \end{cases}
 $$
 By construction, $\widehat f_n(Z_{(i)})\approx f(Z_{(i)})$. Since $f(Q(p))\,Q'(p)=1$, taking the reciprocal yields an estimator of the quantile derivative:
 \begin{equation}
 \widehat{Q'}(p_i)
 \;=\; \frac{1}{\widehat f_n(Z_{(i)})}
-\;=\; \frac{D_{i,m}}{c_i\, (m/n)}\,,
+\;=\; \frac{D_{i,m}}{(m/n)\, c_i}\,,
 \qquad p_i \in (0,1).
 \label{eq:Qprime-hat}
 \end{equation}
@@ -412,35 +417,36 @@ Approximating the integral in \eqref{eq:Tsallis-quantile} by a Riemann sum over 
   \widehat T_{\lambda}(\bm{Z})
   &=\frac{1}{\lambda-1}\left\{
 1-\frac{1}{n}\sum_{i=1}^{n}\bigl[\widehat{Q'}(p_i)\bigr]^{\,1-\lambda}
-\right\}, \nonumber\\[4pt]
+\right\} \nonumber\\[4pt]
   &= \frac{1}{\lambda-1}
   \left\{
     1-\frac{1}{n}
        \sum_{i=1}^{n}
        \left(
-         \frac{Z_{(i+m)}-Z_{(i-m)}}{c_i\, (m/n)}
+         \frac{Z_{(i+m)}-Z_{(i-m)}}{(m/n) \, c_i}
        \right)^{1-\lambda}
   \right\}.
   \label{eq:Tsallis-spacing-estimator}
 \end{align}
 As $\lambda\to 1$, $T_\lambda$ converges to Shannon entropy and $\widehat T_{\lambda}$ recovers the Vasicek estimator&nbsp;[-@vasicek1976test].
-This estimator is asymptotically consistent, i.e., it converges in
-probability to the true value when $m,n\rightarrow\infty$ and
+This estimator is asymptotically consistent, \emph{i.e.}, it converges in
+probability to the true value $T_\lambda$ when $m,n\rightarrow\infty$ and
 $m/n\rightarrow0$. 
-We use the heuristic spacing $m=\left[\sqrt{n}+0.5\right]$.
+We use the heuristic spacing $m=\lfloor\sqrt{n}+0.5\rfloor$.
 
 
 
 # PROPOSED METHODOLOGY {#sec:met}
 
-## Finding an optimal value of $\lambda$
+<!-- ## Finding an optimal value of $\lambda$ -->
+## Optimal $\lambda$ Value
 
-We aim to determine the optimal order $\lambda$ for the Tsallis entropy estimator using simulated samples of size $n = 49$ from  $Z\sim \Gamma_{\text{SAR}}(5,1)$.
+We aim to determine the optimal order $\lambda$ for the Tsallis entropy estimator using simulated samples of size $n = 49$ from  $Z\sim \Gamma_{\text{SAR}}(1,5)$.
 We computed the bias and the mean squared error (MSE) for varying $\lambda$ via a Monte Carlo experiment.
 
 As shown in Fig.&nbsp;\ref{fig-optimal_order-tsallis}, for $L>1$ we found that $\lambda=0.85$ yields the lowest MSE while maintaining a low bias, thus providing a favorable trade-off between bias and variance.
 
-```{r fig-optimal_order-tsallis,  echo=FALSE, message=FALSE, warning=FALSE,  out.width="95%",  fig.pos="H", fig.cap="Bias and MSE as a function of $\\lambda$, for the Tsallis entropy estimator, with $n = 49$, $L = 5$.", fig.width=5, fig.height=3}
+```{r fig-optimal_order-tsallis,  echo=FALSE, message=FALSE, warning=FALSE,  out.width="50%",  fig.pos="H", fig.cap="Bias and MSE as a function of $\\lambda$, for the Tsallis entropy estimator, with $n = 49$ and $L = 5$.", fig.width=5, fig.height=3}
 #fig.show="hide", 
 # eval=FALSE,  # 
 
@@ -491,13 +497,13 @@ grid.arrange(bias_plot, mse_plot, nrow = 2)
 
 ## Bootstrap Correction for Entropy Estimator
 
-Following Refs.&nbsp;[@Frery2024;@Alpala2024;@Alpala2025], we refine the non-parametric entropy estimator $\widehat{T}_{\lambda}$ in&nbsp;\eqref{eq:Tsallis-spacing-estimator} with bootstrap, obtaining $\widetilde{T}_{\lambda}$:
+Following Refs.&nbsp;[@Frery2024;@Alpala2024;@Alpala2025], we refine the non-parametric entropy estimator $\widehat{T}_{\lambda}$ defined in&nbsp;\eqref{eq:Tsallis-spacing-estimator} with bootstrap, obtaining:
 \begin{equation*}
 \widetilde{T}_{\lambda} = 2\widehat{T}_{\lambda}(\bm{Z}) - \frac{1}{B} \sum_{b=1}^{B} \widehat{T}_{\lambda}(\bm{Z}^{(b)}),
 \end{equation*}
 where $B$ is the number of bootstrap replications, and $\bm{Z}^{(b)}$ denotes  the $b$-th resampled dataset obtained by drawing $n$ observations with replacement from $\bm{Z}$.
 
-A Monte Carlo study with $1000$ replications for each sample size $n \in \{9, 25, 49, 81, 121\}$ from the $\Gamma_{\text{SAR}}$ (5,1) confirms that for $\lambda=0.85$, the bootstrap-corrected estimator $\widetilde{T}_{\lambda}$ ($B=200$) reduces both bias and MSE compared to the original $\widehat{T}_{\lambda}$, with significant improvements for small sample sizes, as shown in Fig.&nbsp;\ref{fig-bias_mse_Tsallis}.
+A Monte Carlo study with $1000$ replications for each sample size $n \in \{9, 25, 49, 81, 121\}$ from the $\Gamma_{\text{SAR}}$ (1,5) confirms that for $\lambda=0.85$, the bootstrap-corrected estimator $\widetilde{T}_{\lambda}$ with $B=200$, reduces both bias and MSE compared to the original estimator $\widehat{T}_{\lambda}$, with significant improvements for small sample sizes, as shown in Fig.&nbsp;\ref{fig-bias_mse_Tsallis}.
 
 ```{r Simulated_data_bias_tt, echo=FALSE, message=FALSE }
 set.seed(1234567890, kind = "Mersenne-Twister")
@@ -595,7 +601,7 @@ generate_plot_tsallisn <- function(results_df, lambda_values, selected_estimator
 }
 ```
 
-```{r fig-bias_mse_Tsallis,  echo=FALSE, message=FALSE, warning=FALSE,  out.width="90%",  fig.pos="H",  fig.cap="Bias and MSE of the Tsallis entropy estimators for $\\Gamma_{\\text{SAR}}$, with $L=5$", fig.width=5.5, fig.height=4}
+```{r fig-bias_mse_Tsallis,  echo=FALSE, message=FALSE, warning=FALSE,  out.width="50%",  fig.pos="H",  fig.cap="Bias and MSE for the Tsallis entropy estimators of $\\Gamma_{\\text{SAR}}$, with $L=5$", fig.width=5.5, fig.height=4}
 
 
 theme_set(theme_minimal() +
@@ -766,7 +772,7 @@ for (L in L_values) {
 
 ```
 
-```{r fig-densities-tsallis4,  echo=FALSE, message=FALSE, warning=FALSE,  out.width="99%", fig.pos="H",  fig.cap="Empirical densities of $S_{\\widetilde{T}_{\\lambda}}(\\bm{Z}; L)$ under $\\mathcal{H}_0$, with $\\lambda=0.85$.", fig.width=9, fig.height=4.5}
+```{r fig-densities-tsallis4,  echo=FALSE, message=FALSE, warning=FALSE,  out.width="50%", fig.pos="H",  fig.cap="Empirical densities of $S_{\\widetilde{T}_{\\lambda}}(\\bm{Z}; L)$ under $\\mathcal{H}_0$, with $\\lambda=0.85$.", fig.width=9, fig.height=4.5}
 #fig.show="hide", 
 # eval=FALSE,  #
 
