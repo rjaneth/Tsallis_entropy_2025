@@ -1,5 +1,5 @@
 ---
-title:  Heterogeneity Detection in SAR Imagery using Tsallis Entropy with Adaptive Windowing
+title: Adaptive Tsallis Entropy for Detecting Non-Fully-Developed Speckle in SAR Imagery
 format:
   ieee-pdf:
     pdf-engine: pdflatex # xelatex
@@ -57,12 +57,12 @@ author:
     #   as the argument followed by the biography text.
     # note: "Template created June 23, 2023; revised `r format(Sys.Date(),format='%B %d, %Y')`."
 abstract: |
-  Detecting heterogeneity in Synthetic Aperture Radar (SAR) imagery is essential for reliable interpretation in remote sensing applications. 
+  Detecting departures from the fully-developed speckle in Synthetic Aperture Radar (SAR) imagery is essential for reliable interpretation in remote sensing applications. 
   We propose a statistical test based on a non-parametric estimator of Tsallis entropy, a non-additive generalization of Shannon’s formulation that provides enhanced sensitivity to heavy-tailed data. 
   To improve accuracy with small samples, the estimator is refined through a bootstrap correction. 
    In addition, we integrate the test within an adaptive windowing strategy that adjusts window size locally: larger in homogeneous regions to stabilize estimation, and smaller in heterogeneous areas to preserve structural details. 
   This combination yields an unsupervised and interpretable procedure that produces $p$-value maps highlighting heterogeneous areas. 
-  Experimental results with both simulated and real SAR images demonstrate the robustness of the method in detecting texture variability and distinguishing between homogeneous and heterogeneous regions.
+  Experimental results with both simulated data and SAR images demonstrate the robustness of the method in detecting texture variability and distinguishing between homogeneous and heterogeneous regions.
 
 keywords: [Tsallis entropy, Gamma distribution, GI0 distribution, heterogeneity, SAR, hypothesis test]
 #, bootstrap]
@@ -160,7 +160,14 @@ source("./Code/functions_sample_bias_mse_1.R")
 \renewcommand{\tablename}{TABLE}
 # Introduction
 [S]{.IEEEPARstart}[ynthetic]{}
- Aperture Radar  (SAR) technology has become a key tool in remote sensing, offering high-resolution imaging capabilities independent of solar illumination and weather conditions, which enables continuous and reliable Earth observation&nbsp;[@Mondini2021; @Zeng2020]. SAR images are widely applied in environmental monitoring, disaster assessment, agriculture, urban planning, and maritime surveillance, among other fields&nbsp;[@Akbarizadeh2012; @Moreira2013; @Mu2019; @Yu2023]. However, the effective use of SAR data is hindered by speckle noise, a granular interference inherent to coherent imaging systems&nbsp;[@Argenti2013; @Choi2019]. Speckle appears as multiplicative, non-Gaussian noise, making statistical modeling and image interpretation particularly challenging&nbsp;[@Baraha2023].
+ Aperture Radar  (SAR) technology has become a key tool in remote sensing, offering high-resolution imaging capabilities independent of solar illumination and weather conditions, which enables continuous and reliable Earth observation&nbsp;[@Mondini2021; @Zeng2020]. 
+ SAR images are widely applied in environmental monitoring, 
+ disaster assessment, 
+ agriculture&nbsp;[@Akbarizadeh2012], 
+ urban planning&nbsp;[@NovelTechniquesforBuiltupAreaExtractionfromPolarimetricSARImages2019], and 
+ maritime surveillance&nbsp[@OntheDetectionandLongTermPathVisualisationofa68Iceberg], among other fields&nbsp[@Moreira2013].
+ However, the effective use of SAR data is hindered by speckle noise, a granular interference inherent to coherent imaging systems&nbsp;[@Argenti2013; @Choi2019]. 
+ Speckle appears as multiplicative, non-Gaussian noise, making statistical modeling and image interpretation particularly challenging&nbsp;[@Baraha2023].
 
 Among the statistical models used for SAR intensities, the $\mathcal{G}_I^0$ distribution is widely recognized for its ability to capture different levels of scene heterogeneity. It generalizes the Gamma distribution, which represents fully developed speckle in homogeneous regions&nbsp;[@Frery1997; @Ferreira2020]. While these models are effective, parameter estimation becomes unstable when applied to small local windows, which are often required to preserve spatial resolution. This limitation motivates alternative methodologies that avoid heavy reliance on parametric estimation.
 

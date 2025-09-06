@@ -269,7 +269,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Heterogeneity Detection in SAR Imagery using Tsallis Entropy with Adaptive Windowing},
+  pdftitle={Adaptive Tsallis Entropy for Detecting Non-Fully-Developed Speckle in SAR Imagery},
   pdfauthor={Author 1; Author 2; Author 3; Author 4},
   pdfkeywords={Tsallis entropy, Gamma distribution, GI0
 distribution, heterogeneity, SAR, hypothesis test},
@@ -297,8 +297,8 @@ distribution, heterogeneity, SAR, hypothesis test},
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
 % Do not put math or special symbols in the title.
-\title{Heterogeneity Detection in SAR Imagery using Tsallis Entropy with
-Adaptive Windowing}
+\title{Adaptive Tsallis Entropy for Detecting Non-Fully-Developed
+Speckle in SAR Imagery}
 
 \author{
 Author 1\orcidlink{0000-0002-0265-6236},~Author
@@ -331,21 +331,22 @@ executed in Quarto and is fully reproducible. We used RStudio version
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract}
-Detecting heterogeneity in Synthetic Aperture Radar (SAR) imagery is
-essential for reliable interpretation in remote sensing applications. We
-propose a statistical test based on a non-parametric estimator of
-Tsallis entropy, a non-additive generalization of Shannon's formulation
-that provides enhanced sensitivity to heavy-tailed data. To improve
-accuracy with small samples, the estimator is refined through a
-bootstrap correction. In addition, we integrate the test within an
-adaptive windowing strategy that adjusts window size locally: larger in
-homogeneous regions to stabilize estimation, and smaller in
-heterogeneous areas to preserve structural details. This combination
-yields an unsupervised and interpretable procedure that produces
-\(p\)-value maps highlighting heterogeneous areas. Experimental results
-with both simulated and real SAR images demonstrate the robustness of
-the method in detecting texture variability and distinguishing between
-homogeneous and heterogeneous regions.
+Detecting departures from the fully-developed speckle in Synthetic
+Aperture Radar (SAR) imagery is essential for reliable interpretation in
+remote sensing applications. We propose a statistical test based on a
+non-parametric estimator of Tsallis entropy, a non-additive
+generalization of Shannon's formulation that provides enhanced
+sensitivity to heavy-tailed data. To improve accuracy with small
+samples, the estimator is refined through a bootstrap correction. In
+addition, we integrate the test within an adaptive windowing strategy
+that adjusts window size locally: larger in homogeneous regions to
+stabilize estimation, and smaller in heterogeneous areas to preserve
+structural details. This combination yields an unsupervised and
+interpretable procedure that produces \(p\)-value maps highlighting
+heterogeneous areas. Experimental results with both simulated data and
+SAR images demonstrate the robustness of the method in detecting texture
+variability and distinguishing between homogeneous and heterogeneous
+regions.
 \end{abstract}
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
@@ -374,11 +375,14 @@ capabilities independent of solar illumination and weather conditions,
 which enables continuous and reliable Earth
 observation~\citeproc{ref-Mondini2021}{{[}1{]}},
 \citeproc{ref-Zeng2020}{{[}2{]}}. SAR images are widely applied in
-environmental monitoring, disaster assessment, agriculture, urban
-planning, and maritime surveillance, among other
-fields~\citeproc{ref-Akbarizadeh2012}{{[}3{]}}--\citeproc{ref-Yu2023}{{[}6{]}}.
-However, the effective use of SAR data is hindered by speckle noise, a
-granular interference inherent to coherent imaging
+environmental monitoring, disaster assessment,
+agriculture~\citeproc{ref-Akbarizadeh2012}{{[}3{]}}, urban
+planning~\citeproc{ref-NovelTechniquesforBuiltupAreaExtractionfromPolarimetricSARImages2019}{{[}4{]}},
+and maritime
+surveillance\&nbsp\citeproc{ref-OntheDetectionandLongTermPathVisualisationofa68Iceberg}{{[}5{]}},
+among other fields\&nbsp\citeproc{ref-Moreira2013}{{[}6{]}}. However,
+the effective use of SAR data is hindered by speckle noise, a granular
+interference inherent to coherent imaging
 systems~\citeproc{ref-Argenti2013}{{[}7{]}},
 \citeproc{ref-Choi2019}{{[}8{]}}. Speckle appears as multiplicative,
 non-Gaussian noise, making statistical modeling and image interpretation
@@ -1248,28 +1252,28 @@ statistical-based kurtosis wavelet energy feature for texture
 recognition of SAR images},''} \emph{IEEE Transactions on Geoscience and
 Remote Sensing}, vol. 50, no. 11, pp. 4358--4368, 2012. }
 
-\bibitem[\citeproctext]{ref-Moreira2013}
+\bibitem[\citeproctext]{ref-NovelTechniquesforBuiltupAreaExtractionfromPolarimetricSARImages2019}
 \CSLLeftMargin{{[}4{]} }%
+\CSLRightInline{D. Ratha, P. Gamba, A. Bhattacharya, and A. C. Frery,
+{``\href{https://doi.org/10.1109/LGRS.2019.2914913}{Novel techniques for
+built-up area extraction from polarimetric {SAR} images},''} \emph{IEEE
+Geoscience and Remote Sensing Letters}, vol. 17, no. 1, pp. 177--181,
+Jan. 2020. }
+
+\bibitem[\citeproctext]{ref-OntheDetectionandLongTermPathVisualisationofa68Iceberg}
+\CSLLeftMargin{{[}5{]} }%
+\CSLRightInline{L. Lopez-Lopez, F. Parmiggiani, and L. Moctezuma-Flores
+Migueland Guerrieri, {``\href{https://doi.org/10.3390/rs13030460}{On the
+detection and long-term path visualisation of a-68 iceberg},''}
+\emph{Remote Sensing}, vol. 13, 2021. }
+
+\bibitem[\citeproctext]{ref-Moreira2013}
+\CSLLeftMargin{{[}6{]} }%
 \CSLRightInline{A. Moreira, P. Prats-Iraola, M. Younis, G. Krieger, I.
 Hajnsek, and K. P. Papathanassiou,
 {``\href{https://doi.org/10.1109/mgrs.2013.2248301}{A tutorial on
 synthetic aperture radar},''} \emph{IEEE Geoscience and Remote Sensing
 Magazine}, vol. 1, no. 1, pp. 6--43, 2013. }
-
-\bibitem[\citeproctext]{ref-Mu2019}
-\CSLLeftMargin{{[}5{]} }%
-\CSLRightInline{Y. Mu, B. Huang, Z. Pan, H. Yang, G. Hou, and J. Duan,
-{``An enhanced high-order variational model based on speckle noise
-removal with {\(G^0\)} distribution,''} \emph{IEEE Access}, vol. 7, pp.
-104365--104379, 2019. }
-
-\bibitem[\citeproctext]{ref-Yu2023}
-\CSLLeftMargin{{[}6{]} }%
-\CSLRightInline{H. Yu, X. Yin, Z. Liu, S. Zhou, C. Li, and H. Jiang,
-{``\href{https://doi.org/10.1109/jstars.2023.3257548}{A novel
-unsupervised evaluation metric based on heterogeneity features for SAR
-image segmentation},''} \emph{IEEE Journal of Selected Topics in Applied
-Earth Observations and Remote Sensing}, vol. 16, pp. 2851--2867, 2023. }
 
 \bibitem[\citeproctext]{ref-Argenti2013}
 \CSLLeftMargin{{[}7{]} }%
