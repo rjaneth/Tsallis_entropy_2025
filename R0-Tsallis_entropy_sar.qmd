@@ -441,7 +441,8 @@ We use the heuristic spacing $m=\lfloor\sqrt{n}+0.5\rfloor$.
 <!-- ## Finding an optimal value of $\lambda$ -->
 ## Optimal $\lambda$ value
 
-We aim to determine the optimal order $\lambda$ for the Tsallis entropy estimator using simulated samples of size $n = 49$ from  $Z\sim \Gamma_{\text{SAR}}(1,5)$.
+We investigate the optimal order~$\lambda$ for the Tsallis entropy estimator using simulated samples of size~$n = 49$ drawn from $Z \sim \Gamma_{\text{SAR}}(1,5)$. 
+The bias and mean squared error (MSE) were evaluated for varying values of~$\lambda$ through a Monte Carlo experiment.
 We computed the bias and the mean squared error (MSE) for varying $\lambda$ via a Monte Carlo experiment.
 
 As shown in Fig.&nbsp;\ref{fig-optimal_order-tsallis}, for $L>1$ we found that $\lambda=0.85$ yields the lowest MSE while maintaining a low bias, thus providing a favorable trade-off between bias and variance.
