@@ -652,11 +652,11 @@ We test whether the observed data come from a homogeneous ($\Gamma_{\text{SAR}}$
 \end{equation}
   
 Under $\mathcal{H}_0$, the expected value of the entropy estimator should match the theoretical $T_{\lambda}(\Gamma_{\text{SAR}})$. 
-Significant deviations indicate heterogeneity.
+Meanwhile, significant deviations indicate heterogeneity.
 
 ## The Proposed Test
 
-We propose a test statistic that identifies the discrepancy between estimated and theoretical entropy under homogeneity. Since $L\geq1$ is known, we define the test statistic as follows:
+We propose a statistic test that identifies the discrepancy between estimated and theoretical entropy under homogeneity. Since $L\geq1$ is known, we define the test statistic as follows:
 \begin{multline}
 \label{eq-test-tsallis}
 S_{\widetilde{T}_{\lambda}}(\bm{Z}; L) = \widetilde{T}_{\lambda} - \biggl\{ \frac{1}{\lambda - 1} \Bigl[ 1 -
