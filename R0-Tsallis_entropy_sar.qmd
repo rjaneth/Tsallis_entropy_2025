@@ -177,7 +177,7 @@ The remainder of this paper is organized as follows. Section&nbsp;\ref{sec:pre} 
 
 ## Statistical Modeling of Intensity SAR Data
 
-Statistical modeling plays a central role in the analysis of SAR imagery, where speckle is an inherent feature. For SAR intensity data, two main probability models are employed: the SAR-Gamma distribution ($\Gamma_{\text{SAR}}$), a reparameterization of the classical Gamma law suited to fully developed speckle, and the $\mathcal{G}^0_I$ distribution, which can describe varying levels of heterogeneity&nbsp;[@Frery1997].
+Statistical modeling plays a central role in the analysis of SAR imagery, where speckle is an inherent feature. For SAR intensity data, two main probability models are employed: the SAR-Gamma distribution ($\Gamma_{\text{SAR}}$), a reparametrization of the classical Gamma law suited to fully developed speckle, and the $\mathcal{G}^0_I$ distribution, which can describe varying levels of heterogeneity&nbsp;[@Frery1997].
 
 We denote $Z \sim \Gamma_{\mathrm{SAR}}(\mu, L)$ and $Z \sim \mathcal{G}_I^0(\alpha, \gamma, L)$ when the random variable $Z$ follows the respective distributions, characterized by the following probability density functions (pdfs):
 \begin{equation}
@@ -635,7 +635,7 @@ print(combined_plot_tsallis)
 ```
 
 
-From this point forward, all subsequent simulations and comparisons will be based on the improved bootstrap estimator: $\widetilde{T}_{\lambda}$.
+From this point forward, all subsequent simulations and comparisons will be based on the improved bootstrap estimator $\widetilde{T}_{\lambda}$.
 
 
 ## Hypothesis Testing 

@@ -97,7 +97,9 @@
   \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
 
-\usepackage{longtable,booktabs,array}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -122,8 +124,6 @@
 % Set default figure placement to htbp
 \def\fps@figure{htbp}
 \makeatother
-
-
 % definitions for citeproc citations
 \NewDocumentCommand\citeproctext{}{}
 \NewDocumentCommand\citeproc{mm}{%
@@ -157,18 +157,6 @@
 \newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
-
-
-
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-
-
-
- 
-
 
 \usepackage{booktabs}
 \usepackage{longtable}
@@ -441,7 +429,7 @@ Data}\label{statistical-modeling-of-intensity-sar-data}
 Statistical modeling plays a central role in the analysis of SAR
 imagery, where speckle is an inherent feature. For SAR intensity data,
 two main probability models are employed: the SAR-Gamma distribution
-(\(\Gamma_{\text{SAR}}\)), a reparameterization of the classical Gamma
+(\(\Gamma_{\text{SAR}}\)), a reparametrization of the classical Gamma
 law suited to fully developed speckle, and the \(\mathcal{G}^0_I\)
 distribution, which can describe varying levels of
 heterogeneity~\citeproc{ref-Frery1997}{{[}10{]}}.
@@ -741,7 +729,7 @@ entropy estimators of \(\Gamma_{\text{SAR}}\), with \(L=5\)}
 \end{figure}%
 
 From this point forward, all subsequent simulations and comparisons will
-be based on the improved bootstrap estimator:
+be based on the improved bootstrap estimator
 \(\widetilde{T}_{\lambda}\).
 
 \subsection{Hypothesis Testing}\label{hypothesis-testing}
@@ -929,6 +917,7 @@ The complete results for both size and power are reported in Table
 \ref{tab:size-power-tsallis}.
 
 \renewcommand{\arraystretch}{1}
+
 \begin{table}[H]
 \centering\centering
 \caption{\label{tab:size-power-tsallis}Size and Power of the $S_{\widetilde{T}_{\lambda}}(\bm{Z})$ test statistic (Tsallis).}
