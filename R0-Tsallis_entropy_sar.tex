@@ -97,9 +97,7 @@
   \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
 
-
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -111,17 +109,21 @@
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
+
+
 % definitions for citeproc citations
 \NewDocumentCommand\citeproctext{}{}
 \NewDocumentCommand\citeproc{mm}{%
@@ -155,6 +157,18 @@
 \newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
 
 \usepackage{booktabs}
 \usepackage{longtable}
@@ -558,7 +572,7 @@ the Tsallis entropy for different values of \(\alpha\) and
 
 \centering{
 
-\includegraphics{Figures/fig-tsallis-convergence_L18-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{Figures/fig-tsallis-convergence_L18-1.pdf}}
 
 }
 
@@ -665,7 +679,7 @@ the true value \(T_\lambda\) when \(m,n\rightarrow\infty\) and
 \section{PROPOSED METHODOLOGY}\label{sec:met}
 
 \subsection{\texorpdfstring{Optimal \(\lambda\)
-Value}{Optimal \textbackslash lambda Value}}\label{optimal-lambda-value}
+value}{Optimal \textbackslash lambda value}}\label{optimal-lambda-value}
 
 We aim to determine the optimal order \(\lambda\) for the Tsallis
 entropy estimator using simulated samples of size \(n = 49\) from
@@ -681,7 +695,7 @@ bias, thus providing a favorable trade-off between bias and variance.
 
 \centering{
 
-\includegraphics[width=0.5\textwidth,height=\textheight]{Figures/fig-optimal_order-tsallis-1.pdf}
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{Figures/fig-optimal_order-tsallis-1.pdf}
 
 }
 
@@ -716,7 +730,7 @@ Fig.~\ref{fig-bias_mse_Tsallis}.
 
 \centering{
 
-\includegraphics[width=0.5\textwidth,height=\textheight]{Figures/fig-bias_mse_Tsallis-1.pdf}
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{Figures/fig-bias_mse_Tsallis-1.pdf}
 
 }
 
@@ -790,7 +804,7 @@ texture.
 
 \centering{
 
-\includegraphics[width=0.5\textwidth,height=\textheight]{Figures/fig-densities-tsallis4-1.pdf}
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{Figures/fig-densities-tsallis4-1.pdf}
 
 }
 
@@ -913,7 +927,6 @@ The complete results for both size and power are reported in Table
 \ref{tab:size-power-tsallis}.
 
 \renewcommand{\arraystretch}{1}
-
 \begin{table}[H]
 \centering\centering
 \caption{\label{tab:size-power-tsallis}Size and Power of the $S_{\widetilde{T}_{\lambda}}(\bm{Z})$ test statistic (Tsallis).}
