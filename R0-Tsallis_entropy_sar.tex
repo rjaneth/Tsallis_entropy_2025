@@ -572,7 +572,7 @@ the Tsallis entropy for different values of \(\alpha\) and
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{Figures/fig-tsallis-convergence_L18-1.pdf}}
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{Figures/fig-tsallis-convergence_L18-1.pdf}
 
 }
 
@@ -681,11 +681,12 @@ the true value \(T_\lambda\) when \(m,n\rightarrow\infty\) and
 \subsection{\texorpdfstring{Optimal \(\lambda\)
 value}{Optimal \textbackslash lambda value}}\label{optimal-lambda-value}
 
-We aim to determine the optimal order \(\lambda\) for the Tsallis
-entropy estimator using simulated samples of size \(n = 49\) from
-\(Z\sim \Gamma_{\text{SAR}}(1,5)\). We computed the bias and the mean
-squared error (MSE) for varying \(\lambda\) via a Monte Carlo
-experiment.
+We investigate the optimal order\textasciitilde{}\(\lambda\) for the
+Tsallis entropy estimator using simulated samples of
+size\textasciitilde{}\(n = 49\) drawn from
+\(Z \sim \Gamma_{\text{SAR}}(1,5)\). The bias and mean squared error
+(MSE) were evaluated for varying values of\textasciitilde{}\(\lambda\)
+through a Monte Carlo experiment.
 
 As shown in Fig.~\ref{fig-optimal_order-tsallis}, for \(L>1\) we found
 that \(\lambda=0.85\) yields the lowest MSE while maintaining a low
@@ -695,7 +696,7 @@ bias, thus providing a favorable trade-off between bias and variance.
 
 \centering{
 
-\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{Figures/fig-optimal_order-tsallis-1.pdf}
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{Figures/fig-optimal_order-tsallis-1.pdf}
 
 }
 
@@ -730,7 +731,7 @@ Fig.~\ref{fig-bias_mse_Tsallis}.
 
 \centering{
 
-\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{Figures/fig-bias_mse_Tsallis-1.pdf}
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{Figures/fig-bias_mse_Tsallis-1.pdf}
 
 }
 
@@ -761,8 +762,9 @@ Meanwhile, significant deviations indicate heterogeneity.
 \subsection{The Proposed Test}\label{the-proposed-test}
 
 We propose a statistic test that identifies the discrepancy between
-estimated and theoretical entropy under homogeneity. Since \(L\geq1\) is
-known, we define the test statistic as follows: \begin{multline}
+estimated and theoretical entropy under homogeneity. Since the number of
+looks \(L\geq1\) is known, we define the test statistic as follows:
+\begin{multline}
 \label{eq-test-tsallis}
 S_{\widetilde{T}_{\lambda}}(\bm{Z}; L) = \widetilde{T}_{\lambda} - \biggl\{ \frac{1}{\lambda - 1} \Bigl[ 1 -
 \exp\Bigl(
@@ -804,7 +806,7 @@ texture.
 
 \centering{
 
-\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{Figures/fig-densities-tsallis4-1.pdf}
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{Figures/fig-densities-tsallis4-1.pdf}
 
 }
 

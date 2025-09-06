@@ -285,10 +285,7 @@ $$
 @fig-tsallis-convergence_L18 illustrates the convergence of the Tsallis entropy for different values of $\alpha$ and $L \in \{5,18\}$. In every case, the dashed curves of $T_\lambda(\mathcal{G}^0_I)$ approach the solid black curve of $T_\lambda(\Gamma_{\mathrm{SAR}})$, confirming the limiting behavior.
 
 
-```{r fig-tsallis-convergence_L18, echo=FALSE, message=FALSE, warning=FALSE, fig.pos="H",  fig.cap="Tsallis entropy $T_{\\lambda}(\\mathcal{G}^0_I)$ converges to $T_{\\lambda}(\\Gamma_{\\mathrm{SAR}})$ as $\\alpha$ decreases.", fig.width=8.5, fig.height=5}
-# fig.fullwidth = TRUE, out.width="95%"
-
-
+```{r fig-tsallis-convergence_L18, echo=FALSE, message=FALSE, warning=FALSE, fig.pos="H",  fig.cap="Tsallis entropy $T_{\\lambda}(\\mathcal{G}^0_I)$ converges to $T_{\\lambda}(\\Gamma_{\\mathrm{SAR}})$ as $\\alpha$ decreases.", out.width=".9\\linewidth"}
 
 #  (Gamma SAR - GI0)
 tsallis_gammasar_log <- function(mu, L, lambda) {
@@ -349,7 +346,7 @@ plot_tsallis <- function(L, lambda) {
       panel.grid.minor = element_blank()
     ) +
     coord_cartesian(xlim = c(0, 10), ylim = c(0, 5)) +
-    ggtitle(bquote(L == .(L) ~ ", " ~ lambda == .(lambda)))
+    ggtitle(bquote(italic(L) == .(L) ~ ", " ~ lambda == .(lambda)))
 }
 
 p1 <- plot_tsallis(5, 0.85)
@@ -446,7 +443,7 @@ The bias and mean squared error (MSE) were evaluated for varying values of~$\lam
 
 As shown in Fig.&nbsp;\ref{fig-optimal_order-tsallis}, for $L>1$ we found that $\lambda=0.85$ yields the lowest MSE while maintaining a low bias, thus providing a favorable trade-off between bias and variance.
 
-```{r fig-optimal_order-tsallis,  echo=FALSE, message=FALSE, warning=FALSE,  out.width="50%",  fig.pos="H", fig.cap="Bias and MSE as a function of $\\lambda$, for the Tsallis entropy estimator, with $n = 49$ and $L = 5$.", fig.width=5, fig.height=3}
+```{r fig-optimal_order-tsallis,  echo=FALSE, message=FALSE, warning=FALSE,  out.width=".9\\linewidth",  fig.pos="H", fig.cap="Bias and MSE as a function of $\\lambda$, for the Tsallis entropy estimator, with $n = 49$ and $L = 5$."}
 #fig.show="hide", 
 # eval=FALSE,  # 
 
@@ -601,7 +598,7 @@ generate_plot_tsallisn <- function(results_df, lambda_values, selected_estimator
 }
 ```
 
-```{r fig-bias_mse_Tsallis,  echo=FALSE, message=FALSE, warning=FALSE,  out.width="50%",  fig.pos="H",  fig.cap="Bias and MSE for the Tsallis entropy estimators of $\\Gamma_{\\text{SAR}}$, with $L=5$", fig.width=5.5, fig.height=4}
+```{r fig-bias_mse_Tsallis,  echo=FALSE, message=FALSE, warning=FALSE,  out.width=".9\\linewidth",  fig.pos="H",  fig.cap="Bias and MSE for the Tsallis entropy estimators of $\\Gamma_{\\text{SAR}}$, with $L=5$"}
 
 
 theme_set(theme_minimal() +
@@ -772,7 +769,7 @@ for (L in L_values) {
 
 ```
 
-```{r fig-densities-tsallis4,  echo=FALSE, message=FALSE, warning=FALSE,  out.width="50%", fig.pos="H",  fig.cap="Empirical densities of $S_{\\widetilde{T}_{\\lambda}}(\\bm{Z}; L)$ under $\\mathcal{H}_0$, with $\\lambda=0.85$.", fig.width=9, fig.height=4.5}
+```{r fig-densities-tsallis4,  echo=FALSE, message=FALSE, warning=FALSE,  out.width=".9\\linewidth", fig.pos="H",  fig.cap="Empirical densities of $S_{\\widetilde{T}_{\\lambda}}(\\bm{Z}; L)$ under $\\mathcal{H}_0$, with $\\lambda=0.85$."}
 #fig.show="hide", 
 # eval=FALSE,  #
 
@@ -834,6 +831,7 @@ print(combined_plot)
 
 
 ```
+
 Under the asymptotic properties of the entropy estimators [@vasicek1976test;@VanEs1992], for sufficiently large samples, $S_{\widetilde{T}}(\bm{Z};L)$ follows an asymptotic normal distribution:
 $$
   S_{\widetilde{T}}(\mathbf Z;L)\;
