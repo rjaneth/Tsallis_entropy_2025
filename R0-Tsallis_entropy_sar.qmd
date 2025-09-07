@@ -70,7 +70,7 @@ keywords: [Tsallis entropy, Gamma distribution, GI0 distribution, heterogeneity,
 #funding: 
  # statement: "The `quarto-ieee` "
 pageheader:
-  left: IEEE Geoscience and Remote Sensing Letters, Month Year
+  left: IEEE Transactions on Geoscience and Remote Sensing, Month Year
   right: #'D. Folio:  A Sample Article Using quarto-ieee'
   
 header-includes:
@@ -823,7 +823,7 @@ for (L in selected_L_values) {
   scale_x_continuous(limits = x_limits, breaks = x_breaks, minor_breaks = NULL) +
   scale_y_continuous(limits = y_limits, minor_breaks = NULL) +
   labs(
-      x = expression("Test Statistic" ~ S[widetilde(italic(T))[lambda]](italic(bold(Z))* ";" **phantom(" ")* italic(L))), 
+      x = expression("Test Statistic" ~ S[widetilde(italic(T))[lambda]](bold(italic(Z))* ";" **phantom(" ")* italic(L))), 
       y = "Density"
   ) +
   ggtitle(bquote(italic(L) == .(L))) +
@@ -851,7 +851,7 @@ print(combined_plot)
 
 Under the asymptotic properties of the entropy estimators [@vasicek1976test;@VanEs1992], for sufficiently large samples, $S_{\widetilde{T}}(\bm{Z};L)$ follows an asymptotic normal distribution:
 $$
-  S_{\widetilde{T}}(\mathbf Z;L)\;
+  S_{\widetilde{T}}(\bm Z;L)\;
   \overset{\mathcal{D}}{\underset{n \to \infty}{\longrightarrow}}\;
   \mathcal N\!\bigl(\mu_S,\sigma_S^{2}\bigr),
 $$
