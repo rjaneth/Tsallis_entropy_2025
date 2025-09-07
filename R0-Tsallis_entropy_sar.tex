@@ -379,38 +379,45 @@ environmental monitoring, disaster assessment,
 agriculture~\citeproc{ref-Akbarizadeh2012}{{[}3{]}}, urban
 planning~\citeproc{ref-NovelTechniquesforBuiltupAreaExtractionfromPolarimetricSARImages2019}{{[}4{]}},
 and maritime
-surveillance\&nbsp\citeproc{ref-OntheDetectionandLongTermPathVisualisationofa68Iceberg}{{[}5{]}},
-among other fields\&nbsp\citeproc{ref-Moreira2013}{{[}6{]}}. However,
-the effective use of SAR data is hindered by speckle noise, a granular
+surveillance~\citeproc{ref-OntheDetectionandLongTermPathVisualisationofa68Iceberg}{{[}5{]}},
+among other fields~\citeproc{ref-Moreira2013}{{[}6{]}}. However, the
+effective use of SAR data is hindered by speckle, a noise-like granular
 interference inherent to coherent imaging
-systems~\citeproc{ref-Argenti2013}{{[}7{]}},
-\citeproc{ref-Choi2019}{{[}8{]}}. Speckle appears as multiplicative,
-non-Gaussian noise, making statistical modeling and image interpretation
-particularly challenging~\citeproc{ref-Baraha2023}{{[}9{]}}.
+systems~\citeproc{ref-Argenti2013}{{[}7{]}}. Speckle can be described as
+multiplicative, non-Gaussian noise, making statistical modeling and
+image interpretation particularly
+challenging~\citeproc{ref-Baraha2023}{{[}8{]}}.
 
 Among the statistical models used for SAR intensities, the
 \(\mathcal{G}_I^0\) distribution is widely recognized for its ability to
 capture different levels of scene heterogeneity. It generalizes the
 Gamma distribution, which represents fully developed speckle in
-homogeneous regions~\citeproc{ref-Frery1997}{{[}10{]}},
-\citeproc{ref-Ferreira2020}{{[}11{]}}. While these models are effective,
+homogeneous regions~\citeproc{ref-Frery1997}{{[}9{]}},
+\citeproc{ref-Ferreira2020}{{[}10{]}}. While these models are effective,
 parameter estimation becomes unstable when applied to small local
 windows, which are often required to preserve spatial resolution. This
 limitation motivates alternative methodologies that avoid heavy reliance
 on parametric estimation.
 
 Entropy has long been used as a measure of uncertainty in random
-phenomena, with Shannon's entropy~\citeproc{ref-Shannon1948}{{[}12{]}}
-being the most classical form. Beyond this, Tsallis
-entropy~\citeproc{ref-Tsallis1988}{{[}13{]}} offers a non-additive
-generalization that introduces a parameter \(\lambda\), allowing greater
-flexibility in capturing deviations from homogeneity and better
-sensitivity to heavy-tailed data. This makes it especially appealing for
-SAR analysis, where both homogeneous and highly heterogeneous areas
-coexist. Recent studies have shown the value of entropy-based methods in
-tasks such as edge detection, segmentation, and
-despeckling~\citeproc{ref-Nascimento2014}{{[}14{]}}--\citeproc{ref-Chan2022}{{[}16{]}},
-motivating their extension to hypothesis testing in SAR imagery.
+phenomena, with Shannon's entropy~\citeproc{ref-Shannon1948}{{[}11{]}}
+being the most classical form. Recent studies have shown the value of
+entropy-based methods in tasks such as edge
+detection~\citeproc{ref-Nascimento2014}{{[}12{]}},
+segmentation~\citeproc{ref-Nobre2016}{{[}13{]}}, and
+despeckling~\citeproc{ref-Chan2022}{{[}14{]}}, motivating their
+extension to hypothesis testing in SAR imagery. In this realm, Frery et
+al.~\citeproc{ref-Frery2024}{{[}15{]}} and Alpala et
+al.~\citeproc{ref-Alpala2025}{{[}16{]}} quantified departures from the
+fully-developed speckle hypothesis with the Shannon and Rényi entropy,
+respectively.
+
+The Tsallis entropy~\citeproc{ref-Tsallis1988}{{[}17{]}} offers a
+non-additive generalization that introduces a parameter \(\lambda\),
+allowing greater flexibility in capturing deviations from homogeneity
+and better sensitivity to heavy-tailed data. This makes it especially
+appealing for SAR analysis, where both homogeneous and highly
+heterogeneous areas coexist.
 
 In this work, we propose a statistical test based on a nonparametric
 estimator of Tsallis entropy to distinguish between homogeneous and
@@ -419,7 +426,7 @@ Tsallis entropy with its theoretical value under the Gamma model
 assumption. To improve performance in practice, we incorporate a
 bootstrap procedure that reduces bias in small samples. In addition, we
 embed the test within an adaptive windowing framework, inspired by the
-method of Park et al.~\citeproc{ref-Park1999}{{[}17{]}}. Instead of
+method of Park et al.~\citeproc{ref-Park1999}{{[}18{]}}. Instead of
 relying on size-fixed sliding windows (e.g., \(7 \times 7\)), the
 adaptive procedure adjusts the window size locally: it enlarges in
 homogeneous regions to improve statistical stability, and shrinks in
@@ -448,7 +455,7 @@ two main probability models are employed: the SAR-Gamma distribution
 (\(\Gamma_{\text{SAR}}\)), a reparameterization of the classical Gamma
 law suited to fully developed speckle, and the \(\mathcal{G}^0_I\)
 distribution, which can describe varying levels of
-heterogeneity~\citeproc{ref-Frery1997}{{[}10{]}}.
+heterogeneity~\citeproc{ref-Frery1997}{{[}9{]}}.
 
 We denote \(Z \sim \Gamma_{\mathrm{SAR}}(\mu, L)\) and
 \(Z \sim \mathcal{G}_I^0(\alpha, \gamma, L)\) when the random variable
@@ -480,7 +487,7 @@ Therefore, assuming \(\alpha<-1\), its expected value is
 
 Although the \(\mathcal{G}_I^0\) distribution is defined by the
 parameters \(\alpha\) and \(\gamma\), in the SAR
-literature~\citeproc{ref-Nascimento2010}{{[}18{]}} the texture
+literature~\citeproc{ref-Nascimento2010}{{[}19{]}} the texture
 \(\alpha\) and the mean \(\mu\) are usually used.
 Reparameterizing~\eqref{E:gi01} with \(\mu\), and denoting this model as
 \(Z \sim \mathcal{G}_I^0(\alpha, \mu, L)\) we obtain: \begin{multline}
@@ -492,7 +499,7 @@ Reparameterizing~\eqref{E:gi01} with \(\mu\), and denoting this model as
     \mathbbm 1_{\mathbbm R_+}(z). \label{E:gi02}
 \end{multline} The \(\Gamma_{\mathrm{SAR}}\) model is a particular case
 of the \(\mathcal{G}^0_I\) distribution, as demonstrated
-in~\citeproc{ref-Frery1997}{{[}10{]}}. Specifically, for a given \(\mu\)
+in~\citeproc{ref-Frery1997}{{[}9{]}}. Specifically, for a given \(\mu\)
 fixed, \[
 f_{\mathcal{G}^0_I}\big(z; \mu, \alpha, L\big)
 \longrightarrow 
@@ -502,9 +509,9 @@ f_{\Gamma_{\text{SAR}}}(z;\mu, L) \quad \text{ when } \alpha\to-\infty.
 \subsection{Tsallis Entropy}\label{tsallis-entropy}
 
 Tsallis entropy was originally proposed by Havrda and
-Charvát~\citeproc{ref-Havrda1967}{{[}19{]}} in the context of
+Charvát~\citeproc{ref-Havrda1967}{{[}20{]}} in the context of
 information theory, and later extended by
-Tsallis~\citeproc{ref-Tsallis1988}{{[}13{]}} to emphasize its
+Tsallis~\citeproc{ref-Tsallis1988}{{[}17{]}} to emphasize its
 non-extensive features in statistical physics.
 
 For a continuous random variable \(Z\) with pdf \(f(z)\), the Tsallis
@@ -604,10 +611,10 @@ Entropy}\label{non-parametric-estimation-of-tsallis-entropy}
 \label{subsec:tsallis-np}
 
 Following the spacing-based approach of
-Vasicek~\citeproc{ref-vasicek1976test}{{[}20{]}} and Ebrahimi et
-al.~\citeproc{ref-Ebrahimi1994}{{[}21{]}} for Shannon entropy, and the
+Vasicek~\citeproc{ref-vasicek1976test}{{[}21{]}} and Ebrahimi et
+al.~\citeproc{ref-Ebrahimi1994}{{[}22{]}} for Shannon entropy, and the
 methodology for Rényi entropy proposed by Al-Labadi et
-al.~\citeproc{ref-AlLabadi2024}{{[}22{]}}, we derive a nonparametric
+al.~\citeproc{ref-AlLabadi2024}{{[}23{]}}, we derive a nonparametric
 estimator for Tsallis entropy.
 
 Let \(Q(p)=F^{-1}(p)\) denote the quantile function for \(p\in(0,1)\).
@@ -674,7 +681,7 @@ nonparametric Tsallis entropy estimator: \begin{align}
   \label{eq:Tsallis-spacing-estimator}
 \end{align} As \(\lambda\to 1\), \(T_\lambda\) converges to Shannon
 entropy and \(\widehat T_{\lambda}\) recovers the Vasicek
-estimator~\citeproc{ref-vasicek1976test}{{[}20{]}}. This estimator is
+estimator~\citeproc{ref-vasicek1976test}{{[}21{]}}. This estimator is
 asymptotically consistent, \emph{i.e.}, it converges in probability to
 the true value \(T_\lambda\) when \(m,n\rightarrow\infty\) and
 \(m/n\rightarrow0\). We use the heuristic spacing
@@ -713,11 +720,12 @@ bias, thus providing a favorable trade-off between bias and variance.
 \subsection{Bootstrap Correction for Entropy
 Estimator}\label{bootstrap-correction-for-entropy-estimator}
 
-Following
-Refs.~\citeproc{ref-Frery2024}{{[}23{]}}--\citeproc{ref-Alpala2025}{{[}25{]}},
-we refine the non-parametric entropy estimator \(\widehat{T}_{\lambda}\)
-defined in~\eqref{eq:Tsallis-spacing-estimator} with bootstrap,
-obtaining: \begin{equation*}
+Following Refs.~\citeproc{ref-Frery2024}{{[}15{]}},
+\citeproc{ref-Alpala2025}{{[}16{]}},
+\citeproc{ref-Alpala2024}{{[}24{]}}, we refine the non-parametric
+entropy estimator \(\widehat{T}_{\lambda}\) defined
+in~\eqref{eq:Tsallis-spacing-estimator} with bootstrap, obtaining:
+\begin{equation*}
 \widetilde{T}_{\lambda} = 2\widehat{T}_{\lambda}(\bm{Z}) - \frac{1}{B} \sum_{b=1}^{B} \widehat{T}_{\lambda}(\bm{Z}^{(b)}),
 \end{equation*} where \(B\) is the number of bootstrap replications, and
 \(\bm{Z}^{(b)}\) denotes the \(b\)-th resampled dataset obtained by
@@ -821,8 +829,8 @@ texture.
 \end{figure}%
 
 Under the asymptotic properties of the entropy estimators
-\citeproc{ref-vasicek1976test}{{[}20{]}},
-\citeproc{ref-VanEs1992}{{[}26{]}}, for sufficiently large samples,
+\citeproc{ref-vasicek1976test}{{[}21{]}},
+\citeproc{ref-VanEs1992}{{[}25{]}}, for sufficiently large samples,
 \(S_{\widetilde{T}}(\bm{Z};L)\) follows an asymptotic normal
 distribution: \[
   S_{\widetilde{T}}(\mathbf Z;L)\;
@@ -975,7 +983,7 @@ The complete results for both size and power are reported in Table
 Entropy}\label{adaptive-windows-with-tsallis-entropy}
 
 Our approach builds on the adaptive windowing algorithm for SAR images
-proposed by Park et al. \citeproc{ref-Park1999}{{[}17{]}}, which adjusts
+proposed by Park et al. \citeproc{ref-Park1999}{{[}18{]}}, which adjusts
 the analysis window size according to the local homogeneity of the
 scene. For each pixel \((i,j)\), the coefficient of variation is
 computed over the border of the current window, \begin{equation}
@@ -1050,7 +1058,7 @@ extensible and can be applied with any entropy estimator.
 
 Figure~\ref{fig:sim_Phantom_1} presents the structural design of the
 synthetic phantom with dimensions of \(500\times500\) pixels, proposed
-by Gomez et al.~\citeproc{ref-Gomez2017}{{[}27{]}} as a tool to assess
+by Gomez et al.~\citeproc{ref-Gomez2017}{{[}26{]}} as a tool to assess
 the performance of speckle-reduction filters. This layout serves as a
 base template to generate the simulated images shown in
 Figures~\ref{fig:sim_Phantom_2}.
@@ -1065,11 +1073,11 @@ textureless areas (homogeneous).
 The \(\alpha\) parameter of the \(G_I^0\) distribution is essential for
 interpreting texture characteristics. Values near zero greater than
 \(-3\) suggest extremely textured targets, such as urban
-zones~\citeproc{ref-Frery2019a}{{[}28{]}}. As the value decreases, it
+zones~\citeproc{ref-Frery2019a}{{[}27{]}}. As the value decreases, it
 indicates regions with moderate texture (in the \(\left[-6,-3\right]\)
 region), related to forest zones, while values below \(-6\) correspond
 to textureless regions, such as pasture, agricultural fields, and water
-bodies~\citeproc{ref-Neto2023}{{[}29{]}}.
+bodies~\citeproc{ref-Neto2023}{{[}28{]}}.
 
 The proposed Tsallis-based test statistic,
 \(S_{\widetilde{T}_\lambda}\), was applied to the simulated image using
@@ -1283,16 +1291,8 @@ speckle reduction in synthetic aperture radar images},''} \emph{IEEE
 Geoscience and Remote Sensing Magazine}, vol. 1, no. 3, pp. 6--35, 2013.
 }
 
-\bibitem[\citeproctext]{ref-Choi2019}
-\CSLLeftMargin{{[}8{]} }%
-\CSLRightInline{H. Choi and J. Jeong,
-{``\href{https://doi.org/10.3390/rs11101184}{Speckle noise reduction
-technique for SAR images using statistical characteristics of speckle
-noise and discrete wavelet transform},''} \emph{Remote Sensing}, vol.
-11, no. 10, p. 1184, 2019. }
-
 \bibitem[\citeproctext]{ref-Baraha2023}
-\CSLLeftMargin{{[}9{]} }%
+\CSLLeftMargin{{[}8{]} }%
 \CSLRightInline{S. Baraha and A. K. Sahoo,
 {``\href{https://doi.org/10.1016/j.sigpro.2023.109156}{Synthetic
 aperture radar image and its despeckling using variational methods: A
@@ -1300,34 +1300,27 @@ review of recent trends},''} \emph{Signal Processing}, vol. 212, p.
 109156, 2023. }
 
 \bibitem[\citeproctext]{ref-Frery1997}
-\CSLLeftMargin{{[}10{]} }%
+\CSLLeftMargin{{[}9{]} }%
 \CSLRightInline{A. C. Frery, H.-J. Muller, C. C. F. Yanasse, and S. J.
 S. SantAnna, {``A model for extremely heterogeneous clutter,''}
 \emph{{IEEE} Transactions on Geoscience and Remote Sensing}, vol. 35,
 no. 3, pp. 648--659, 1997. }
 
 \bibitem[\citeproctext]{ref-Ferreira2020}
-\CSLLeftMargin{{[}11{]} }%
+\CSLLeftMargin{{[}10{]} }%
 \CSLRightInline{J. De A. Ferreira and A. D. C. Nascimento, {``Shannon
 entropy for the {\(\mathcal {G}^0_{I}\)} model: A new segmentation
 approach,''} \emph{{IEEE} Journal of Selected Topics in Applied Earth
 Observations and Remote Sensing}, vol. 13, pp. 2547--2553, 2020. }
 
 \bibitem[\citeproctext]{ref-Shannon1948}
-\CSLLeftMargin{{[}12{]} }%
+\CSLLeftMargin{{[}11{]} }%
 \CSLRightInline{C. E. Shannon, {``A mathematical theory of
 communication,''} \emph{The Bell System Technical Journal}, vol. 27, no.
 3, pp. 379--423, 1948. }
 
-\bibitem[\citeproctext]{ref-Tsallis1988}
-\CSLLeftMargin{{[}13{]} }%
-\CSLRightInline{C. Tsallis,
-{``\href{https://doi.org/10.1007/bf01016429}{Possible generalization of
-boltzmann-gibbs statistics},''} \emph{Journal of Statistical Physics},
-vol. 52, no. 1--2, pp. 479--487, 1988. }
-
 \bibitem[\citeproctext]{ref-Nascimento2014}
-\CSLLeftMargin{{[}14{]} }%
+\CSLLeftMargin{{[}12{]} }%
 \CSLRightInline{A. D. C. Nascimento, M. M. Horta, A. C. Frery, and R. J.
 Cintra, {``Comparing edge detection methods based on stochastic
 entropies and distances for {PolSAR} imagery,''} \emph{{IEEE} Journal of
@@ -1335,7 +1328,7 @@ Selected Topics in Applied Earth Observations and Remote Sensing}, vol.
 7, no. 2, pp. 648--663, 2014. }
 
 \bibitem[\citeproctext]{ref-Nobre2016}
-\CSLLeftMargin{{[}15{]} }%
+\CSLLeftMargin{{[}13{]} }%
 \CSLRightInline{R. H. Nobre, F. A. A. Rodrigues, R. C. P. Marques, J. S.
 Nobre, J. F. S. R. Neto, and F. N. S. Medeiros,
 {``\href{https://doi.org/10.1109/lsp.2016.2606760}{SAR image
@@ -1343,58 +1336,72 @@ segmentation with {R}ényi's entropy},''} \emph{IEEE Signal Processing
 Letters}, vol. 23, no. 11, pp. 1551--1555, 2016. }
 
 \bibitem[\citeproctext]{ref-Chan2022}
-\CSLLeftMargin{{[}16{]} }%
+\CSLLeftMargin{{[}14{]} }%
 \CSLRightInline{D. Chan, J. Gambini, and A. C. Frery,
 {``\href{https://doi.org/10.3390/rs14030509}{Entropy-based non-local
 means filter for single-look SAR speckle reduction},''} \emph{Remote
 Sensing}, vol. 14, no. 3, p. 509, 2022. }
 
-\bibitem[\citeproctext]{ref-Park1999}
+\bibitem[\citeproctext]{ref-Frery2024}
+\CSLLeftMargin{{[}15{]} }%
+\CSLRightInline{A. C. Frery, J. Alpala, and A. D. C. Nascimento,
+{``\href{https://doi.org/10.3390/rs16111973}{Identifying heterogeneity
+in {SAR} data with new test statistics},''} \emph{Remote Sensing}, vol.
+16, no. 11, p. 1973, 2024. }
+
+\bibitem[\citeproctext]{ref-Alpala2025}
+\CSLLeftMargin{{[}16{]} }%
+\CSLRightInline{J. Alpala, A. D. C. Nascimento, and A. C. Frery,
+{``\href{https://doi.org/10.1109/lgrs.2025.3581855}{Quantifying
+heterogeneity in SAR imagery with the rényi entropy},''} \emph{IEEE
+Geoscience and Remote Sensing Letters}, pp. 1--1, 2025. }
+
+\bibitem[\citeproctext]{ref-Tsallis1988}
 \CSLLeftMargin{{[}17{]} }%
+\CSLRightInline{C. Tsallis,
+{``\href{https://doi.org/10.1007/bf01016429}{Possible generalization of
+boltzmann-gibbs statistics},''} \emph{Journal of Statistical Physics},
+vol. 52, no. 1--2, pp. 479--487, 1988. }
+
+\bibitem[\citeproctext]{ref-Park1999}
+\CSLLeftMargin{{[}18{]} }%
 \CSLRightInline{J.-M. Park, W. J. Song, and W. A. Pearlman,
 {``\href{https://doi.org/10.1049/ip-vis:19990550}{Speckle filtering of
-SAR images based on adaptive windowing},''} \emph{IEE Proceedings -
+SAR images based on adaptive windowing},''} \emph{IEE Proceedings --
 Vision, Image, and Signal Processing}, vol. 146, no. 4, p. 191, 1999. }
 
 \bibitem[\citeproctext]{ref-Nascimento2010}
-\CSLLeftMargin{{[}18{]} }%
+\CSLLeftMargin{{[}19{]} }%
 \CSLRightInline{A. D. C. Nascimento, R. J. Cintra, and A. C. Frery,
 {``Hypothesis testing in speckled data with stochastic distances,''}
 \emph{{IEEE} Transactions on Geoscience and Remote Sensing}, vol. 48,
 no. 1, pp. 373--385, Jan. 2010. }
 
 \bibitem[\citeproctext]{ref-Havrda1967}
-\CSLLeftMargin{{[}19{]} }%
+\CSLLeftMargin{{[}20{]} }%
 \CSLRightInline{J. Havrda and F. Charvát, {``Quantification method of
 classification processes. Concept of structural \(a\)-entropy,''}
 \emph{Kybernetika}, vol. 3, no. 1, pp. (30)--35, 1967 {[}Online{]}.
 Available: \url{http://eudml.org/doc/28681}}
 
 \bibitem[\citeproctext]{ref-vasicek1976test}
-\CSLLeftMargin{{[}20{]} }%
+\CSLLeftMargin{{[}21{]} }%
 \CSLRightInline{O. Vasicek, {``A test for normality based on sample
 entropy,''} \emph{Journal of the Royal Statistical Society Series B:
 Statistical Methodology}, vol. 38, no. 1, pp. 54--59, 1976. }
 
 \bibitem[\citeproctext]{ref-Ebrahimi1994}
-\CSLLeftMargin{{[}21{]} }%
+\CSLLeftMargin{{[}22{]} }%
 \CSLRightInline{N. Ebrahimi, K. Pflughoeft, and E. S. Soofi, {``Two
 measures of sample entropy,''} \emph{Statistics \& Probability Letters},
 vol. 20, no. 3, pp. 225--234, 1994. }
 
 \bibitem[\citeproctext]{ref-AlLabadi2024}
-\CSLLeftMargin{{[}22{]} }%
+\CSLLeftMargin{{[}23{]} }%
 \CSLRightInline{L. Al-Labadi, Z. Chu, and Y. Xu,
 {``\href{https://doi.org/10.1007/s00180-024-01507-z}{Advancements in
 {R}ényi entropy and divergence estimation for model assessment},''}
 \emph{Computational Statistics}, 2024. }
-
-\bibitem[\citeproctext]{ref-Frery2024}
-\CSLLeftMargin{{[}23{]} }%
-\CSLRightInline{A. C. Frery, J. Alpala, and A. D. C. Nascimento,
-{``\href{https://doi.org/10.3390/rs16111973}{Identifying heterogeneity
-in {SAR} data with new test statistics},''} \emph{Remote Sensing}, vol.
-16, no. 11, p. 1973, 2024. }
 
 \bibitem[\citeproctext]{ref-Alpala2024}
 \CSLLeftMargin{{[}24{]} }%
@@ -1405,21 +1412,14 @@ departures from the fully developed speckle hypothesis in intensity
 \emph{2024 {I}nternational {C}onference on {M}achine {I}ntelligence for
 {G}eo{A}nalytics and {R}emote {S}ensing ({MIGARS})}, 2024, pp. 1--4. }
 
-\bibitem[\citeproctext]{ref-Alpala2025}
-\CSLLeftMargin{{[}25{]} }%
-\CSLRightInline{J. Alpala, A. D. C. Nascimento, and A. C. Frery,
-{``\href{https://doi.org/10.1109/lgrs.2025.3581855}{Quantifying
-heterogeneity in SAR imagery with the rényi entropy},''} \emph{IEEE
-Geoscience and Remote Sensing Letters}, pp. 1--1, 2025. }
-
 \bibitem[\citeproctext]{ref-VanEs1992}
-\CSLLeftMargin{{[}26{]} }%
+\CSLLeftMargin{{[}25{]} }%
 \CSLRightInline{B. Van Es, {``Estimating functionals related to a
 density by a class of statistics based on spacings,''}
 \emph{Scandinavian Journal of Statistics}, vol. 19, pp. 61--72, 1992. }
 
 \bibitem[\citeproctext]{ref-Gomez2017}
-\CSLLeftMargin{{[}27{]} }%
+\CSLLeftMargin{{[}26{]} }%
 \CSLRightInline{L. Gomez, L. Alvarez, L. Mazorra, and A. C. Frery,
 {``\href{https://doi.org/10.1016/j.neucom.2016.08.140}{Fully PolSAR
 image classification using machine learning techniques and
@@ -1427,14 +1427,14 @@ reaction-diffusion systems},''} \emph{Neurocomputing}, vol. 255, pp.
 52--60, 2017. }
 
 \bibitem[\citeproctext]{ref-Frery2019a}
-\CSLLeftMargin{{[}28{]} }%
+\CSLLeftMargin{{[}27{]} }%
 \CSLRightInline{A. C. Frery and J. Gambini,
 {``\href{https://doi.org/10.1007/s11749-019-00658-2}{Comparing samples
 from the \({\mathcal {G}}^0\) distribution using a geodesic
 distance},''} \emph{TEST}, vol. 29, no. 2, pp. 359--378, 2019. }
 
 \bibitem[\citeproctext]{ref-Neto2023}
-\CSLLeftMargin{{[}29{]} }%
+\CSLLeftMargin{{[}28{]} }%
 \CSLRightInline{J. F. S. R. Neto and F. A. A. Rodrigues,
 {``\href{https://doi.org/10.1109/lgrs.2023.3305119}{Improving
 log-cumulant-based estimation of heterogeneity information in {SAR}

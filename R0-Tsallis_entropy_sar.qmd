@@ -165,13 +165,23 @@ source("./Code/functions_sample_bias_mse_1.R")
  disaster assessment, 
  agriculture&nbsp;[@Akbarizadeh2012], 
  urban planning&nbsp;[@NovelTechniquesforBuiltupAreaExtractionfromPolarimetricSARImages2019], and 
- maritime surveillance&nbsp[@OntheDetectionandLongTermPathVisualisationofa68Iceberg], among other fields&nbsp[@Moreira2013].
- However, the effective use of SAR data is hindered by speckle noise, a granular interference inherent to coherent imaging systems&nbsp;[@Argenti2013; @Choi2019]. 
- Speckle appears as multiplicative, non-Gaussian noise, making statistical modeling and image interpretation particularly challenging&nbsp;[@Baraha2023].
+ maritime surveillance&nbsp;[@OntheDetectionandLongTermPathVisualisationofa68Iceberg], among other fields&nbsp;[@Moreira2013].
+ However, the effective use of SAR data is hindered by speckle, a noise-like granular interference inherent to coherent imaging systems&nbsp;[@Argenti2013]. 
+ Speckle can be described as multiplicative, non-Gaussian noise, making statistical modeling and image interpretation particularly challenging&nbsp;[@Baraha2023].
 
-Among the statistical models used for SAR intensities, the $\mathcal{G}_I^0$ distribution is widely recognized for its ability to capture different levels of scene heterogeneity. It generalizes the Gamma distribution, which represents fully developed speckle in homogeneous regions&nbsp;[@Frery1997; @Ferreira2020]. While these models are effective, parameter estimation becomes unstable when applied to small local windows, which are often required to preserve spatial resolution. This limitation motivates alternative methodologies that avoid heavy reliance on parametric estimation.
+Among the statistical models used for SAR intensities, the $\mathcal{G}_I^0$ distribution is widely recognized for its ability to capture different levels of scene heterogeneity. 
+It generalizes the Gamma distribution, which represents fully developed speckle in homogeneous regions&nbsp;[@Frery1997; @Ferreira2020]. 
+While these models are effective, parameter estimation becomes unstable when applied to small local windows, which are often required to preserve spatial resolution. 
+This limitation motivates alternative methodologies that avoid heavy reliance on parametric estimation.
 
-Entropy has long been used as a measure of uncertainty in random phenomena, with Shannon’s entropy&nbsp;[@Shannon1948] being the most classical form. Beyond this, Tsallis entropy&nbsp;[@Tsallis1988] offers a non-additive generalization that introduces a parameter $\lambda$, allowing greater flexibility in capturing deviations from homogeneity and better sensitivity to heavy-tailed data. This makes it especially appealing for SAR analysis, where both homogeneous and highly heterogeneous areas coexist. Recent studies have shown the value of entropy-based methods in tasks such as edge detection, segmentation, and despeckling&nbsp;[@Nascimento2014; @Nobre2016; @Chan2022], motivating their extension to hypothesis testing in SAR imagery.
+Entropy has long been used as a measure of uncertainty in random phenomena, with Shannon’s entropy&nbsp;[@Shannon1948] being the most classical form. 
+Recent studies have shown the value of entropy-based methods in tasks such as edge detection&nbsp;[@Nascimento2014], 
+segmentation&nbsp;[@Nobre2016], 
+and despeckling&nbsp;[@Chan2022], motivating their extension to hypothesis testing in SAR imagery.
+In this realm, Frery et al.&nbsp;[@Frery2024] and Alpala et al.&nbsp;[@Alpala2025] quantified departures from the fully-developed speckle hypothesis with the Shannon and Rényi entropy, respectively.
+
+The Tsallis entropy&nbsp;[@Tsallis1988] offers a non-additive generalization that introduces a parameter $\lambda$, allowing greater flexibility in capturing deviations from homogeneity and better sensitivity to heavy-tailed data. 
+This makes it especially appealing for SAR analysis, where both homogeneous and highly heterogeneous areas coexist. 
 
 In this work, we propose a statistical test based on a nonparametric estimator of Tsallis entropy to distinguish between homogeneous and heterogeneous regions in SAR data. The test compares the estimated Tsallis entropy with its theoretical value under the Gamma model assumption. To improve performance in practice, we incorporate a bootstrap procedure that reduces bias in small samples. In addition, we embed the test within an adaptive windowing framework, inspired by the method of Park et al.&nbsp;[@Park1999]. Instead of relying on size-fixed sliding windows (e.g., $7 \times 7$), the adaptive procedure adjusts the window size locally: it enlarges in homogeneous regions to improve statistical stability, and shrinks in heterogeneous regions to avoid mixing different structures and to preserve local details.
 
