@@ -672,7 +672,7 @@ Meanwhile, significant deviations indicate heterogeneity.
 
 ## The Proposed Test
 
-We propose a statistic test that identifies the discrepancy between estimated and theoretical entropy under homogeneity. Since the number of looks $L\geq1$ is known, we define the test statistic as follows:
+We propose a test statistic that identifies the discrepancy between estimated and theoretical entropy under homogeneity. Since the number of looks $L\geq1$ is known, we define the test statistic as follows:
 \begin{multline}
 \label{eq-test-tsallis}
 S_{\widetilde{T}_{\lambda}}(\bm{Z}; L) = \widetilde{T}_{\lambda} - \biggl\{ \frac{1}{\lambda - 1} \Bigl[ 1 -
@@ -686,19 +686,19 @@ S_{\widetilde{T}_{\lambda}}(\bm{Z}; L) = \widetilde{T}_{\lambda} - \biggl\{ \fra
 \end{multline}
 where $\widehat{\mu} = \frac{1}{n} \sum_{i=1}^n Z_i$ is the sample mean.
 
-This statistic can be interpreted as:
+This statistic can be interpreted as follows:
 $$
 S_{\widetilde T_\lambda} 
 = 
 \underbrace{\widetilde T_\lambda}_{\text{estimated}} 
 \;-\;
-\underbrace{T_\lambda\bigl(\Gamma_{\mathrm{SAR}}\bigr)}_{\text{theoretical under } H_0}\hspace{-0.5em},
+\underbrace{T_\lambda\bigl(\Gamma_{\mathrm{SAR}}\bigr)}_{\text{theoretical under } \mathcal{H}_0}\hspace{-0.5em},
 $$
-the difference between the estimated entropy and the expected value under homogeneity. Values close to zero indicate that the region behaves like fully developed speckle, while large positive values signal excess entropy and, thus, heterogeneity.
-This formulation avoids the need to estimate $\mathcal{G}^0_I$ parameters  such as $\alpha$, offering a simple, interpretable, and statistically grounded test. Moreover, the method remains effective for small samples, aided by the bootstrap bias correction.
+\emph{i.e.}, the difference between the estimated entropy and the expected value under homogeneity. Values close to zero indicate that the region behaves like fully developed speckle, while large positive values signal entropy excess and, thus, heterogeneity.
+This formulation avoids the need to estimate $\mathcal{G}^0_I$ parameters  such as $\alpha$, offering a simple, interpretable, and statistically grounded test. Moreover, the proposed method remains effective for small samples, aided by the bootstrap bias correction.
 
 
-Figure&nbsp;\ref{fig-densities-tsallis6} shows the empirical distribution of $S_{\widetilde{T}_{\lambda}}$ under $\mathcal{H}_0$, obtained from $10^4$ Monte Carlo simulations with varying sample sizes ($n \in \{25, 49, 81,121\}$), $\lambda = 0.85$, and $L \in \{5,18\}$. The empirical densities are tightly concentrated around zero, confirming that under $\mathcal{H}_0$ the test statistic has mean approximately $0$; at the same time, their moderately heavy tails reveal sensitivity to departures from homogeneity, which is desirable for detecting subtle texture.
+Figure&nbsp;\ref{fig-densities-tsallis6} shows the empirical distribution of $S_{\widetilde{T}_{\lambda}}$ under $\mathcal{H}_0$, obtained from $10^4$ Monte Carlo simulations with varying sample sizes $n \in \{25, 49, 81,121\}$, $\lambda = 0.85$, and $L \in \{5,18\}$. The empirical densities are tightly concentrated around zero, confirming that under $\mathcal{H}_0$, the test statistic has mean approximately $0$; at the same time, their moderately heavy tails reveal sensitivity to departures from homogeneity, which is desirable for detecting subtle texture.
 
 
 ```{r Simulated_density-tsallis5, echo=FALSE, message=FALSE}
@@ -788,7 +788,7 @@ for (L in L_values) {
 
 ```
 
-```{r fig-densities-tsallis6,  echo=FALSE, message=FALSE, warning=FALSE,  out.width=".9\\linewidth", fig.pos="H",  fig.cap="Empirical densities of $S_{\\widetilde{T}_{\\lambda}}(\\bm{Z}; L)$ under $\\mathcal{H}_0$, with $\\lambda=0.85$."}
+```{r fig-densities-tsallis6,  echo=FALSE, message=FALSE, warning=FALSE,  out.width="\\linewidth", fig.pos="H",  fig.cap="Empirical densities of $S_{\\widetilde{T}_{\\lambda}}(\\bm{Z}; L)$ under $\\mathcal{H}_0$, with $\\lambda=0.85$."}
 #fig.show="hide", 
 # eval=FALSE,  #  fig.asp=0.65
 
@@ -820,8 +820,8 @@ for (L in selected_L_values) {
   
     p <- ggplot(combined_data, aes(x = Test_Statistics, col = LegendOrder, linetype = LegendOrder, group = CurveOrder)) +
   geom_line(stat = "density", linewidth = 1.4) +
-  scale_color_brewer(palette = "Set1", name = "Sample Size") +
-  scale_linetype_manual(values = rep("solid", length(sample.size)), name = "Sample Size") +
+  scale_color_brewer(palette = "Set1", name = "Sample size") +
+  scale_linetype_manual(values = rep("solid", length(sample.size)), name = "Sample size") +
   scale_x_continuous(limits = x_limits, breaks = x_breaks, minor_breaks = NULL) +
   scale_y_continuous(limits = y_limits, minor_breaks = NULL) +
   labs(
@@ -851,23 +851,23 @@ print(combined_plot)
 
 ```
 
-Under the asymptotic properties of the entropy estimators [@vasicek1976test;@VanEs1992], for sufficiently large samples, $S_{\widetilde{T}}(\bm{Z};L)$ follows an asymptotic normal distribution:
+Under the asymptotic properties of the entropy estimators [@vasicek1976test;@VanEs1992], for sufficiently large samples, $S_{\widetilde{T}}(\bm{Z};L)$ follows an asymptotic Normal distribution, \emph{i.e.}, the following convergence in distribution holds:
 $$
   S_{\widetilde{T}}(\bm Z;L)\;
   \overset{\mathcal{D}}{\underset{n \to \infty}{\longrightarrow}}\;
-  \mathcal N\!\bigl(\mu_S,\sigma_S^{2}\bigr),
+  \mathcal N\!\bigl(\mu_S,\sigma_S^{2}\bigr).
 $$
-where $\xrightarrow{\mathcal{D}}$ denotes convergence in distribution.
-
-Here, $\mu_S = \mathbb{E}[S_{\widetilde{T}}(\bm{Z};L)]$ and $\sigma^2_S = \mathrm{Var}[S_{\widetilde{T}}(\bm{Z};L)]$ are the theoretical mean and variance of the test statistic under $\mathcal{H}_0$. This asymptotic normality can be explained by noting that the entropy estimator (and hence $S_{\widetilde{T}}$) can be expressed as a sum or average of numerous observations; therefore, by the Central Limit Theorem and the delta method, its sampling distribution approaches a Gaussian form for large $n$.
-
+<!-- where $\xrightarrow{\mathcal{D}}$ denotes convergence in distribution. -->
+Here, $\mu_S = \mathbb{E}[S_{\widetilde{T}}(\bm{Z};L)]$ and $\sigma^2_S = \mathrm{Var}[S_{\widetilde{T}}(\bm{Z};L)]$ are the theoretical mean and variance of the test statistic under $\mathcal{H}_0$, respectively. This asymptotic normality can be explained by noting that the entropy estimator (and hence $S_{\widetilde{T}}$) can be expressed as a sum or average of numerous observations; therefore, by the Central Limit Theorem and the Delta Method, its sampling distribution approaches a Gaussian form for large $n$.
 In practice, we estimate $\widehat{\mu}_S$ and $\widehat{\sigma}_S$ via Monte Carlo under $\mathcal{H}_0$.
+Therefore,
 \begin{equation*}
 \varepsilon = \frac{{S_{\widetilde{T}}(\bm{Z}; L) - \widehat{\mu}_S}}{{\widehat{\sigma}_S}},
 \end{equation*} 
-which is asymptotically standard normal distributed for large $n$. Consequently, two-sided $p$-values are obtained as $2\Phi(-|\varepsilon|)$, where $\Phi(\cdot)$ is the cumulative distribution function of the standard normal distribution.
+is asymptotically standard Normal distributed for large $n$. Consequently, two-sided $p$-values are obtained as $2\Phi(-|\varepsilon|)$, where $\Phi(\cdot)$ is the cumulative distribution function of the standard Normal distribution.
 
-The practical procedure is as follows: first, compute the test statistic $S_{\widetilde{T}}(\bm{Z}; L)$ for the observed data; then standardize it using the estimated mean and standard deviation $(\widehat{\mu}_S, \widehat{\sigma}_S)$; next, compute the $p$-value as $2\Phi(-|\varepsilon|)$; and finally, make a decision by comparing the $p$-value with the threshold $0.05$, as illustrated in Figure&nbsp;\ref{fig:entropy-diagram-test}.
+The practical procedure is as follows: first, compute the test statistic $S_{\widetilde{T}}(\bm{Z}; L)$ for the observed data; then standardize it using the estimated mean $\widehat{\mu}_S$ and the standard deviation $\widehat{\sigma}_S$; next, compute the $p$-value as $2\Phi(-|\varepsilon|)$; and finally, make a decision by comparing the $p$-value with the threshold $0.05$. 
+The corresponding workflow is illustrated in Figure&nbsp;\ref{fig:entropy-diagram-test}.
 
 ```{=latex}
 \begin{figure}[H]
@@ -889,7 +889,7 @@ The practical procedure is as follows: first, compute the test statistic $S_{\wi
   \node[box,right=of raw] (std) {2. Standardize\\test statistic\\ $\varepsilon=(S-\hat\mu_S)/\hat\sigma_S$};
   
   % 
-  \node[box,below=of raw] (pval) {4. Make decision\\Reject if\\ $p<0.05$};
+  \node[box,below=of raw] (pval) {4. Make decision\\Reject if\\ $p\text{-value} <0.05$};
   \node[box,right=of pval] (dec) {3. Compute \\ $p$-value \\ $2\Phi(-|\varepsilon|)$};
 
   % 
@@ -908,12 +908,10 @@ The practical procedure is as follows: first, compute the test statistic $S_{\wi
 
 The statistical validity and effectiveness of the proposed Tsallis entropy–based test was examined through two fundamental properties: \emph{size} and \emph{power}. These provide insight into the probability of incorrect decisions in hypothesis testing.
 
-The size of a statistical test, also known as the Type&nbsp;I&nbsp;error rate, refers to the probability of incorrectly rejecting the null hypothesis $\mathcal{H}_0$ when it is in fact true. In hypothesis testing, practitioners typically specify a nominal significance level, commonly set at \SI{1}{\percent}, \SI{5}{\percent}, and \SI{10}{\percent}, which represent acceptable probabilities of committing a Type&nbsp;I error. A well-calibrated test should reproduce these levels empirically across sample sizes and conditions.
+The size of a statistical test, also known as the Type&nbsp;I&nbsp;error rate, refers to the probability of incorrectly rejecting the null hypothesis $\mathcal{H}_0$ when it is in fact true. In hypothesis testing, practitioners typically specify a nominal significance level, commonly set at \SI{1}{\percent}, \SI{5}{\percent}, or \SI{10}{\percent}, which represent acceptable probabilities of committing a Type&nbsp;I error. A well-calibrated test should reproduce these levels empirically across sample sizes and conditions.
+To assess this, we performed $1000$ Monte Carlo replications under $\mathcal{H}_0$ with data from a $\Gamma_{\mathrm{SAR}}$ distribution with $\mu=1$, computing the test statistic via a bootstrap entropy estimator using $B=100$ and $\lambda=0.85$. The empirical size was then estimated as the proportion of replications in which the null hypothesis was incorrectly rejected. The observed Type&nbsp;I error rates remained close to the nominal levels, confirming the validity and proper calibration of the proposed procedures.
 
-To assess this, we performed $1000$ Monte Carlo replications under $\mathcal{H}_0$ with data from a $\Gamma_{\mathrm{SAR}}$ distribution ($\mu=1$), computing the test statistic via a bootstrap entropy estimator ($B=100$, $\lambda=0.85$). The empirical size was then estimated as the proportion of replications in which the null hypothesis was incorrectly rejected. The observed Type&nbsp;I error rates remained close to the nominal levels, confirming the validity and proper calibration of the proposed procedures.
-
-The power of a test is its probability of correctly rejecting $\mathcal{H}_0$ when it is false. Equivalently, it equals $1-\beta$, where $\beta$ is the Type&nbsp;II error rate. High power thus indicates strong sensitivity to departures from $\mathcal{H}_0$. To assess power, we simulated data under the alternative hypothesis $\mathcal{H}_1$, assuming a $\mathcal{G}^0_I$ distribution with $\mu=1$ and $\alpha=-2$. Again, $1000$ Monte Carlo replications were performed for each configuration of sample size and $L$, and the test statistic was computed using the bootstrap estimator ($B=100$, $\lambda=0.85$).
-
+The power of a test is its probability of correctly rejecting $\mathcal{H}_0$ when it is false. Equivalently, it equals $1-\beta$, where $\beta$ is the Type&nbsp;II error rate. High power thus indicates strong sensitivity to departures from $\mathcal{H}_0$. To assess power, we simulated data under the alternative hypothesis $\mathcal{H}_1$, assuming a $\mathcal{G}^0_I$ distribution with $\mu=1$ and $\alpha=-2$. Again, $1000$ Monte Carlo replications were performed for each configuration of sample size $n \in \{25, 49, 81, 121\}$ and $L \in \{5, 8, 18\}$, and the test statistic was computed using the bootstrap estimator with $B=100$ and $\lambda=0.85$.
 As expected, power increased with both the sample size and the number of looks, confirming the effectiveness of the Tsallis entropy–based test in detecting departures from the null hypothesis.
 
 The complete results for both size and power are reported in Table \ref{tab:size-power-tsallis}.
@@ -1170,10 +1168,10 @@ suppressMessages({
 
 table_combined_result <- knitr::kable(
   combined_results,
-  caption = "Size and Power of the $S_{\\widetilde{T}_{\\lambda}}(\\bm{Z})$ test statistic (Tsallis).",
+  caption = "Size and Power of the $S_{\\widetilde{T}_{\\lambda}}(\\bm{Z})$ test statistic.",
   format = "latex",
   booktabs = TRUE,
-  align = "cccccccc",
+  align = "rrcccccc",
   escape = FALSE,
   digits = 3,
   label = "size-power-tsallis",
@@ -1192,31 +1190,40 @@ print(table_combined_result)
 ```
 
 
-## Adaptive Windows with Tsallis Entropy
+## Adaptive Windows 
 
-Our approach builds on the adaptive windowing algorithm for SAR images proposed by Park et al. [@Park1999], which adjusts the analysis window size according to the local homogeneity of the scene. For each pixel $(i,j)$, the coefficient of variation  is computed over the border of the current window,
+Our approach builds on the adaptive windowing algorithm for SAR images proposed by Park et al. [@Park1999], which adjusts the analysis window size according to the local homogeneity of the scene. For each pixel $(i,j)$, let $w_{ij}$ be the windows centered at the pixel $(i,j)$ of radius $N_{ij}$ defined as
+\begin{equation}
+w_{ij} = \{(i',j') / i-N_{ij} \le i' \le i+N_{ij} \, \wedge \, j-N_{ij} \le j' \le j+N_{ij}\}.
+\end{equation}
+Then, the border of this window is given by
+\begin{multline}
+b_{ij} = \{(i',j') \in w_{ij}/ i' = i-N_{ij} \, \vee \, i' = i+N_{ij} \, \vee \\ j' = j-N_{ij} \, \vee \, j' = j+N_{ij}\}.
+\end{multline}
+The coefficient of variation is computed over the border of the current window, as follows:
 \begin{equation}
 C_{ij} = \frac{\sigma_{ij}}{\mu_{ij}},
 \end{equation}
-where $\mu_{ij}$ and $\sigma_{ij}$ are calculated using only the border pixels $b_{ij}$ of the window $w_{ij}$. In  homogeneous areas, $C_{ij} \approx \sigma_n$, with
+where the mean $\mu_{ij}$ and the standar deviation $\sigma_{ij}$ are calculated using only the border pixels $b_{ij}$ of the window $w_{ij}$. 
+In homogeneous areas, 
 \begin{equation}
-\sigma_n = \frac{0.523}{\sqrt{L}}.
+C_{ij} \approx \sigma_n := \frac{0.523}{\sqrt{L}}.
 \end{equation}
 The homogeneity criterion is defined by comparing $C_{ij}$ with an adaptive threshold  $U_{ij}$, given by
 \begin{equation}
 U_{ij} = \eta\left( 1 + \sqrt{\frac{1 + 2\sigma_n^2}{8(W_{ij} - 1)}} \right)\sigma_n,
 \end{equation}
-where $W_{ij} = 2N_{ij} + 1$ is the current window side length (with radius $N_{ij}$), and $\eta$ is a tuning parameter controlling the degree of smoothing. Values close to $\eta=1.0$ provide limited speckle suppression, while larger values increase smoothing and yield stronger noise reduction. 
+where $W_{ij} = 2N_{ij} + 1$ is the current window side length, and $\eta$ is a tuning parameter controlling the degree of smoothing. Values close to $\eta=1$ provide limited speckle suppression, while larger values increase smoothing and yield stronger noise reduction. 
 
 The window radius $N_{ij}$ is updated dynamically and locally as follows:
 $$
-N_{i,j+1} =
+N_{i,j}^{\text{updated}} =
 \begin{cases}
-\min(N_{ij} + 1, N_{\max}), & \text{if } C_{ij} \leq U_{ij}, \\
-\max(N_{ij} - 1, N_{\min}), & \text{if } C_{ij} > U_{ij},
+\min\{N_{ij} + 1, N_{\max}\}, & \text{if } C_{ij} \leq U_{ij}, \\
+\max\{N_{ij} - 1, N_{\min}\}, & \text{if } C_{ij} > U_{ij},
 \end{cases}
 $$
-here, $N_{\max}$ and $N_{\min}$ denote the maximum and minimum window size, respectively. 
+where $N_{\max}$ and $N_{\min}$ denote the maximum and minimum allowed window size, respectively. 
 <!-- In homogeneous regions the window size increases, provided it does not exceed $N_{\max}$, which enhances speckle reduction and stabilizes the estimates. Conversely, in heterogeneous regions the window size decreases, but not below $N_{\min}$, thereby preserving edges and preventing the mixing of different classes. -->
 
 
@@ -1227,7 +1234,7 @@ The procedure can be summarized as:
 - **Homogeneous regions** ($C_{ij} \leq U_{ij}$): the window grows, up to $N_{\max}$, which enhances speckle reduction and stabilizes the estimates.  
 - **Heterogeneous regions** ($C_{ij} > U_{ij}$): the window shrinks, down to $N_{\min}$, which preserves edges and prevents the mixing of different classes.  
 
-Once the window radius $N_{ij}$ has been determined for pixel $(i,j)$, the corresponding full window is extracted and the proposed test in \eqref{eq-test-tsallis} is applied to obtain the local statistic. This produces two outputs: 
+Once the window radius $N_{ij}$ has been determined for the pixel $(i,j)$, the corresponding full window is extracted and the proposed test in \eqref{eq-test-tsallis} is applied to obtain the local test statistic. This produces two outputs: 
 
 - a map of test statistics over the image, and  
 - a window-size map $W_{ij}$, which records the locally selected window side (larger in homogeneous regions, smaller in heterogeneous ones).  
@@ -1244,14 +1251,14 @@ This adaptive strategy has several advantages. It is locally responsive to image
 
 Figure&nbsp;\ref{fig:sim_Phantom_1} presents the structural design of the synthetic phantom with dimensions of
 $500\times500$ pixels, proposed by  Gomez et al.&nbsp;[@Gomez2017] as a tool to assess the performance of speckle-reduction filters. 
-This layout serves as a base template to generate the simulated image shown in Figures&nbsp;\ref{fig:sim_Phantom_2}.
+This layout serves as a base template to generate the simulated image shown in Figure&nbsp;\ref{fig:sim_Phantom_2}.
 
-Each region is filled with data simulated from the $\mathcal{G}^0_I$ distribution&nbsp;\eqref{E:gi02}, using different combinations of the texture parameter $\alpha$ and the mean $\mu$, as indicated by the labels in each quadrant of the image.
+Each region is filled with data simulated from the $\mathcal{G}^0_I$ distribution, using the expression&nbsp;\eqref{E:gi02}, considering different combinations of the texture parameter $\alpha$ and the mean $\mu$, as indicated by the labels in each quadrant of the image.
 Light regions correspond to textured observations (heterogeneous), while darker regions represent textureless areas (homogeneous).
 
 
-The $\alpha$ parameter of the $G_I^0$ distribution is essential for
-interpreting texture characteristics. Values near zero greater than
+The $\alpha$ parameter of the $\mathcal{G}_I^0$ distribution is essential for
+interpreting texture characteristics. Values near zero and greater than
 $-3$ suggest extremely textured targets, such as urban
 zones&nbsp;[@Frery2019a]. 
 As the value decreases, it indicates regions
@@ -1260,7 +1267,10 @@ forest zones, while values below $-6$ correspond to textureless
 regions, such as pasture, agricultural fields, and water
 bodies&nbsp;[@Neto2023].
 
-The proposed Tsallis-based test statistic, $S_{\widetilde{T}_\lambda}$, was applied to the simulated image using the adaptive windowing strategy with side lengths ranging from $5\times 5$ (minimum) to $11\times 11$ (maximum), with the smoothing parameter set to $\eta = 5$. Figure&nbsp;\ref{fig:pvalueL9} displays the resulting $p$-value map for $L=9$. 
+The proposed Tsallis-based test statistic, $S_{\widetilde{T}_\lambda}$, was applied to the simulated image using the adaptive windowing strategy with side lengths ranging from $5\times 5$ ($N_{\min}=5$) to $11\times 11$ ($N_{\max}=11$), with the smoothing parameter set to $\eta = 5$. Figure&nbsp;\ref{fig:pvalueL9} displays the resulting $p$-value map for $L=9$. 
+The color gradient provides an interpretable scale: dark red regions ($p \approx 0$) indicate strong evidence of heterogeneity, consistently appearing in highly textured zones such as those with $\alpha > -3$, while dark blue regions ($p \approx 1$) correspond to homogeneous areas, typically observed for very low $\alpha$ values (e.g., $\alpha < -6$). 
+Intermediate colors, such as yellow and green ($p \approx 0.2$–$0.6$), represent transitional responses that capture moderately textured areas (e.g., $-6 \leq \alpha \leq -3$), whereas light blue tones ($p \approx 0.7$–$0.9$) occur in regions that are close to homogeneous but still contain subtle texture variations. 
+This gradation of colors highlights the sensitivity of the proposed test: instead of producing only binary outcomes, it provides a continuous measure of heterogeneity across the image, allowing areas with intermediate texture levels to be represented by intermediate $p$-values that reflect the gradual transition between homogeneous and heterogeneous scattering conditions.
 ```{=latex}
 \begin{figure*}[hbt]
     \centering
@@ -1282,25 +1292,17 @@ The proposed Tsallis-based test statistic, $S_{\widetilde{T}_\lambda}$, was appl
         \caption{$p$-value map  }
         \label{fig:pvalueL9}
     \end{subfigure}
-    \caption{Results on simulated data with $S_{\widetilde{T}_{\lambda}}$, using adaptive windows ($5\times5$ to $11\times11$).}
+    \caption{Results on simulated data with $S_{\widetilde{T}_{\lambda}}$, using adaptive windows from $N_{\min}=5$ to $N_{\max}=11$.}
 
     \label{fig:simL9}
 \end{figure*}
 ```
-
-The color gradient provides an interpretable scale: dark red regions ($p \approx 0$) indicate strong evidence of heterogeneity, consistently appearing in highly textured zones such as those with $\alpha > -3$, while dark blue regions ($p \approx 1$) correspond to homogeneous areas, typically observed for very low $\alpha$ values (e.g., $\alpha < -6$). 
-Intermediate colors, such as yellow and green ($p \approx 0.2$–$0.6$), represent transitional responses that capture moderately textured areas (e.g., $-6 \leq \alpha \leq -3$), whereas light blue tones ($p \approx 0.7$–$0.9$) occur in regions that are close to homogeneous but still contain subtle texture variations. 
-This gradation of colors highlights the sensitivity of the proposed test: instead of producing only binary outcomes, it provides a continuous measure of heterogeneity across the image, allowing areas with intermediate texture levels to be represented by intermediate $p$-values that reflect the gradual transition between homogeneous and heterogeneous scattering conditions.
-
-
-
 
 
 ## Applications to SAR Data
 
 The selected SAR scenes were acquired in HH polarization for the outskirts of Munich (Germany) and Dublin Port (Ireland), and in VV polarization for Foggia (Italy), as shown in Figs.&nbsp;\ref{fig:munich-sar}–\ref{fig:foggia-sar}. 
 The corresponding optical images (Figs.&nbsp;\ref{fig:munich-o}–\ref{fig:foggia-o}) illustrate the land cover context.
-
 Table&nbsp;\ref{tab:table_param} details the SAR acquisition parameters.
 \renewcommand{\arraystretch}{2.5}   
 ```{r parameters_sar, echo=FALSE, message=FALSE, warning=FALSE}
@@ -1356,7 +1358,7 @@ kable(SAR_data,
   column_spec(7, width = "4.5cm")
 
 ```
-We applied the proposed test statistic $S_{\widetilde{T}_{\lambda}}$ to real SAR data using adaptive local sliding windows ranging from $5 \times 5$ to $11 \times 11$, with the smoothing parameter set to $\eta = 5$. The results are illustrated in Figures&nbsp;\ref{fig:munichp}–\ref{fig:foggiap}, which display the original SAR image, the corresponding optical reference, and the resulting $p$-value maps.
+We applied the proposed test statistic $S_{\widetilde{T}_{\lambda}}$ to real SAR data using adaptive local sliding windows ranging from $N_{\min}=5$ to $N_{\max}=11$, with the smoothing parameter set to $\eta = 5$. The results are illustrated in Figures&nbsp;\ref{fig:munichp}–\ref{fig:foggiap}, which display the original SAR image, the corresponding optical reference, and the resulting $p$-value maps.
 ```{=latex}
 \setlength{\dblfloatsep}{6pt}      % space between double floats
 \setlength{\dbltextfloatsep}{6pt}  % space between text and double float
@@ -1385,7 +1387,7 @@ We applied the proposed test statistic $S_{\widetilde{T}_{\lambda}}$ to real SAR
         \caption{$p$-value map   }
         \label{fig:munichp}
     \end{subfigure}
-    \caption{Results on SAR data over Munich, Germany, using the test statistic $S_{\widetilde{T}_{\lambda}}$ with adaptive windows ($5\times5$ to $11\times11$).}
+    \caption{Results on SAR data over Munich, Germany, using the test statistic $S_{\widetilde{T}_{\lambda}}$ with adaptive windows from $N_{\min}=5$ to $N_{\max}=11$.}
     \label{fig:munich}
 \end{figure*}
 ```
@@ -1411,7 +1413,7 @@ We applied the proposed test statistic $S_{\widetilde{T}_{\lambda}}$ to real SAR
         \caption{$p$-value map   }
         \label{fig:dublinp}
     \end{subfigure}
-   \caption{Results on SAR data over Dublin, Ireland, using the test statistic $S_{\widetilde{T}_{\lambda}}$ with adaptive windows ($5\times5$ to $11\times11$).}
+   \caption{Results on SAR data over Dublin, Ireland, using the test statistic $S_{\widetilde{T}_{\lambda}}$ with adaptive windows from $N_{\min}=5$ to $N_{\max}=11$.}
     \label{fig:dublin}
 \end{figure*}
 ```
@@ -1436,7 +1438,7 @@ We applied the proposed test statistic $S_{\widetilde{T}_{\lambda}}$ to real SAR
         \caption{$p$-value map   }
         \label{fig:foggiap}
     \end{subfigure}
-   \caption{Results on SAR data over Foggia, Italy, using the test statistic $S_{\widetilde{T}_{\lambda}}$ with adaptive windows ($5\times5$ to $11\times11$).}
+   \caption{Results on SAR data over Foggia, Italy, using the test statistic $S_{\widetilde{T}_{\lambda}}$ with adaptive windows from $N_{\min}=5$ to $N_{\max}=11$.}
     \label{fig:foggia}
 \end{figure*}
 ```
