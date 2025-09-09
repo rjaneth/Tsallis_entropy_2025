@@ -457,8 +457,8 @@ We use the heuristic spacing $m=\lfloor\sqrt{n}+0.5\rfloor$.
 <!-- ## Finding an optimal value of $\lambda$ -->
 ## Optimal $\lambda$ value
 
-We investigate the optimal order $\lambda$ for the Tsallis entropy estimator using simulated samples of size~$n = 49$ drawn from $Z \sim \Gamma_{\mathrm{SAR}}(1,5)$. 
-The bias and mean squared error (MSE) were evaluated for varying values of~$\lambda$ through a Monte Carlo experiment.
+We investigate the optimal order $\lambda$ for the Tsallis entropy estimator using simulated samples of size $n = 49$ drawn from $Z \sim \Gamma_{\mathrm{SAR}}(1,5)$. 
+The bias and mean squared error (MSE) were evaluated for varying values of $\lambda$ through a Monte Carlo experiment.
 
 As shown in Figure&nbsp;\ref{fig-optimal_order-tsallis}, for $L>1$ we found that $\lambda=0.85$ yields the lowest MSE while maintaining a low bias, thus providing a favorable trade-off between bias and variance.
 
@@ -1301,8 +1301,8 @@ This gradation of colors highlights the sensitivity of the proposed test: instea
 
 ## Applications to SAR Data
 
-The selected SAR scenes were acquired in HH polarization for the outskirts of Munich (Germany) and Dublin Port (Ireland), and in VV polarization for Foggia (Italy), as shown in Figs.&nbsp;\ref{fig:munich-sar}–\ref{fig:foggia-sar}. 
-The corresponding optical images (Figs.&nbsp;\ref{fig:munich-o}–\ref{fig:foggia-o}) illustrate the land cover context.
+The selected SAR scenes were acquired in HH polarization for the outskirts of Munich (Germany) and Dublin Port (Ireland), and in VV polarization for Foggia (Italy), as shown in Figures.&nbsp;\ref{fig:munich-sar}–\ref{fig:foggia-sar}. 
+The corresponding optical images (Figures.&nbsp;\ref{fig:munich-o}–\ref{fig:foggia-o}) illustrate the land cover context.
 Table&nbsp;\ref{tab:table_param} details the SAR acquisition parameters.
 \renewcommand{\arraystretch}{2.5}   
 ```{r parameters_sar, echo=FALSE, message=FALSE, warning=FALSE}
