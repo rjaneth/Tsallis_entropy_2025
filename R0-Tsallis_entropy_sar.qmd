@@ -19,6 +19,8 @@ format:
 crossref:
     fig-title: Figure
 author:
+    #   Use `IEEEbiographynophoto` and the author name
+    #   as the argument followed by the biography text.
   - name: Janeth Alpala
     email: janeth.alpala@ufpe.br
     orcid: 0000-0002-0265-6236
@@ -45,31 +47,23 @@ author:
       #corresponding: true
     note: |
       Author 1 is with the Departamento de Estatística, Universidade Federal de Pernambuco, Recife, 50670-901 PE, Brazil (e-mails: janeth.alpala@ufpe.br).
-
       Author 2 is with the School of Mathematics and Statistics, Victoria University of Wellington, Wellington, 6140, New Zealand (e-mail: alejandro.frery@vuw.ac.nz). \emph{Corresponding author: Alejandro C. Frery.}
-
       This research, including its outputs, e.g., this manuscript, was executed in Quarto and is fully reproducible. We used RStudio version 2024.12.1+563, and R version 4.4.2. Data and code are available at: <https://github.com/rjaneth/Tsallis_entropy_2025>
     # bio: |
-    #   Use `IEEEbiographynophoto` and the author name
-    #   as the argument followed by the biography text.
     # note: "Template created June 23, 2023; revised `r format(Sys.Date(),format='%B %d, %Y')`."
 abstract: |
   Detecting departures from the fully-developed speckle in Synthetic Aperture Radar (SAR) imagery is essential for reliable interpretation in remote sensing applications. 
   We propose a statistical test based on a nonparametric estimator of Tsallis entropy, a non-additive generalization of Shannon’s formulation that provides enhanced sensitivity to heavy-tailed data. 
   To improve accuracy with small samples, the estimator is refined through a bootstrap correction. 
    In addition, we integrate the test within an adaptive windowing strategy that adjusts window size locally: larger in homogeneous regions to stabilize estimation, and smaller in heterogeneous areas to preserve structural details. 
-  This combination yields an unsupervised and interpretable procedure that produces $p$-value maps highlighting heterogeneous areas. 
-  Experimental results with both simulated data and SAR images demonstrate the robustness of the method in detecting texture variability and distinguishing between homogeneous and heterogeneous regions.
-
 keywords: [Tsallis entropy, Gamma distribution, GI0 distribution, heterogeneity, SAR, hypothesis test]
-#, bootstrap]
  
 #funding: 
  # statement: "The `quarto-ieee` "
 pageheader:
+  
   left: IEEE Transactions on Geoscience and Remote Sensing, Month Year
   right: #'D. Folio:  A Sample Article Using quarto-ieee'
-  
 header-includes:
    #- \usepackage[english]{babel}
    - \usepackage{bm,bbm}
@@ -84,7 +78,6 @@ header-includes:
    - \usepackage{booktabs}
    - \usepackage{color}
    - \usepackage{hyperref}
-   #- \hypersetup{draft} #Desactiva enlaces y referencias cruzadas
    - \usepackage{float} # position figures
    - \usepackage{array}
    - \usepackage{multirow}
@@ -96,12 +89,14 @@ header-includes:
    - \usetikzlibrary{shapes, arrows.meta, positioning}
 #bibliography: references.bib
 bibliography: references.bib
-
 # execute:
 #   echo: false
 #   eval: true
-
+editor: 
+  markdown: 
+    wrap: 72
 ---
+
 ```{r setup, include=FALSE}
 
 #knitr::opts_chunk$set(echo = FALSE, cache = TRUE)
@@ -156,104 +151,160 @@ source("./Code/functions_sample_bias_mse_1.R")
 #source("./Code/read_ENVI_images.R")
 
 ```
+
 \renewcommand{\tablename}{TABLE}
+
 # Introduction
-[S]{.IEEEPARstart}[ynthetic]{}
- Aperture Radar  (SAR) technology has become a key tool in remote sensing, offering high-resolution imaging capabilities independent of solar illumination and weather conditions, which enables continuous and reliable Earth observation&nbsp;[@Mondini2021]. 
- SAR images are widely applied in environmental monitoring&nbsp;[@Amitrano2021], 
- disaster assessment&nbsp;[@Ge2020], 
- agriculture&nbsp;[@Changan2019], 
- urban planning&nbsp;[@Esch2010;@NovelTechniquesforBuiltupAreaExtractionfromPolarimetricSARImages2019], and 
- maritime surveillance&nbsp;[@Cao2024;@OntheDetectionandLongTermPathVisualisationofa68Iceberg], among other fields&nbsp;[@Moreira2013].
- However, the effective use of SAR data is hindered by speckle, a noise-like granular interference inherent to coherent imaging systems&nbsp;[@Argenti2013]. 
- Speckle can be described as multiplicative, non-Gaussian noise, making statistical modeling and image interpretation particularly challenging&nbsp;[@Baraha2023].
 
-Among the statistical models used for SAR intensities, the $\mathcal{G}_I^0$ distribution is widely recognized for its ability to capture different levels of scene heterogeneity. 
-It generalizes the Gamma distribution, which represents fully developed speckle in homogeneous regions&nbsp;[@Frery1997; @Ferreira2020]. 
-While these models are effective, parameter estimation becomes unstable when applied to small local windows, which are often required to preserve spatial resolution. 
-This limitation motivates alternative methodologies that avoid heavy reliance on parametric estimation.
+[S]{.IEEEPARstart}ynthetic Aperture Radar (SAR) technology has become a
+key tool in remote sensing, offering high-resolution imaging
+capabilities independent of solar illumination and weather conditions,
+which enables continuous and reliable Earth observation [@Mondini2021].
+SAR images are widely applied in environmental
+monitoring [@Amitrano2021], disaster assessment [@Ge2020],
+agriculture [@Changan2019], urban planning [@Esch2010;
+@NovelTechniquesforBuiltupAreaExtractionfromPolarimetricSARImages2019],
+and maritime surveillance [@Cao2024;
+@OntheDetectionandLongTermPathVisualisationofa68Iceberg], among other
+fields [@Moreira2013]. However, the effective use of SAR data is
+hindered by speckle, a noise-like granular interference inherent to
+coherent imaging systems [@Argenti2013]. Speckle can be described as
+multiplicative, non-Gaussian noise, making statistical modeling and
+image interpretation particularly challenging [@Baraha2023].
 
-Entropy has long been used to quantify the uncertainty of a random variable, with Shannon entropy&nbsp;[@Shannon1948] as the classical form. 
-Recent studies have shown the value of entropy-based methods in tasks such as edge detection&nbsp;[@Nascimento2014], 
-segmentation&nbsp;[@Nobre2016], 
-and despeckling&nbsp;[@Chan2022], motivating their extension to hypothesis testing in SAR imagery.
-In this realm, Frery et al.&nbsp;[@Frery2024] and Alpala et al.&nbsp;[@Alpala2025] quantified departures from the fully-developed speckle hypothesis with the Shannon and Rényi entropy, respectively.
+Among the statistical models used for SAR intensities, the
+$\mathcal{G}_I^0$ distribution is widely recognized for its ability to
+capture different levels of scene heterogeneity. It generalizes the
+Gamma distribution, which represents fully developed speckle in
+homogeneous regions [@Frery1997; @Ferreira2020]. While these models are
+effective, parameter estimation becomes unstable when applied to small
+local windows, which are often required to preserve spatial resolution.
+This limitation motivates alternative methodologies that avoid heavy
+reliance on parametric estimation.
 
-The Tsallis entropy&nbsp;[@Tsallis1988] offers a non-additive generalization that introduces a parameter $\lambda$, allowing greater flexibility in capturing deviations from homogeneity and better sensitivity to heavy-tailed data. 
-This makes it especially appealing for SAR analysis, where both homogeneous and highly heterogeneous areas coexist. 
+Entropy has long been used to quantify the uncertainty of a random
+variable, with Shannon entropy [@Shannon1948] as the classical form.
+Recent studies have shown the value of entropy-based methods in tasks
+such as edge detection [@Nascimento2014], segmentation [@Nobre2016], and
+despeckling [@Chan2022], motivating their extension to hypothesis
+testing in SAR imagery. In this realm, Frery et al. [@Frery2024] and
+Alpala et al. [@Alpala2025] quantified departures from the
+fully-developed speckle hypothesis with the Shannon and Rényi entropy,
+respectively.
 
-In this work, we propose a statistical test based on a nonparametric estimator of Tsallis entropy to distinguish between homogeneous and heterogeneous regions in SAR data. The test compares the estimated Tsallis entropy with its theoretical value under the Gamma model assumption. To improve performance in practice, we incorporate a bootstrap procedure that reduces bias in small samples. In addition, we embed the test within an adaptive windowing framework, inspired by the method of Park et al.&nbsp;[@Park1999]. Instead of relying on fixed-size sliding windows (e.g., $7 \times 7$), the adaptive procedure adjusts the window size locally: it enlarges in homogeneous regions to improve statistical stability, and shrinks in heterogeneous regions to avoid mixing different structures and to preserve local details.
+The Tsallis entropy [@Tsallis1988] offers a non-additive generalization
+that introduces a parameter $\lambda$, allowing greater flexibility in
+capturing deviations from homogeneity and better sensitivity to
+heavy-tailed data. This makes it especially appealing for SAR analysis,
+where both homogeneous and highly heterogeneous areas coexist.
 
-The proposed method is unsupervised, does not require training data, and produces interpretable $p$-value maps, making it suitable for scenarios where ground-truth information is scarce or unavailable.  
+In this work, we propose a statistical test based on a nonparametric
+estimator of Tsallis entropy to distinguish between homogeneous and
+heterogeneous regions in SAR data. The test compares the estimated
+Tsallis entropy with its theoretical value under the Gamma model
+assumption. To improve performance in practice, we incorporate a
+bootstrap procedure that reduces bias in small samples. In addition, we
+embed the test within an adaptive windowing framework, inspired by the
+method of Park et al. [@Park1999]. Instead of relying on fixed-size
+sliding windows (e.g., $7 \times 7$), the adaptive procedure adjusts the
+window size locally: it enlarges in homogeneous regions to improve
+statistical stability, and shrinks in heterogeneous regions to avoid
+mixing different structures and to preserve local details.
 
-The remainder of this paper is organized as follows. Section&nbsp;\ref{sec:pre} reviews the statistical models for SAR data and introduces Tsallis entropy, including its nonparametric estimation. Section&nbsp;\ref{sec:met} details the methodology: the proposed nonparametric test, the bootstrap bias correction, and the adaptive windowing strategy. Section&nbsp;\ref{sec:app} reports experiments with simulated and real SAR images. inally, Section&nbsp;\ref{sec:conclusion} concludes the paper.
+The proposed method is unsupervised, does not require training data, and
+produces interpretable $p$-value maps, making it suitable for scenarios
+where ground-truth information is scarce or unavailable.
 
+The remainder of this paper is organized as follows.
+Section \ref{sec:pre} reviews the statistical models for SAR data and
+introduces Tsallis entropy, including its nonparametric estimation.
+Section \ref{sec:met} details the methodology: the proposed
+nonparametric test, the bootstrap bias correction, and the adaptive
+windowing strategy. Section \ref{sec:app} reports experiments with
+simulated and real SAR images. inally, Section \ref{sec:conclusion}
+concludes the paper.
 
-# PRELIMINARIES {#sec:pre} 
+# PRELIMINARIES {#sec:pre}
 
 ## Statistical Modeling of Intensity SAR Data
 
-In the analysis of SAR imagery, where speckle is inherent, statistical modeling is essential.
-For SAR intensity data, two main probability models are employed: the Gamma SAR distribution ($\Gamma_{\mathrm{SAR}}$), a reparametrization of the classical Gamma law suited to fully developed speckle, and the $\mathcal{G}^0_I$ distribution, which describes different levels of heterogeneity&nbsp;[@Frery1997].
+In the analysis of SAR imagery, where speckle is inherent, statistical
+modeling is essential. For SAR intensity data, two main probability
+models are employed: the Gamma SAR distribution
+($\Gamma_{\mathrm{SAR}}$), a reparametrization of the classical Gamma
+law suited to fully developed speckle, and the $\mathcal{G}^0_I$
+distribution, which describes different levels of
+heterogeneity [@Frery1997].
 
-We denote $Z \sim \Gamma_{\mathrm{SAR}}(\mu,L)$ when the random variable $Z$ follows the Gamma SAR distribution, whose probability density function (pdf) is:
-\begin{equation}
-	f_{\Gamma_{\mathrm{SAR}}}\bigl(z;\mu, L\bigr) 
+We denote $Z \sim \Gamma_{\mathrm{SAR}}(\mu,L)$ when the random variable
+$Z$ follows the Gamma SAR distribution, whose probability density
+function (pdf) is: \begin{equation}
+    f_{\Gamma_{\mathrm{SAR}}}\bigl(z;\mu, L\bigr) 
     = \frac{L^L}{\Gamma(L)\,\mu^L} z^{L-1} 
     \exp \biggl(-\frac{Lz}{\mu}\biggr)
     \mathbbm 1_{\mathbbm R_+}(z). \label{E:gamma1}
-\end{equation}
-Similarly, $Z \sim \mathcal{G}^0_I(\alpha,\gamma,L)$ has density:
-\begin{align}
+\end{equation} Similarly, $Z \sim \mathcal{G}^0_I(\alpha,\gamma,L)$ has
+density: \begin{align}
  f_{\mathcal{G}^0_I}\bigl(z;  \alpha,\gamma, L \bigr) &=\frac{L^L\Gamma(L-\alpha)}{\gamma^{\alpha}\Gamma(-\alpha)\Gamma(L)}\frac{z^{L-1}}{(\gamma+Lz)^{L-\alpha}} \mathbbm{1}_{\mathbb{R}_+}(z). \label{E:gi01}
-\end{align}
-Here, $\mu > 0$ is the mean intensity, $\gamma > 0$ is a scale parameter, $\alpha < 0$ is the texture (heterogeneity) parameter of the $\mathcal{G}^0_I$ distribution, $L \geq 1$ is the number of looks (either nominal or estimated, thus not restricted to integer values), $\Gamma(\cdot)$ is
-the gamma function, and $\mathbbm 1_{A}(\cdot)$ is the indicator function of the set $A$.
+\end{align} Here, $\mu > 0$ is the mean intensity, $\gamma > 0$ is a
+scale parameter, $\alpha < 0$ is the texture (heterogeneity) parameter
+of the $\mathcal{G}^0_I$ distribution, $L \geq 1$ is the number of looks
+(either nominal or estimated, thus not restricted to integer values),
+$\Gamma(\cdot)$ is the gamma function, and $\mathbbm 1_{A}(\cdot)$ is
+the indicator function of the set $A$.
 
 The $r$th order moments of the $\mathcal{G}_I^0$ model are
 \begin{equation}
 E\big(Z^r\big)  = \left(\frac{\gamma}{L}\right)^r\frac{\Gamma(-\alpha-r)}{\Gamma(-\alpha)}\frac{\Gamma(L+r)}{\Gamma(L)}, 
     \label{E:rmom}
-\end{equation}
-provided that $\alpha <-r$, and infinite otherwise.
-Therefore, assuming $\alpha<-1$, its expected value is
-\begin{equation}
+\end{equation} provided that $\alpha <-r$, and infinite otherwise.
+Therefore, assuming $\alpha<-1$, its expected value is \begin{equation}
     \mu=\left(\frac{\gamma}{L}\right)\frac{\Gamma(-\alpha-1)}{\Gamma(-\alpha)}\frac{\Gamma(L+1)}{\Gamma(L)}=-\frac{\gamma}{\alpha+1}.
     \label{E:mean1}
-\end{equation} 
+\end{equation}
 
-Although the $\mathcal{G}^0_I$ distribution is defined by the parameters $\alpha$ and $\gamma$, in the SAR literature&nbsp;[@Nascimento2010] the texture parameter $\alpha$ and the mean $\mu$ are commonly used. Expressing $\gamma$ in terms of $\mu$ as $\gamma=-\mu(\alpha+1)$ in&nbsp;\eqref{E:gi01}, and denoting the reparameterized model as $Z \sim \mathcal{G}^0_I(\alpha,\mu,L)$, we obtain for $\alpha<-1$ (which ensures $\gamma>0$ and that the mean $\mu$ exists):
-\begin{multline}
+Although the $\mathcal{G}^0_I$ distribution is defined by the parameters
+$\alpha$ and $\gamma$, in the SAR literature [@Nascimento2010] the
+texture parameter $\alpha$ and the mean $\mu$ are commonly used.
+Expressing $\gamma$ in terms of $\mu$ as $\gamma=-\mu(\alpha+1)$
+in \eqref{E:gi01}, and denoting the reparametrized model as
+$Z \sim \mathcal{G}^0_I(\alpha,\mu,L)$, we obtain for $\alpha<-1$ (which
+ensures $\gamma>0$ and that the mean $\mu$ exists): \begin{multline}
     f_{\mathcal{G}^0_I}\bigl(z; \mu, \alpha, L \bigr) 
     = \frac{L^L\,\Gamma(L-\alpha)}
     {\bigl[-\mu(\alpha+1)\bigr]^{\alpha} \Gamma(-\alpha)\,\Gamma(L)}\\
     \frac{z^{L-1}}
     {\bigl[-\mu(\alpha+1)+Lz\bigr]^{L-\alpha}}
     \mathbbm 1_{\mathbbm R_+}(z). \label{E:gi02}
-\end{multline}
-The $\Gamma_{\mathrm{SAR}}$ model is a particular case of the $\mathcal{G}^0_I$ distribution [@Frery1997]. Specifically, for fixed $\mu$,
-$$
+\end{multline} The $\Gamma_{\mathrm{SAR}}$ model is a particular case of
+the $\mathcal{G}^0_I$ distribution [@Frery1997]. Specifically, for fixed
+$\mu$, $$
   f_{\mathcal{G}^0_I}\bigl(z;\alpha,\mu,L\bigr)
   \longrightarrow
   f_{\Gamma_{\mathrm{SAR}}}(z;\mu,L)
   \quad \text{as } \alpha \to -\infty.
 $$
 
-
-
-
 ## Tsallis Entropy
-Tsallis entropy was originally proposed by Havrda and Charvát&nbsp;[-@Havrda1967] in the context of information theory, and later extended by Tsallis&nbsp;[-@Tsallis1988] to emphasize its non-extensive features in statistical physics.
 
-For a continuous random variable $Z$ with pdf $f(z)$, the Tsallis entropy of order $\lambda \in \mathbbm R_+ \setminus \{1\}$ is defined as:
-\begin{equation}
+Tsallis entropy was originally proposed by Havrda and
+Charvát [-@Havrda1967] in the context of information theory, and later
+extended by Tsallis [-@Tsallis1988] to emphasize its non-extensive
+features in statistical physics.
+
+For a continuous random variable $Z$ with pdf $f(z)$, the Tsallis
+entropy of order $\lambda \in \mathbbm R_+ \setminus \{1\}$ is defined
+as: \begin{equation}
 \label{eq:tsallis}
 T_\lambda(Z) = \frac{1}{\lambda - 1} \Bigl[ 1 - \int_{\mathcal{B}} \bigl(f(z)\bigr)^{\lambda} \,\mathrm{d}z \Bigr],
-\end{equation}
-where $\mathcal{B} \subseteq \mathbb{R}$ denotes the support of $f(z)$. 
-In the limit $\lambda \to 1$, we obtain $T_\lambda(Z) \to H(Z)$, making Tsallis a one-parameter generalization of Shannon entropy.
+\end{equation} where $\mathcal{B} \subseteq \mathbb{R}$ denotes the
+support of $f(z)$. In the limit $\lambda \to 1$, we obtain
+$T_\lambda(Z) \to H(Z)$, making Tsallis a one-parameter generalization
+of Shannon entropy.
 
-Using&nbsp;\eqref{eq:tsallis}, we derive closed-form expressions for the Tsallis entropy of the $\Gamma_{\mathrm{SAR}}$ and the $\mathcal{G}^0_I$ distributions:
+Using \eqref{eq:tsallis}, we derive closed-form expressions for the
+Tsallis entropy of the $\Gamma_{\mathrm{SAR}}$ and the $\mathcal{G}^0_I$
+distributions:
 
 \begin{multline}
 \label{eq:gammasar-Tsallis}
@@ -266,9 +317,7 @@ T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr)=
 -\lambda\ln\Gamma(L)
 -(\lambda(L-1)+1)\ln\lambda
 \bigr]\Bigr\}, 
-\end{multline}
-and
-\begin{multline}
+\end{multline} and \begin{multline}
 \label{eq:GI0-Tsallis}
   T_\lambda\bigl(\mathcal{G}^0_I(\mu,\alpha,L)\bigr) = T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr)\;+\;\\
   \frac{1}{\lambda-1}\,
@@ -286,23 +335,26 @@ and
   +\ln\Gamma\bigl(\lambda(1-\alpha)-1\bigr)\\
   -\ln\Gamma\bigl(\lambda(L-\alpha)\bigr)
   \bigr]\Bigr\}.
-\end{multline}
-Equation&nbsp;\eqref{eq:GI0-Tsallis} can be interpreted as:
+\end{multline} Equation \eqref{eq:GI0-Tsallis} can be interpreted as:
 \begin{equation*}
   T_\lambda(\mathcal{G}^0_I)
   =
   \underbrace{T_\lambda \bigl(\Gamma_{\mathrm{SAR}}\bigr)}_{\text{baseline entropy}}
   \hspace{1.8em} + \hspace{-1.8em}
   \underbrace{\Delta_\alpha}_{\text{entropy excess caused by texture}}\hspace{-4.0em},
-\end{equation*}
-where the term $\Delta_\alpha$ measures the increase in entropy induced by the texture level, with the level controlled by the parameter $\alpha$.
-As $\alpha \to -\infty$ (fully developed speckle), $\Delta_\alpha \to 0$ and \eqref{eq:GI0-Tsallis} reduces to the homogeneous case in \eqref{eq:gammasar-Tsallis}, \emph{i.e.},
-$$
+\end{equation*} where the term $\Delta_\alpha$ measures the increase in
+entropy induced by the texture level, with the level controlled by the
+parameter $\alpha$. As $\alpha \to -\infty$ (fully developed speckle),
+$\Delta_\alpha \to 0$ and \eqref{eq:GI0-Tsallis} reduces to the
+homogeneous case in \eqref{eq:gammasar-Tsallis}, \emph{i.e.}, $$
 \lim_{\alpha \to -\infty} T_{\lambda}\bigl(\mathcal{G}^0_I(\mu, \alpha, L)\bigr) =  T_{\lambda}\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr).
-$$ 
+$$
 
-@fig-tsallis-convergence_L18 illustrates the convergence of the Tsallis entropy for different values of $\alpha$ and $L \in \{5,18\}$. In every case, the dashed curves of $T_\lambda(\mathcal{G}^0_I)$ approach the solid black curve of $T_\lambda(\Gamma_{\mathrm{SAR}})$, confirming the limiting behavior.
-
+@fig-tsallis-convergence_L18 illustrates the convergence of the Tsallis
+entropy for different values of $\alpha$ and $L \in \{5,18\}$. In every
+case, the dashed curves of $T_\lambda(\mathcal{G}^0_I)$ approach the
+solid black curve of $T_\lambda(\Gamma_{\mathrm{SAR}})$, confirming the
+limiting behavior.
 
 ```{r fig-tsallis-convergence_L18, echo=FALSE, message=FALSE, warning=FALSE, fig.pos="H",  fig.cap="Tsallis entropy $T_{\\lambda}(\\mathcal{G}^0_I)$ converges to $T_{\\lambda}(\\Gamma_{\\mathrm{SAR}})$ as $\\alpha$ decreases.", out.width=".9\\linewidth"}
 
@@ -373,63 +425,77 @@ p2 <- plot_tsallis(18, 0.85)
 (p1 | p2) + plot_layout(guides = "collect") & theme(legend.position = "bottom")
 ```
 
-For the highly heterogeneous case ($\alpha=-2$), entropy values are very similar for $L=5$ and $L=18$, since texture dominates over speckle. In contrast, in the homogeneous limit ($\alpha \to -\infty$), texture effects vanish and entropy is mainly determined by speckle. With a low number of looks, speckle is strong and increases the uncertainty, which raises the entropy values. However, the curves for different $\alpha$ values appear more concentrated, since the contribution of texture to entropy is masked by the dominant speckle. As the number of looks increases, speckle is progressively reduced and entropy decreases. This reduction of speckle makes the entropy excess $\Delta_\alpha$ more evident, resulting in more separated curves across $\alpha$.
-
+For the highly heterogeneous case ($\alpha=-2$), entropy values are very
+similar for $L=5$ and $L=18$, since texture dominates over speckle. In
+contrast, in the homogeneous limit ($\alpha \to -\infty$), texture
+effects vanish and entropy is mainly determined by speckle. With a low
+number of looks, speckle is strong and increases the uncertainty, which
+raises the entropy values. However, the curves for different $\alpha$
+values appear more concentrated, since the contribution of texture to
+entropy is masked by the dominant speckle. As the number of looks
+increases, speckle is progressively reduced and entropy decreases. This
+reduction of speckle makes the entropy excess $\Delta_\alpha$ more
+evident, resulting in more separated curves across $\alpha$.
 
 ## Nonparametric Estimation of Tsallis Entropy
+
 \label{subsec:tsallis-np}
 
-Following the spacing-based approach of Vasicek&nbsp;[-@vasicek1976test] and Ebrahimi et al.&nbsp;[-@Ebrahimi1994] for Shannon entropy, and the methodology for Rényi entropy proposed by Al-Labadi et al.&nbsp;[-@AlLabadi2024], we derive a nonparametric estimator for Tsallis entropy.
+Following the spacing-based approach of Vasicek [-@vasicek1976test] and
+Ebrahimi et al. [-@Ebrahimi1994] for Shannon entropy, and the
+methodology for Rényi entropy proposed by Al-Labadi et
+al. [-@AlLabadi2024], we derive a nonparametric estimator for Tsallis
+entropy.
 
-Let $Q(p)=F^{-1}(p)$ denote the quantile function for $p\in(0,1)$. From \eqref{eq:tsallis}, the inner integral can be expressed as an expectation under a random variable $Z$ with pdf $f$:
-$$
+Let $Q(p)=F^{-1}(p)$ denote the quantile function for $p\in(0,1)$. From
+\eqref{eq:tsallis}, the inner integral can be expressed as an
+expectation under a random variable $Z$ with pdf $f$: $$
 \int_{\mathcal B} f(z)^\lambda\,\mathrm{d}z
 =\int_{\mathcal B} f(z)^{\lambda-1} f(z)\,\mathrm{d}z
 =\mathbb{E}\!\left[f(Z)^{\lambda-1}\right].
-$$
-Using the change of variables $p=F(z)$ (hence $\mathrm{d}p=f(z)\,\mathrm{d}z$) and the identity $f(Q(p))=1/Q'(p)$, we obtain
-$$
+$$ Using the change of variables $p=F(z)$ (hence
+$\mathrm{d}p=f(z)\,\mathrm{d}z$) and the identity $f(Q(p))=1/Q'(p)$, we
+obtain $$
   \mathbb{E}\!\left[f(Z)^{\lambda-1}\right]
   = \int_{0}^{1} \bigl(Q'(p)\bigr)^{1-\lambda}\,\mathrm{d}p,
-$$
-which yields the representation
-\begin{equation}
+$$ which yields the representation \begin{equation}
   T_\lambda(Z)
   =\frac{1}{\lambda-1}
      \left\{
        1-\int_{0}^{1}\bigl(Q'(p)\bigr)^{1-\lambda}\,\mathrm{d}p
      \right\}.
   \label{eq:Tsallis-quantile}
-\end{equation}
-Let $\bm{Z}=(Z_1,Z_2,\dots,Z_n)$ be an i.i.d.\ sample from $F$, with order statistics $Z_{(1)}\le Z_{(2)} \le \cdots\le Z_{(n)}$. For a window size $m\in\{1,\dots,\lfloor (n-1)/2\rfloor\}$, define the $m$-spacing
-$$
+\end{equation} Let $\bm{Z}=(Z_1,Z_2,\dots,Z_n)$ be an i.i.d. sample from
+$F$, with order statistics $Z_{(1)}\le Z_{(2)} \le \cdots\le Z_{(n)}$.
+For a window size $m\in\{1,\dots,\lfloor (n-1)/2\rfloor\}$, define the
+$m$-spacing $$
 D_{i,m}:=Z_{(i+m)}-Z_{(i-m)},\qquad i=1,2,\dots,n,
-$$
-with boundary conventions $Z_{(i-m)}:=Z_{(1)}$ if $i\le m$ and $Z_{(i+m)}:=Z_{(n)}$ if $i\ge n-m$, where $\lfloor \cdot \rfloor$ denotes the floor function. The $m$-spacing density estimator at $Z_{(i)}$ is
-\begin{equation}
+$$ with boundary conventions $Z_{(i-m)}:=Z_{(1)}$ if $i\le m$ and
+$Z_{(i+m)}:=Z_{(n)}$ if $i\ge n-m$, where $\lfloor \cdot \rfloor$
+denotes the floor function. The $m$-spacing density estimator at
+$Z_{(i)}$ is \begin{equation}
 \widehat f_n\bigl(Z_{(i)}\bigr)
 =\frac{(m/n) \, c_i}{Z_{(i+m)}-Z_{(i-m)}}\,,\qquad i=1,2,\dots,n,
 \label{eq:density-spacing}
-\end{equation}
-where
-$$
+\end{equation} where $$
 c_i=
 \begin{cases}
 \dfrac{m+i-1}{m} & \text{if } \; 1\le i\le m,\\[6pt]
 2 & \text{if } \; m+1\le i\le n-m,\\[6pt]
 \dfrac{n+m-i}{m} & \text{if } \; n-m+1\le i\le n.
 \end{cases}
-$$
-By construction, $\widehat f_n(Z_{(i)})\approx f(Z_{(i)})$. Since $f(Q(p))\,Q'(p)=1$, taking the reciprocal yields an estimator of the quantile derivative:
-\begin{equation}
+$$ By construction, $\widehat f_n(Z_{(i)})\approx f(Z_{(i)})$. Since
+$f(Q(p))\,Q'(p)=1$, taking the reciprocal yields an estimator of the
+quantile derivative: \begin{equation}
 \widehat{Q'}(p_i)
 \;=\; \frac{1}{\widehat f_n(Z_{(i)})}
 \;=\; \frac{D_{i,m}}{(m/n)\, c_i}\,,
 \qquad p_i \in (0,1).
 \label{eq:Qprime-hat}
-\end{equation}
-Approximating the integral in \eqref{eq:Tsallis-quantile} by a Riemann sum over the grid $p_i=i/n$ and inserting $\widehat{Q'}(p_i)$ from \eqref{eq:Qprime-hat} yields the nonparametric Tsallis entropy estimator:
-\begin{align}
+\end{equation} Approximating the integral in \eqref{eq:Tsallis-quantile}
+by a Riemann sum over the grid $p_i=i/n$ and inserting
+$\widehat{Q'}(p_i)$ from \eqref{eq:Qprime-hat} yields the nonparametric
+Tsallis entropy estimator: \begin{align}
   \widehat T_{\lambda}(\bm{Z})
   &=\frac{1}{\lambda-1}\left\{
 1-\frac{1}{n}\sum_{i=1}^{n}\bigl[\widehat{Q'}(p_i)\bigr]^{\,1-\lambda}
@@ -443,24 +509,28 @@ Approximating the integral in \eqref{eq:Tsallis-quantile} by a Riemann sum over 
        \right)^{1-\lambda}
   \right\}.
   \label{eq:Tsallis-spacing-estimator}
-\end{align}
-As $\lambda\to 1$, $T_\lambda$ converges to Shannon entropy and $\widehat T_{\lambda}$ recovers the Vasicek estimator&nbsp;[-@vasicek1976test].
-This estimator is asymptotically consistent, \emph{i.e.}, it converges in
-probability to the true value $T_\lambda$ when $m,n\rightarrow\infty$ and
-$m/n\rightarrow0$. 
-We use the heuristic spacing $m=\lfloor\sqrt{n}+0.5\rfloor$.
-
-
+\end{align} As $\lambda\to 1$, $T_\lambda$ converges to Shannon entropy
+and $\widehat T_{\lambda}$ recovers the Vasicek
+estimator [-@vasicek1976test]. This estimator is asymptotically
+consistent, \emph{i.e.}, it converges in probability to the true value
+$T_\lambda$ when $m,n\rightarrow\infty$ and $m/n\rightarrow0$. We use
+the heuristic spacing $m=\lfloor\sqrt{n}+0.5\rfloor$.
 
 # PROPOSED METHODOLOGY {#sec:met}
 
 <!-- ## Finding an optimal value of $\lambda$ -->
+
 ## Optimal $\lambda$ value
 
-We investigate the optimal order $\lambda$ for the Tsallis entropy estimator using simulated samples of size $n = 49$ drawn from $Z \sim \Gamma_{\mathrm{SAR}}(1,5)$. 
-The bias and mean squared error (MSE) were evaluated for varying values of $\lambda$ through a Monte Carlo experiment.
+We investigate the optimal order $\lambda$ for the Tsallis entropy
+estimator using simulated samples of size $n = 49$ drawn from
+$Z \sim \Gamma_{\mathrm{SAR}}(1,5)$. The bias and mean squared error
+(MSE) were evaluated for varying values of $\lambda$ through a Monte
+Carlo experiment.
 
-As shown in Figure&nbsp;\ref{fig-optimal_order-tsallis}, for $L>1$ we found that $\lambda=0.85$ yields the lowest MSE while maintaining a low bias, thus providing a favorable trade-off between bias and variance.
+As shown in Figure \ref{fig-optimal_order-tsallis}, for $L>1$ we found
+that $\lambda=0.85$ yields the lowest MSE while maintaining a low bias,
+thus providing a favorable trade-off between bias and variance.
 
 ```{r fig-optimal_order-tsallis,  echo=FALSE, message=FALSE, warning=FALSE,  out.width=".9\\linewidth",  fig.pos="H", fig.cap="Bias and MSE as a function of $\\lambda$, for the Tsallis entropy estimator, with $n = 49$ and $L = 5$."}
 #fig.show="hide", 
@@ -513,13 +583,22 @@ grid.arrange(bias_plot, mse_plot, nrow = 2)
 
 ## Bootstrap Correction for Entropy Estimator
 
-Following Refs.&nbsp;[@Frery2024;@Alpala2024;@Alpala2025], we refine the nonparametric entropy estimator $\widehat{T}_{\lambda}$ defined in&nbsp;\eqref{eq:Tsallis-spacing-estimator} with bootstrap, obtaining:
+Following Refs. [@Frery2024; @Alpala2024; @Alpala2025], we refine the
+nonparametric entropy estimator $\widehat{T}_{\lambda}$ defined
+in \eqref{eq:Tsallis-spacing-estimator} with bootstrap, obtaining:
 \begin{equation*}
 \widetilde{T}_{\lambda} = 2\widehat{T}_{\lambda}(\bm{Z}) - \frac{1}{B} \sum_{b=1}^{B} \widehat{T}_{\lambda}(\bm{Z}^{(b)}),
-\end{equation*}
-where $B$ is the number of bootstrap replications, and $\bm{Z}^{(b)}$ denotes  the $b$-th resampled dataset obtained by drawing $n$ observations with replacement from $\bm{Z}$.
+\end{equation*} where $B$ is the number of bootstrap replications, and
+$\bm{Z}^{(b)}$ denotes the $b$-th resampled dataset obtained by drawing
+$n$ observations with replacement from $\bm{Z}$.
 
-A Monte Carlo study with $1000$ replications for each sample size $n \in \{9, 25, 49, 81, 121\}$ from the $\Gamma_{\mathrm{SAR}}$ (1,5) confirms that for $\lambda=0.85$, the bootstrap-corrected estimator $\widetilde{T}_{\lambda}$ with $B=200$, reduces both bias and MSE compared to the original estimator $\widehat{T}_{\lambda}$, with significant improvements for small samples, as shown in Figure&nbsp;\ref{fig-bias_mse_Tsallis}.
+A Monte Carlo study with $1000$ replications for each sample size
+$n \in \{9, 25, 49, 81, 121\}$ from the $\Gamma_{\mathrm{SAR}}$ (1,5)
+confirms that for $\lambda=0.85$, the bootstrap-corrected estimator
+$\widetilde{T}_{\lambda}$ with $B=200$, reduces both bias and MSE
+compared to the original estimator $\widehat{T}_{\lambda}$, with
+significant improvements for small samples, as shown in
+Figure \ref{fig-bias_mse_Tsallis}.
 
 ```{r Simulated_data_bias_tt, echo=FALSE, message=FALSE }
 set.seed(1234567890, kind = "Mersenne-Twister")
@@ -553,7 +632,6 @@ if (file.exists(file_name_tsallis)) {
 }
 
 ```
-
 
 ```{r}
 generate_plot_tsallisn <- function(results_df, lambda_values, selected_estimators, ncol = 1, nrow = 1) {
@@ -653,26 +731,29 @@ print(combined_plot_tsallis)
 
 ```
 
+From this point forward, all subsequent simulations and comparisons will
+be based on the improved bootstrap estimator $\widetilde{T}_{\lambda}$.
 
-From this point forward, all subsequent simulations and comparisons will be based on the improved bootstrap estimator $\widetilde{T}_{\lambda}$.
+## Hypothesis Testing
 
-
-## Hypothesis Testing 
-
-We test whether the observed data come from a homogeneous ($\Gamma_{\mathrm{SAR}}$) or a heterogeneous ($\mathcal{G}^0_I$) region, as follows:
-\begin{equation}\label{eq:hypothesis_test}
+We test whether the observed data come from a homogeneous
+($\Gamma_{\mathrm{SAR}}$) or a heterogeneous ($\mathcal{G}^0_I$) region,
+as follows: \begin{equation}\label{eq:hypothesis_test}
 \begin{cases}
 \mathcal{H}_0: \mathbb{E}[\widetilde{T}_{\lambda}] = T_{\lambda}(\Gamma_{\mathrm{SAR}}) & \text{(Homogeneous region)}, \\[6pt]
 \mathcal{H}_1: \mathbb{E}[\widetilde{T}_{\lambda}] = T_{\lambda}(\mathcal{G}^0_I) & \text{(Heterogeneous region)}.
 \end{cases}
 \end{equation}
-  
-Under $\mathcal{H}_0$, the expected value of the entropy estimator should match the theoretical $T_{\lambda}(\Gamma_{\mathrm{SAR}})$. 
+
+Under $\mathcal{H}_0$, the expected value of the entropy estimator
+should match the theoretical $T_{\lambda}(\Gamma_{\mathrm{SAR}})$.
 Meanwhile, significant deviations indicate heterogeneity.
 
 ## The Proposed Test
 
-We propose a test statistic that identifies the discrepancy between estimated and theoretical entropy under homogeneity. Since the number of looks $L\geq1$ is known, we define the test statistic as follows:
+We propose a test statistic that identifies the discrepancy between
+estimated and theoretical entropy under homogeneity. Since the number of
+looks $L\geq1$ is known, we define the test statistic as follows:
 \begin{multline}
 \label{eq-test-tsallis}
 S_{\widetilde{T}_{\lambda}}(\bm{Z}; L) = \widetilde{T}_{\lambda} - \biggl\{ \frac{1}{\lambda - 1} \Bigl[ 1 -
@@ -683,23 +764,33 @@ S_{\widetilde{T}_{\lambda}}(\bm{Z}; L) = \widetilde{T}_{\lambda} - \biggl\{ \fra
 - \lambda\ln\Gamma(L)
 - \bigl(\lambda(L - 1) + 1\bigr)\ln \lambda
 \Bigr) \Bigr] \biggr\},
-\end{multline}
-where $\widehat{\mu} = \frac{1}{n} \sum_{i=1}^n Z_i$ is the sample mean.
+\end{multline} where $\widehat{\mu} = \frac{1}{n} \sum_{i=1}^n Z_i$ is
+the sample mean.
 
-This statistic can be interpreted as follows:
-$$
+This statistic can be interpreted as follows: $$
 S_{\widetilde T_\lambda} 
 = 
 \underbrace{\widetilde T_\lambda}_{\text{estimated}} 
 \;-\;
 \underbrace{T_\lambda\bigl(\Gamma_{\mathrm{SAR}}\bigr)}_{\text{theoretical under } \mathcal{H}_0}\hspace{-0.5em},
-$$
-\emph{i.e.}, the difference between the estimated entropy and the expected value under homogeneity. Values close to zero indicate that the region behaves like fully developed speckle, while large positive values signal entropy excess and, thus, heterogeneity.
-This formulation avoids the need to estimate $\mathcal{G}^0_I$ parameters  such as $\alpha$, offering a simple, interpretable, and statistically grounded test. Moreover, the proposed method remains effective for small samples, aided by the bootstrap bias correction.
+$$ \emph{i.e.}, the difference between the estimated entropy and the
+expected value under homogeneity. Values close to zero indicate that the
+region behaves like fully developed speckle, while large positive values
+signal entropy excess and, thus, heterogeneity. This formulation avoids
+the need to estimate $\mathcal{G}^0_I$ parameters such as $\alpha$,
+offering a simple, interpretable, and statistically grounded test.
+Moreover, the proposed method remains effective for small samples, aided
+by the bootstrap bias correction.
 
-
-Figure&nbsp;\ref{fig-densities-tsallis6} shows the empirical distribution of $S_{\widetilde{T}_{\lambda}}$ under $\mathcal{H}_0$, obtained from $10^4$ Monte Carlo simulations with varying sample sizes $n \in \{25, 49, 81,121\}$, $\lambda = 0.85$, and $L \in \{5,18\}$. The empirical densities are tightly concentrated around zero, confirming that under $\mathcal{H}_0$, the test statistic has mean approximately $0$; at the same time, their moderately heavy tails reveal sensitivity to departures from homogeneity, which is desirable for detecting subtle texture.
-
+Figure \ref{fig-densities-tsallis6} shows the empirical distribution of
+$S_{\widetilde{T}_{\lambda}}$ under $\mathcal{H}_0$, obtained from
+$10^4$ Monte Carlo simulations with varying sample sizes
+$n \in \{25, 49, 81,121\}$, $\lambda = 0.85$, and $L \in \{5,18\}$. The
+empirical densities are tightly concentrated around zero, confirming
+that under $\mathcal{H}_0$, the test statistic has mean approximately
+$0$; at the same time, their moderately heavy tails reveal sensitivity
+to departures from homogeneity, which is desirable for detecting subtle
+texture.
 
 ```{r Simulated_density-tsallis5, echo=FALSE, message=FALSE}
 set.seed(1234567890, kind = "Mersenne-Twister")
@@ -851,23 +942,38 @@ print(combined_plot)
 
 ```
 
-Under the asymptotic properties of the entropy estimators [@vasicek1976test;@VanEs1992], for sufficiently large samples, $S_{\widetilde{T}}(\bm{Z};L)$ follows an asymptotic Normal distribution, \emph{i.e.}, the following convergence in distribution holds:
-$$
+Under the asymptotic properties of the entropy estimators
+[@vasicek1976test; @VanEs1992], for sufficiently large samples,
+$S_{\widetilde{T}}(\bm{Z};L)$ follows an asymptotic Normal distribution,
+\emph{i.e.}, the following convergence in distribution holds: $$
   S_{\widetilde{T}}(\bm Z;L)\;
   \overset{\mathcal{D}}{\underset{n \to \infty}{\longrightarrow}}\;
   \mathcal N\!\bigl(\mu_S,\sigma_S^{2}\bigr).
 $$
 <!-- where $\xrightarrow{\mathcal{D}}$ denotes convergence in distribution. -->
-Here, $\mu_S = \mathbb{E}[S_{\widetilde{T}}(\bm{Z};L)]$ and $\sigma^2_S = \mathrm{Var}[S_{\widetilde{T}}(\bm{Z};L)]$ are the theoretical mean and variance of the test statistic under $\mathcal{H}_0$, respectively. This asymptotic normality can be explained by noting that the entropy estimator (and hence $S_{\widetilde{T}}$) can be expressed as a sum or average of numerous observations; therefore, by the Central Limit Theorem and the Delta Method, its sampling distribution approaches a Gaussian form for large $n$.
-In practice, we estimate $\widehat{\mu}_S$ and $\widehat{\sigma}_S$ via Monte Carlo under $\mathcal{H}_0$.
-Therefore,
-\begin{equation*}
+Here, $\mu_S = \mathbb{E}[S_{\widetilde{T}}(\bm{Z};L)]$ and
+$\sigma^2_S = \mathrm{Var}[S_{\widetilde{T}}(\bm{Z};L)]$ are the
+theoretical mean and variance of the test statistic under
+$\mathcal{H}_0$, respectively. This asymptotic normality can be
+explained by noting that the entropy estimator (and hence
+$S_{\widetilde{T}}$) can be expressed as a sum or average of numerous
+observations; therefore, by the Central Limit Theorem and the Delta
+Method, its sampling distribution approaches a Gaussian form for large
+$n$. In practice, we estimate $\widehat{\mu}_S$ and $\widehat{\sigma}_S$
+via Monte Carlo under $\mathcal{H}_0$. Therefore, \begin{equation*}
 \varepsilon = \frac{{S_{\widetilde{T}}(\bm{Z}; L) - \widehat{\mu}_S}}{{\widehat{\sigma}_S}},
-\end{equation*} 
-is asymptotically standard Normal distributed for large $n$. Consequently, two-sided $p$-values are obtained as $2\Phi(-|\varepsilon|)$, where $\Phi(\cdot)$ is the cumulative distribution function of the standard Normal distribution.
+\end{equation*} is asymptotically standard Normal distributed for large
+$n$. Consequently, two-sided $p$-values are obtained as
+$2\Phi(-|\varepsilon|)$, where $\Phi(\cdot)$ is the cumulative
+distribution function of the standard Normal distribution.
 
-The practical procedure is as follows: first, compute the test statistic $S_{\widetilde{T}}(\bm{Z}; L)$ for the observed data; then standardize it using the estimated mean $\widehat{\mu}_S$ and the standard deviation $\widehat{\sigma}_S$; next, compute the $p$-value as $2\Phi(-|\varepsilon|)$; and finally, make a decision by comparing the $p$-value with the threshold $0.05$. 
-The corresponding workflow is illustrated in Figure&nbsp;\ref{fig:entropy-diagram-test}.
+The practical procedure is as follows: first, compute the test statistic
+$S_{\widetilde{T}}(\bm{Z}; L)$ for the observed data; then standardize
+it using the estimated mean $\widehat{\mu}_S$ and the standard deviation
+$\widehat{\sigma}_S$; next, compute the $p$-value as
+$2\Phi(-|\varepsilon|)$; and finally, make a decision by comparing the
+$p$-value with the threshold $0.05$. The corresponding workflow is
+illustrated in Figure \ref{fig:entropy-diagram-test}.
 
 ```{=latex}
 \begin{figure}[H]
@@ -903,18 +1009,46 @@ The corresponding workflow is illustrated in Figure&nbsp;\ref{fig:entropy-diagra
 \end{figure}
 ```
 
-
 ## Size and Power Analysis of the Proposed Test
 
-The statistical validity and effectiveness of the proposed Tsallis entropy–based test was examined through two fundamental properties: \emph{size} and \emph{power}. These provide insight into the probability of incorrect decisions in hypothesis testing.
+The statistical validity and effectiveness of the proposed Tsallis
+entropy–based test was examined through two fundamental properties:
+\emph{size} and \emph{power}. These provide insight into the probability
+of incorrect decisions in hypothesis testing.
 
-The size of a statistical test, also known as the Type&nbsp;I&nbsp;error rate, refers to the probability of incorrectly rejecting the null hypothesis $\mathcal{H}_0$ when it is in fact true. In hypothesis testing, practitioners typically specify a nominal significance level, commonly set at \SI{1}{\percent}, \SI{5}{\percent}, or \SI{10}{\percent}, which represent acceptable probabilities of committing a Type&nbsp;I error. A well-calibrated test should reproduce these levels empirically across sample sizes and conditions.
-To assess this, we performed $1000$ Monte Carlo replications under $\mathcal{H}_0$ with data from a $\Gamma_{\mathrm{SAR}}$ distribution with $\mu=1$, computing the test statistic via a bootstrap entropy estimator using $B=100$ and $\lambda=0.85$. The empirical size was then estimated as the proportion of replications in which the null hypothesis was incorrectly rejected. The observed Type&nbsp;I error rates remained close to the nominal levels, confirming the validity and proper calibration of the proposed procedures.
+The size of a statistical test, also known as the Type I error rate,
+refers to the probability of incorrectly rejecting the null hypothesis
+$\mathcal{H}_0$ when it is in fact true. In hypothesis testing,
+practitioners typically specify a nominal significance level, commonly
+set at \SI{1}{\percent}, \SI{5}{\percent}, or \SI{10}{\percent}, which
+represent acceptable probabilities of committing a Type I error. A
+well-calibrated test should reproduce these levels empirically across
+sample sizes and conditions. To assess this, we performed $1000$ Monte
+Carlo replications under $\mathcal{H}_0$ with data from a
+$\Gamma_{\mathrm{SAR}}$ distribution with $\mu=1$, computing the test
+statistic via a bootstrap entropy estimator using $B=100$ and
+$\lambda=0.85$. The empirical size was then estimated as the proportion
+of replications in which the null hypothesis was incorrectly rejected.
+The observed Type I error rates remained close to the nominal levels,
+confirming the validity and proper calibration of the proposed
+procedures.
 
-The power of a test is its probability of correctly rejecting $\mathcal{H}_0$ when it is false. Equivalently, it equals $1-\beta$, where $\beta$ is the Type&nbsp;II error rate. High power thus indicates strong sensitivity to departures from $\mathcal{H}_0$. To assess power, we simulated data under the alternative hypothesis $\mathcal{H}_1$, assuming a $\mathcal{G}^0_I$ distribution with $\mu=1$ and $\alpha=-2$. Again, $1000$ Monte Carlo replications were performed for each configuration of sample size $n \in \{25, 49, 81, 121\}$ and $L \in \{5, 8, 18\}$, and the test statistic was computed using the bootstrap estimator with $B=100$ and $\lambda=0.85$.
-As expected, power increased with both the sample size and the number of looks, confirming the effectiveness of the Tsallis entropy–based test in detecting departures from the null hypothesis.
+The power of a test is its probability of correctly rejecting
+$\mathcal{H}_0$ when it is false. Equivalently, it equals $1-\beta$,
+where $\beta$ is the Type II error rate. High power thus indicates
+strong sensitivity to departures from $\mathcal{H}_0$. To assess power,
+we simulated data under the alternative hypothesis $\mathcal{H}_1$,
+assuming a $\mathcal{G}^0_I$ distribution with $\mu=1$ and $\alpha=-2$.
+Again, $1000$ Monte Carlo replications were performed for each
+configuration of sample size $n \in \{25, 49, 81, 121\}$ and
+$L \in \{5, 8, 18\}$, and the test statistic was computed using the
+bootstrap estimator with $B=100$ and $\lambda=0.85$. As expected, power
+increased with both the sample size and the number of looks, confirming
+the effectiveness of the Tsallis entropy–based test in detecting
+departures from the null hypothesis.
 
-The complete results for both size and power are reported in Table \ref{tab:size-power-tsallis}.
+The complete results for both size and power are reported in Table
+\ref{tab:size-power-tsallis}.
 
 ```{r Simulated_error_type_I-tsallis1, echo=FALSE, message=FALSE}
 if (!file.exists("./Data/type_I_results-tsallis1.Rdata")) {
@@ -1002,7 +1136,6 @@ if (!file.exists("./Data/type_I_results-tsallis1.Rdata")) {
   
 }
 ```
-
 
 ```{r Simulated_power-tsallis1, echo=FALSE, message=FALSE}
 
@@ -1106,8 +1239,8 @@ if (!file.exists("./Data/results_power-tsallis1.Rdata")) {
 }
 ```
 
-
 \renewcommand{\arraystretch}{1}
+
 ```{r Table_size_and_power-tsallis0, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 suppressMessages({
   suppressWarnings({
@@ -1189,62 +1322,92 @@ table_combined_result <- knitr::kable(
 print(table_combined_result)
 ```
 
-
 ## Adaptive Windows
 
-Our approach builds on the adaptive windowing algorithm for SAR images proposed by Park et al. [@Park1999], which adjusts the analysis window size according to the local homogeneity of the scene. For each pixel $(i,j)$, let $w_{ij}$ be the window centered at $(i,j)$ with radius $N_{ij}$, defined as
-\begin{equation}
+Our approach builds on the adaptive windowing algorithm for SAR images
+proposed by Park et al. [@Park1999], which adjusts the analysis window
+size according to the local homogeneity of the scene. For each pixel
+$(i,j)$, let $w_{ij}$ be the window centered at $(i,j)$ with radius
+$N_{ij}$, defined as \begin{equation}
 w_{ij} = \{(i',j') \, / \, i-N_{ij} \le i' \le i+N_{ij} \,\wedge\, j-N_{ij} \le j' \le j+N_{ij}\}.
-\end{equation}
-Then, the border of this window is
-\begin{multline}
+\end{equation} Then, the border of this window is \begin{multline}
 b_{ij} = \{(i',j') \in w_{ij} \, / \, i' = i-N_{ij} \,\vee\, i' = i+N_{ij} \,\vee\\
 j' = j-N_{ij} \,\vee\, j' = j+N_{ij}\}.
 \end{multline}
 
-The coefficient of variation is computed over the border of the current window as
-\begin{equation}
+The coefficient of variation is computed over the border of the current
+window as \begin{equation}
 C_{ij} = \frac{\sigma_{ij}}{\mu_{ij}},
-\end{equation}
-where the mean $\mu_{ij}$ and the standard deviation $\sigma_{ij}$ are calculated using only the border pixels $b_{ij}$ of $w_{ij}$.
+\end{equation} where the mean $\mu_{ij}$ and the standard deviation
+$\sigma_{ij}$ are calculated using only the border pixels $b_{ij}$ of
+$w_{ij}$.
 
-For SAR intensity images (fully developed speckle with $L$ looks), the coefficient of variation in homogeneous areas satisfies
-\begin{equation}
+For SAR intensity images (fully developed speckle with $L$ looks), the
+coefficient of variation in homogeneous areas satisfies \begin{equation}
 C_{ij} \approx \sigma_n := \frac{1}{\sqrt{L}}.
 \end{equation}
 
-The homogeneity criterion is defined by comparing $C_{ij}$ with an adaptive threshold $U_{ij}$:
-\begin{equation}
+The homogeneity criterion is defined by comparing $C_{ij}$ with an
+adaptive threshold $U_{ij}$: \begin{equation}
 U_{ij} = \eta\!\left( 1 + \sqrt{\frac{1 + 2\sigma_n^2}{8\,(W_{ij} - 1)}} \right)\sigma_n,
-\end{equation}
-where $W_{ij} = 2N_{ij} + 1$ is the current window side length, and $\eta$ is a tuning parameter controlling the degree of smoothing. Values close to $\eta=1$ provide limited speckle suppression, while larger values increase smoothing and yield stronger noise reduction.
+\end{equation} where $W_{ij} = 2N_{ij} + 1$ is the current window side
+length, and $\eta$ is a tuning parameter controlling the degree of
+smoothing. Values close to $\eta=1$ provide limited speckle suppression,
+while larger values increase smoothing and yield stronger noise
+reduction.
 
-The window radius $N_{ij}$ is updated dynamically and locally as follows:
-$$
+The window radius $N_{ij}$ is updated dynamically and locally as
+follows: $$
 N_{i,j}^{\text{updated}} =
 \begin{cases}
 \min\{N_{ij} + 1,\, N_{\max}\}, & \text{if } C_{ij} \leq U_{ij}, \\
 \max\{N_{ij} - 1,\, N_{\min}\}, & \text{if } C_{ij} > U_{ij},
 \end{cases}
-$$
-where $N_{\max}$ and $N_{\min}$ denote the maximum and minimum allowed window size, respectively. In homogeneous regions ($C_{ij} \le U_{ij}$), the window grows (up to $N_{\max}$), enhancing speckle reduction and stabilizing the estimates; in heterogeneous regions ($C_{ij} > U_{ij}$), the window shrinks (down to $N_{\min}$), preserving edges and preventing class mixing.
+$$ where $N_{\max}$ and $N_{\min}$ denote the maximum and minimum
+allowed window size, respectively. In homogeneous regions
+($C_{ij} \le U_{ij}$), the window grows (up to $N_{\max}$), enhancing
+speckle reduction and stabilizing the estimates; in heterogeneous
+regions ($C_{ij} > U_{ij}$), the window shrinks (down to $N_{\min}$),
+preserving edges and preventing class mixing.
 
-Once the window radius $N_{ij}$ has been determined for pixel $(i,j)$, the corresponding full window is extracted and the proposed test in \eqref{eq-test-tsallis} is applied to obtain the local test statistic. This produces two outputs: (i) a map of test statistics over the image, and (ii) a window-size map $W_{ij}$ that records the locally selected window side (larger in homogeneous regions, smaller in heterogeneous ones). For inference, each value of the test statistic is standardized using the empirical mean and standard deviation of the image, and two-sided $p$-values are then computed.
+Once the window radius $N_{ij}$ has been determined for pixel $(i,j)$,
+the corresponding full window is extracted and the proposed test in
+\eqref{eq-test-tsallis} is applied to obtain the local test statistic.
+This produces two outputs: (i) a map of test statistics over the image,
+and (ii) a window-size map $W_{ij}$ that records the locally selected
+window side (larger in homogeneous regions, smaller in heterogeneous
+ones). For inference, each value of the test statistic is standardized
+using the empirical mean and standard deviation of the image, and
+two-sided $p$-values are then computed.
 
-This adaptive strategy is locally responsive to image texture, using small windows in heterogeneous areas and larger ones in homogeneous zones. This ensures edge preservation and statistical stability, while the parameter $\eta$ controls the balance between smoothness and detail preservation. Moreover, the framework is extensible and can be applied with any entropy estimator.
+This adaptive strategy is locally responsive to image texture, using
+small windows in heterogeneous areas and larger ones in homogeneous
+zones. This ensures edge preservation and statistical stability, while
+the parameter $\eta$ controls the balance between smoothness and detail
+preservation. Moreover, the framework is extensible and can be applied
+with any entropy estimator.
 
-
-# RESULTS  {#sec:app}
+# RESULTS {#sec:app}
 
 ## Analysis with Simulated Data {#sec-sim2}
 
 <!-- Figure&nbsp;\ref{fig:sim_Phantom_1} presents the structural design of the synthetic phantom with dimensions of -->
+
 <!-- $500\times500$ pixels, proposed by  Gomez et al.&nbsp;[@Gomez2017] as a tool to assess the performance of speckle-reduction filters.  -->
+
 <!-- This layout serves as a base template to generate the simulated image shown in Figure&nbsp;\ref{fig:sim_Phantom_2}. -->
 
-Figure&nbsp;\ref{fig:sim_scene} shows the simulated image of size $500\times500$ pixels, generated from the structural design proposed by Gomez et al.&nbsp;[@Gomez2017] as a tool to assess the performance of speckle-reduction filters. 
-Each region is filled with simulated samples drawn from the $\mathcal{G}^0_I$ distribution using the expression&nbsp;\eqref{E:gi02}, considering different combinations of the texture parameter $\alpha$ and the mean $\mu$, as indicated by the labels in each quadrant of the image.
-Light regions correspond to textured observations (heterogeneous), while darker regions represent textureless areas (homogeneous).
+Figure \ref{fig:sim_scene} shows the simulated image of size
+$500\times500$ pixels, generated from the structural design proposed by
+Gomez et al. [@Gomez2017] as a tool to assess the performance of
+speckle-reduction filters. Each region is filled with simulated samples
+drawn from the $\mathcal{G}^0_I$ distribution using the
+expression \eqref{E:gi02}, considering different combinations of the
+texture parameter $\alpha$ and the mean $\mu$, as indicated by the
+labels in each quadrant of the image. Light regions correspond to
+textured observations (heterogeneous), while darker regions represent
+textureless areas (homogeneous).
+
 ```{=latex}
 \begin{figure}[htb]
   \centering
@@ -1254,19 +1417,39 @@ Light regions correspond to textured observations (heterogeneous), while darker 
 \end{figure}
 ```
 
-The $\alpha$ parameter of the $\mathcal{G}_I^0$ distribution is essential for
-interpreting texture characteristics. Values near zero and greater than
-$-3$ suggest extremely textured targets, such as urban
-zones&nbsp;[@Frery2019a]. 
-As the value decreases, it indicates regions with moderate texture (in the $\left[-6,-3\right]$ region), related to forest zones, while values below $-6$ correspond to textureless regions, such as pasture, agricultural fields, and water bodies&nbsp;[@Neto2023].
+The $\alpha$ parameter of the $\mathcal{G}_I^0$ distribution is
+essential for interpreting texture characteristics. Values near zero and
+greater than $-3$ suggest extremely textured targets, such as urban
+zones [@Frery2019a]. As the value decreases, it indicates regions with
+moderate texture (in the $\left[-6,-3\right]$ region), related to forest
+zones, while values below $-6$ correspond to textureless regions, such
+as pasture, agricultural fields, and water bodies [@Neto2023].
 
-The proposed Tsallis-based test statistic, $S_{\widetilde{T}\lambda}$, was applied to the simulated image using the adaptive windowing strategy with side lengths ranging from $5\times5$ ($N_{\min}=5$) to $11\times11$ ($N_{\max}=11$). For comparison, a fixed $7\times7$ window was also considered. 
+The proposed Tsallis-based test statistic, $S_{\widetilde{T}\lambda}$,
+was applied to the simulated image using the adaptive windowing strategy
+with side lengths ranging from $5\times5$ ($N_{\min}=5$) to $11\times11$
+($N_{\max}=11$). For comparison, a fixed $7\times7$ window was also
+considered.
 
-Figure&nbsp;\ref{fig:simc1} shows the $p$-value map with the fixed window, while Figures&nbsp;\ref{fig:simc2}-\ref{fig:simc4} display the adaptive results for $\eta=1.0$, $2.0$, and $3.0$. The corresponding binary decision maps at a $0.05$ significance level are shown in Figures&nbsp;\ref{fig:simbc1}-\ref{fig:simbc4}.
-The color gradient provides an interpretable scale: dark red regions ($p \approx 0$) indicate strong evidence of heterogeneity, consistently appearing in highly textured zones, while dark blue regions ($p \approx 1$) correspond to homogeneous areas.
-Intermediate colors follow a smooth progression: orange ($p\!\approx\!0.2$–$0.4$) denotes transitional texture, whereas yellow–green to cyan ($p\!\approx\!0.4$–$0.8$) marks increasingly near-homogeneous areas.
+Figure \ref{fig:simc1} shows the $p$-value map with the fixed window,
+while Figures \ref{fig:simc2}-\ref{fig:simc4} display the adaptive
+results for $\eta=1.0$, $2.0$, and $3.0$. The corresponding binary
+decision maps at a $0.05$ significance level are shown in
+Figures \ref{fig:simbc1}-\ref{fig:simbc4}. The color gradient provides
+an interpretable scale: dark red regions ($p \approx 0$) indicate strong
+evidence of heterogeneity, consistently appearing in highly textured
+zones, while dark blue regions ($p \approx 1$) correspond to homogeneous
+areas. Intermediate colors follow a smooth progression: orange
+($p\!\approx\!0.2$–$0.4$) denotes transitional texture, whereas
+yellow–green to cyan ($p\!\approx\!0.4$–$0.8$) marks increasingly
+near-homogeneous areas.
 
-Although the differences were subtle, the adaptive scheme exhibits the expected behavior: larger windows in homogeneous areas provide smoother estimates, while smaller windows in heterogeneous regions preserve structural details. Visual inspection suggests that $\eta$ values between $2.0$ and $3.0$ provide the most balanced results, as larger values tend to blur the edges.
+Although the differences were subtle, the adaptive scheme exhibits the
+expected behavior: larger windows in homogeneous areas provide smoother
+estimates, while smaller windows in heterogeneous regions preserve
+structural details. Visual inspection suggests that $\eta$ values
+between $2.0$ and $3.0$ provide the most balanced results, as larger
+values tend to blur the edges.
 
 <!-- This gradation of colors highlights the sensitivity of the proposed test: instead of producing only binary outcomes, it provides a continuous measure of heterogeneity across the image, allowing areas with intermediate texture levels to be represented by intermediate $p$-values that reflect the gradual transition between homogeneous and heterogeneous scattering conditions. -->
 
@@ -1340,14 +1523,19 @@ $\eta=1.0$, $2.0$, and $3.0$. (e-h) binary decision map ($0.05$).}
 \label{fig:grid10}
 \end{figure*}
 
-
 ```
 
+## SAR dataset
 
-## SAR dataset 
+We evaluated the proposed test statistic on four SAR scenes from
+different radar missions, covering San Francisco (USA), the outskirts of
+Munich (Germany), Dublin Port (Ireland), and the area around Foggia
+(Italy). The first three SAR images were acquired in HH polarization and
+the fourth in VV polarization (see Figures. \ref{fig:sar1},
+\ref{fig:sar2}, \ref{fig:sar3} and \ref{fig:sar4}). The corresponding
+optical images (Figures. \ref{fig:opt1}, \ref{fig:opt2}, \ref{fig:opt3}
+and \ref{fig:opt4}) illustrate the land cover context.
 
-We evaluated the proposed test statistic on four SAR scenes from different radar missions, covering San Francisco (USA), the outskirts of Munich (Germany), Dublin Port (Ireland), and the area around Foggia (Italy). The first three SAR images were acquired in HH polarization and the fourth in VV polarization (see Figures.&nbsp;\ref{fig:sar1}, \ref{fig:sar2}, \ref{fig:sar3} and \ref{fig:sar4}).
-The corresponding optical images (Figures.&nbsp;\ref{fig:opt1}, \ref{fig:opt2}, \ref{fig:opt3} and \ref{fig:opt4}) illustrate the land cover context.
 ```{=latex}
 \setlength{\dblfloatsep}{6pt}      % space between double floats
 \setlength{\dbltextfloatsep}{6pt}  % space between text and double float
@@ -1414,11 +1602,15 @@ The corresponding optical images (Figures.&nbsp;\ref{fig:opt1}, \ref{fig:opt2}, 
 \label{fig:images}
 \end{figure*}
 
-
 ```
-The SAR scenes come from different missions: PAZ, TanDEM-X, UAVSAR, and Iceye. All images are single-polarization (HH or VV), and their acquisition parameters vary in resolution, scene size, and number of looks. Table&nbsp;\ref{tab:table_param} reports the acquisition parameters.
 
-\renewcommand{\arraystretch}{2.5}   
+The SAR scenes come from different missions: PAZ, TanDEM-X, UAVSAR, and
+Iceye. All images are single-polarization (HH or VV), and their
+acquisition parameters vary in resolution, scene size, and number of
+looks. Table \ref{tab:table_param} reports the acquisition parameters.
+
+\renewcommand{\arraystretch}{2.5}
+
 ```{r parameters_sar, echo=FALSE, message=FALSE, warning=FALSE}
 
 SAR_data <- data.frame(
@@ -1472,24 +1664,32 @@ kable(SAR_data,
   column_spec(7, width = "4.5cm")
 
 ```
+
 For each SAR image, the number of looks $L$ was obtained from the
-product of azimuth and range looks provided in the metadata of SNAP (Sentinel Application Platform) toolbox. We
-validated this nominal value with the equivalent number of looks (ENL)
-from manually selected homogeneous areas using the classical formula
-$\text{ENL} = 1/\widehat{\text{CV}}^2$, based on the sample
-coefficient of variation. The results were consistent with the metadata.
-We also verified that moderate deviations in $L$ did not significantly
-impact the outcome of the test, confirming the robustness of the
-proposed method.
-
-
+product of azimuth and range looks provided in the metadata of SNAP
+(Sentinel Application Platform) toolbox. We validated this nominal value
+with the equivalent number of looks (ENL) from manually selected
+homogeneous areas using the classical formula
+$\text{ENL} = 1/\widehat{\text{CV}}^2$, based on the sample coefficient
+of variation. The results were consistent with the metadata. We also
+verified that moderate deviations in $L$ did not significantly impact
+the outcome of the test, confirming the robustness of the proposed
+method.
 
 ## Qualitative analysis
 
-The proposed Tsallis-based test statistic, $S_{\widetilde{T}{\lambda}}$, was applied to four SAR intensity images. 
-For each scene, results were obtained using a fixed $7 \times 7$ sliding window and the adaptive windowing scheme with side lengths ranging from $5\times5$ ($N_{\min}=5$) to $11\times11$ ($N_{\max}=11$), for smoothing parameters $\eta=1.0$, $2.0$, and $3.0$.
+The proposed Tsallis-based test statistic, $S_{\widetilde{T}{\lambda}}$,
+was applied to four SAR intensity images. For each scene, results were
+obtained using a fixed $7 \times 7$ sliding window and the adaptive
+windowing scheme with side lengths ranging from $5\times5$
+($N_{\min}=5$) to $11\times11$ ($N_{\max}=11$), for smoothing parameters
+$\eta=1.0$, $2.0$, and $3.0$.
 
-Figures \ref{fig:sanfrancisco}–\ref{fig:foggia} present the outcomes, organized in two rows: the first row shows the $p$-value heatmaps, while the second row displays the corresponding binary decision maps at the $0.05$ significance level, where black pixels denote heterogeneous areas and white pixels homogeneous regions.
+Figures \ref{fig:sanfrancisco}–\ref{fig:foggia} present the outcomes,
+organized in two rows: the first row shows the $p$-value heatmaps, while
+the second row displays the corresponding binary decision maps at the
+$0.05$ significance level, where black pixels denote heterogeneous areas
+and white pixels homogeneous regions.
 
 ```{=latex}
 \setlength{\dblfloatsep}{6pt}      % space between double floats
@@ -1561,7 +1761,6 @@ Figures \ref{fig:sanfrancisco}–\ref{fig:foggia} present the outcomes, organize
 \label{fig:sanfrancisco}
 \end{figure*}
 
-
 ```
 
 ```{=latex}
@@ -1626,7 +1825,6 @@ Munich, using the test $S_{\widetilde{T}_{\lambda}}$.
 \label{fig:munich}
 \end{figure*}
 
-
 ```
 
 ```{=latex}
@@ -1689,7 +1887,6 @@ Munich, using the test $S_{\widetilde{T}_{\lambda}}$.
 
 \label{fig:dublin}
 \end{figure*}
-
 
 ```
 
@@ -1754,39 +1951,43 @@ Munich, using the test $S_{\widetilde{T}_{\lambda}}$.
 \label{fig:foggia}
 \end{figure*}
 
-
 ```
+
 <!-- In all scenes, the adaptive strategy improves the detection of textured features.  -->
 
-In the $p$-value heatmaps, dark-red tones ($p \approx 0$) concentrate on heterogeneous areas such as urban blocks, harbor structures, and field boundaries, while blue tones ($p \approx 1$) dominate open water and uniform surfaces. 
-Intermediate values reveal transitional textures, where the adaptive approach provides cleaner and more stable estimates in homogeneous regions, while preserving finer edges in heterogeneous regions.
-The binary maps make the separation between homogeneous and heterogeneous areas explicit, showing that the adaptive strategy preserves fine details that are partially lost with the fixed window.
+In the $p$-value heatmaps, dark-red tones ($p \approx 0$) concentrate on
+heterogeneous areas such as urban blocks, harbor structures, and field
+boundaries, while blue tones ($p \approx 1$) dominate open water and
+uniform surfaces. Intermediate values reveal transitional textures,
+where the adaptive approach provides cleaner and more stable estimates
+in homogeneous regions, while preserving finer edges in heterogeneous
+regions. The binary maps make the separation between homogeneous and
+heterogeneous areas explicit, showing that the adaptive strategy
+preserves fine details that are partially lost with the fixed window.
 
+The effect of the number of looks is evident. In San Francisco ($L=4$),
+where speckle is stronger, adaptive maps, especially for $\eta=2.0$ and
+$\eta=3.0$, enhance the detection of urban structures compared to the
+fixed window.
 
-The effect of the number of looks is evident.
-In San Francisco ($L=4$), where speckle is stronger, adaptive maps, especially for $\eta=2.0$ and $\eta=3.0$, enhance the detection of urban structures compared to the fixed window. 
+As $L$ increases (Munich, Dublin, Foggia), speckle decreases and the
+overall performance improves, yet the adaptive scheme still provides
+visible advantages: it enlarges homogeneous areas for stability and
+refines textured zones by preserving edges.
 
-As $L$ increases (Munich, Dublin, Foggia), speckle decreases and the overall performance improves, yet the adaptive scheme still provides visible advantages: it enlarges homogeneous areas for stability and refines textured zones by preserving edges.
-
-Visual inspection suggests that $\eta=2.0$ and $\eta=3.0$ yield the most balanced results. 
-With $\eta=1.0$, the outcome is close to the fixed-window case, offering little improvement. 
-Values above $\eta=3.0$ tend to oversmooth the images, causing blurred edges and loss of fine details. 
-These findings highlight the advantages of the adaptive approach, which better preserves heterogeneous features while enhancing the clarity of homogeneous areas, consistent with the behavior observed in the simulated experiment.
-
-
-
-
-
+Visual inspection suggests that $\eta=2.0$ and $\eta=3.0$ yield the most
+balanced results. With $\eta=1.0$, the outcome is close to the
+fixed-window case, offering little improvement. Values above $\eta=3.0$
+tend to oversmooth the images, causing blurred edges and loss of fine
+details. These findings highlight the advantages of the adaptive
+approach, which better preserves heterogeneous features while enhancing
+the clarity of homogeneous areas, consistent with the behavior observed
+in the simulated experiment.
 
 # Conclusions {#sec:conclusion}
 
-
-
-
-
-
 ::: {.content-visible when-format="pdf"}
-# References {-}
+# References {.unnumbered}
 :::
 
 <!-- [^issues-1023]: ["_[longtable not compatible with 2-column LaTeX documents](https://github.com/jgm/pandoc/issues/1023>)_",  -->
