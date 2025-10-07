@@ -349,11 +349,11 @@ plot_tsallis <- function(L, lambda) {
     geom_line(data = muEntropy.molten, aes(x = mu, y = value, color = alpha), linetype = "longdash", linewidth = 1.4, alpha=.7) +
     scale_color_manual(values = rev(pal_lancet()(4)), labels = alpha_labels) +
     labs(color = "Texture", x = expression(mu), y = "Tsallis Entropy") +
-    annotate("text",
+    annotate("text", 
              x = max(mu) + 0.5,
              y = max(Entropy_gamma$Entropy_Gamma) - 0.4,
-             label = TeX("${italic(T)}_{\\lambda}(\\Gamma_{\\tiny{SAR}})$"),
-             hjust = 1, vjust = 1, size = 3.5) +
+             label = as.character(TeX("${italic(T)}_{\\lambda}(\\Gamma_{\\tiny{SAR}})$")),
+             hjust = 1, vjust = 1, size = 3.5, parse=TRUE) +
     theme_minimal(base_family = "serif") +
     theme(
       legend.position = "bottom",
