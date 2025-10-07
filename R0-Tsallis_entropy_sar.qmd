@@ -1,5 +1,5 @@
 ---
-title: Adaptive Tsallis Entropy for Detecting Non-Fully-Developed Speckle in SAR Imagery
+title: Adaptive Tsallis Entropy Estimation for Detecting Non-Fully-Developed Speckle in SAR Imagery
 format:
   ieee-pdf:
     pdf-engine: pdflatex # xelatex
