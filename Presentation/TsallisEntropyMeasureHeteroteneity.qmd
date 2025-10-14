@@ -627,4 +627,24 @@ A Monte Carlo validation confirmed that the test maintains proper control of the
 
 Although machine learning-based SAR classifiers are widely used, this framework offers a statistically grounded alternative that provides interpretable significance measures and requires no labelled data, making it suitable for rapid detection, screening, and scenarios with limited data availability.
 
+## Contact
+
+::: columns
+::: {.column width="35%"}
+![](../Figures/QRCode-WebPageVUW.png)
+:::
+
+::: {.column width="63%"}
+<ul style="list-style-type: none; padding-left: 0;">
+  <li>Alejandro C. Frery</li>
+  <li>School of Mathematics and Statistics</li>
+  <li>Victoria University of Wellington</li>
+  <li>New Zealand</li>
+  <li></li>
+  <li>alejandro.frery at vuw.ac.nz</li>
+</ul>
+::: 
+:::
+
 ## References  {.references-slide}
+
