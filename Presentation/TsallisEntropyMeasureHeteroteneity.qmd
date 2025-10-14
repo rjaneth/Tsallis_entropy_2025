@@ -45,14 +45,14 @@ set.seed(123456789, kind="Mersenne-Twister")
 
 ::: {.incremental}
 * Speckle is an interference phenomenon common to every image produced by coherent imaging.
-* Imagine the pixe value is formed by the addition of the return from $n$ elementary backscatterers:
+* Imagine the pixe value is formed by the addition of the return from $m$ elementary backscatterers:
 $$
-S = \sum_{\ell=1}^n S_\ell e^{j \phi_\ell},
+S = \sum_{\ell=1}^m S_\ell e^{j \phi_\ell},
 $$
 where $S$ is the complex observation,
 $S_\ell$ is the amplitude returned by the $\ell$-th elementary backscatter,
 $\phi_\ell$ is the phase of the signal returned by the $\ell$-th elementary backscatter,
-and $n$ is the number of backscatterers.
+and $m$ is the number of backscatterers.
 :::
 
 --- 
@@ -104,42 +104,42 @@ ggplot(data=DATA) +
 * The most common assumption is the "fully-developed speckle".
 :::
 
-## What is "fully-developed speckle"? {.fullsmall #orange-slide}
+## What is "fully-developed speckle"? {.fullsmall .orange-slide}
 
 Recall that the observation in a pixel is
 $$
-S = \sum_{\ell=1}^n S_\ell e^{j \phi_\ell}.
+S = \sum_{\ell=1}^m S_\ell e^{j \phi_\ell}.
 $$
 If
 
-* $n\to\infty$ (infinitely many scatterers in the resolution cell),
+* $m\to\infty$ (infinitely many scatterers in the resolution cell),
 * $\max\operatorname{Var}(S_\ell)<\infty$ (no scatterer dominates),
-* $|S_\ell| \perp |S_m|$ (independent amplitudes),
+* $|S_\ell| \perp |S_k|$ (independent amplitudes),
 * $\phi_\ell\sim\mathcal U(-\pi,\pi]$ (uninformative phases),
-* $\phi_\ell \perp \phi_m$ (independent phases),
+* $\phi_\ell \perp \phi_k$ (independent phases),
 * the amplitudes are collectively independent of the phases,
 
 then$\dots$
 
-## What is "fully-developed speckle"? {.fullsmall #orange-slide}
+## What is "fully-developed speckle"? {.fullsmall .orange-slide}
 
 $\dots$ we can invoke the Central Limit Theorem:
 $$
-S = \sum_{\ell=1}^n S_\ell e^{j \phi_\ell} =
-\underbrace{\sum_{\ell=1}^n |S_\ell| \cos \phi_\ell}_{\Re(S)} +
-j \underbrace{\sum_{\ell=1}^n |S_\ell| \sin \phi_\ell}_{\Im(S)},
+S = \sum_{\ell=1}^m S_\ell e^{j \phi_\ell} =
+\underbrace{\sum_{\ell=1}^m |S_\ell| \cos \phi_\ell}_{\Re(S)} +
+j \underbrace{\sum_{\ell=1}^m |S_\ell| \sin \phi_\ell}_{\Im(S)},
 $$
 and say that $\Re(S)$ and $\Im(S)$ are asymptotically normal distributed and independent.
 
 With that,
 $$
-|S|^2\sim\text{E}(\sigma^2),
+|S|^2\sim\text{E}(\mu),
 $$
-which is far from the usual normal additive noise.
+where $\mu$ is the backscatter, assumed [constant]{.alert} among pixels of the same type.
 
 Equivalently,
 $$
-|S|^2\sim\sigma^2\text{E}(1),
+|S|^2\sim\mu\text{E}(1),
 $$
 the basis for the multiplicative model [@SARImageStatisticalModelingPartISinglePixelStatisticalModels].
 
@@ -150,10 +150,10 @@ the basis for the multiplicative model [@SARImageStatisticalModelingPartISingleP
 ::: column 
 
 ::: {.incremental}
-* The number of backscatterers $n$ is the number of elements in the resolution cell of the order of the wavelength
+* The number of backscatterers $m$ is the number of elements in the resolution cell of the order of the wavelength
    * X-band: $\approx 3\text{ cm}$
    * L-band: $\approx 20\text{ cm}$
-* Pasture, calm water, bare soil usually verify $n\to\infty$ and the other hypotheses.
+* Pasture, crops, and bare soil usually verify $m\to\infty$ and the other hypotheses.
 :::
 
 :::
@@ -206,6 +206,156 @@ $$
 * The coefficient of variation is widely used to check if the observations are fully-developed speckle.
 :::
 
+## Properties of the gamma distribution
+
+Multiplicative property:
+if 
+\begin{align}
+W &\sim\Gamma_{\text{SAR}}(1,L), \\
+\text{then}\\
+Z=\mu W&\sim\Gamma_{\text{SAR}}(\mu,L).
+\end{align}
+
+This property leads to more general models by letting $\mu$ be a random variable.
+
+## What happens if the speckle is not fully-developed? {.fullsmall}
+
+::: columns
+
+::: column
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-width: 10
+#| fig-height: 10
+#| out-width: "100%"
+
+knitr::include_graphics("../Figures/dubli_1600.png")
+```
+
+:::
+
+::: column
+
+:::{.incremental}
+
+* This may occur when at least one of the hypotheses is violated.
+* Typically, when $m$ is finite, i.e., the number of elementary backscatterers in the resolution cell is not big:
+   * a few in forested regions,
+   * even less in urban areas.
+* When the backscatter changes among resolution cells.
+
+:::
+
+:::
+
+:::
+
+## What happens if the speckle is not fully-developed? {.fullsmall}
+
+Instead of assuming $\mu$ constant, we may assume that it is a random variable.
+
+@Frery1997 proposed the inverse gamma distribution for the backscatter, leading to the $\mathcal G^0_{\text{SAR}}$ model, characterised by the probability density function
+$$    
+\color{DarkOrchid}{f_{\mathcal{G}^0_{\text{SAR}}}\bigl(z; \mu, \alpha, L \bigr) 
+    = \frac{L^L\,\Gamma(L-\alpha)}
+    {\bigl[-\mu(\alpha+1)\bigr]^{\alpha} \Gamma(-\alpha)\,\Gamma(L)}
+    \frac{z^{L-1}}
+    {\bigl[-\mu(\alpha+1)+Lz\bigr]^{L-\alpha}}
+    \mathbb I_{\mathbb R_+}(z)}. 
+$$
+Here, $\mu > 0$ is the mean intensity, 
+$\alpha < 0$ is the texture (heterogeneity) parameter, which relates with the number of backscatterers $m$,
+and $L \geq 1$ is the number of looks.
+
+The $\mathcal G^0_{\text{SAR}}$ model can describe data with extreme variability ($\alpha\approx0$) as well as fully-developed speckle ($\alpha\to-\infty$).
+
+## Recap {.orange-slide}
+
+We have two models to describe the observations:
+
+* The $\Gamma_{\text{SAR}}(\mu,L)$ model for fully-developed speckle, and
+* The more general $\mathcal G^0_{\text{SAR}}(\mu,\alpha,L)$ law that includes the fully-developed speckle situation.
+
+[We want to identify where we are, but using small samples possibly contaminated by outliers.]{.alert}
+
+# Methodology
+
+## Goodness-of-fit tests
+
+Given a random sample $\mathbf Z = (Z_1,Z_2,\dots,Z_n)$, our problem can be stated as a goodness-of-fit test:
+\begin{align}
+\mathcal H_0 &: \mathbf Z \text{ is compatible with } \Gamma_{\text{SAR}}(\mu,L),\\
+\mathcal H_1 &:  \mathbf Z \text{ is compatible with } \mathcal G^0_{\text{SAR}}(\mu,\alpha,L).
+\end{align}
+
+It is a nested-distribution problem.
+There are plenty of tests for problems like this, but we want one that
+
+::: {.incremental}
+* Performs well with relatively small samples.
+* Is resistant to departures from the hypothesised models.
+* Is computationally efficient.
+:::
+
+## Goodness-of-fit tests
+
+Nested-distribution goodness-of-fit tests can be sorted out with, among others, the following approaches [@MathematicalStatisticsvII2015; @ModelSelectionandMultimodelInference; @davisonhinkleybootstrap97]:
+
+* Likelihood-ratio tests
+* Score tests
+* Wald tests
+* Information criterion comparison tests
+* Bootstrap
+
+They are very sensitive to outliers.
+
+## Goodness-of-fit tests
+
+[We opt for an information-theory based approach based on entropy.]{.alert}
+
+Our proposal has the good properties of semiparametric statistics:
+
+::: {.incremental}
+* It uses a parametric property of the $\Gamma_{\text{SAR}}$ model.
+* It does not estimate the roughness parameter of the $\mathcal G^0_{\text{SAR}}$ models (which may be numerically unstable).
+* It performs well with small samples.
+* It resists contamination.
+* It is interpretable.
+:::
+
+## What do we use?
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-width: 10
+#| fig-height: 10
+#| out-width: "100%"
+
+knitr::include_graphics("/Users/acfrery/Library/CloudStorage/OneDrive-VictoriaUniversityofWellington-STAFF/Documents/Slides/entropy.jpg")
+```
+
+## Why do we use the entropy?
+
+According to @EnergyandInformation, Shannon used this name because
+
+> "My
+greatest concern was what to call it. I
+thought of calling it 'information,' but
+the word was overly used, so I decided
+to call it 'uncertainty.' When I discussed
+it with John von Neumann, he had a better
+idea. Von Neumann told me, 'You
+should call it entropy, for two reasons.
+In the first place your uncertainty function
+has been used in statistical mechanics
+under that name, so it already has a
+name. In the second place, and more
+important, no one knows what entropy
+really is, so in a debate you will always
+have the advantage.' "
 
 ## Flavours of Entropy
 
@@ -222,14 +372,185 @@ $$
 $$
 :::
 
-## What happens if the speckle is not fully-developed?
+## Tsallis entropy {.fullsmall}
 
+Under the $\Gamma_{\mathrm{SAR}}$ and the $\mathcal{G}^0_{\text{SAR}}$ distributions:
 
+\begin{multline}
+\label{eq:gammasar-Tsallis}
+T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr)=
+\frac{1}{\lambda-1}\Bigl\{1-
+\exp\bigl[
+(1-\lambda)\ln\mu
++(\lambda-1)\ln L
++\ln\Gamma\bigl(\lambda(L-1)+1\bigr) \\
+-\lambda\ln\Gamma(L)
+-(\lambda(L-1)+1)\ln\lambda
+\bigr]\Bigr\}, 
+\end{multline}
+and
+\begin{multline}
+\label{eq:GI0-Tsallis}
+  T_\lambda\bigl(\mathcal{G}^0_{\text{SAR}}(\mu,\alpha,L)\bigr) = T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr) + 
+  \frac{1}{\lambda-1}\,
+  \exp\Bigl[
+  (1-\lambda)\ln\mu
+  +(\lambda-1)\ln L\\
+  +\ln\Gamma\bigl(\lambda(L-1)+1\bigr)
+  -\lambda\ln\Gamma(L)
+  \Bigr] 
+  \Bigl\{1-
+  \exp\bigl[
+  (1-\lambda)\ln(-\alpha-1)
+  +\lambda\ln\Gamma(L-\alpha)\\
+  -\lambda\ln\Gamma(-\alpha) 
+  +\ln\Gamma\bigl(\lambda(1-\alpha)-1\bigr)
+  -\ln\Gamma\bigl(\lambda(L-\alpha)\bigr)
+  \bigr]\Bigr\}.
+\end{multline}
 
-# Methodology
+This means that
+\begin{equation*}
+  \color{DarkOrchid}{T_\lambda(\mathcal{G}^0_I)
+  =
+  \underbrace{T_\lambda \bigl(\Gamma_{\mathrm{SAR}}(\mu,L)\bigr)}_{\text{baseline entropy}} 
+  \hspace{1.8em} + \hspace{-1.8em}
+  \underbrace{\Delta(\mu, L, \alpha)}_{\text{entropy excess caused by texture}}\hspace{-4.0em}}
+\end{equation*}
+where the term $\Delta_\alpha$ measures the increase in entropy induced by the texture level, with the level controlled by the parameter $\alpha$.
+
+--- 
+
+The relationship 
+\begin{equation*}
+  \color{DarkOrchid}{T_\lambda(\mathcal{G}^0_I)
+  =
+T_\lambda \bigl(\Gamma_{\mathrm{SAR}}(\mu,L)\bigr) +
+  \Delta(\mu, L, \alpha)}
+\end{equation*}
+gives a hint to build a test statistic:
+
+::: {.incremental}
+* Estimate the Tsallis entropy with the random sample $\mathbf Z=(Z_1,Z_2,\dots,Z_n)$.
+* Check if it close to the theoretical Tsallis entropy under the $\Gamma_{\mathrm{SAR}}$ model or to the Tsallis entropy under the $\Gamma_{\mathrm{SAR}}(\mu,L)$.
+:::
+
+## But$\dots$ how?
+
+In the following, assume we know $L$, e.g., as the nominal number of looks.
+
+We need
+$$
+\widehat{T_\lambda} \bigl(\Gamma_{\mathrm{SAR}}(\mu)\bigr) \text { or }
+\widehat{T_\lambda} \bigl(\mathcal G^0_{\mathrm{SAR}}(\mu,\alpha)\bigr),
+$$
+but we don't trust $\widehat\mu$ and don't want to compute $\widehat\alpha$.
+
+## Direct estimation of the entropy
+
+The technique consists of 
+
+1. Writing the Tsallis entropy as a function of the quantile function.
+1. Make sensible approximations
+
+@vasicek1976test and @Ebrahimi1994 proposed spacing-based estimation for the Shannon entropy.
+@AlLabadi2024 followed the approach for the Rényi entropy.
+We proceed in the same way, and obtain a non-parametric estimator for the Tsallis entropy.
+
+## {.fullsmall}
+
+Denote $Q(p)=F^{-1}(p)$ the quantile function for $p\in(0,1)$. 
+Then:
+$$
+\int_{\mathcal B} f(z)^\lambda\,\mathrm{d}z
+=\int_{\mathcal B} f(z)^{\lambda-1} f(z)\,\mathrm{d}z
+=\mathbb{E}\!\left[f(Z)^{\lambda-1}\right].
+$$
+Using the change of variables $p=F(z)$ (hence $\mathrm{d}p=f(z)\,\mathrm{d}z$) and the identity $f(Q(p))=1/Q'(p)$, we obtain
+$$
+  \mathbb{E}\!\left[f(Z)^{\lambda-1}\right]
+  = \int_{0}^{1} \bigl(Q'(p)\bigr)^{1-\lambda}\,\mathrm{d}p,
+$$
+which yields the representation
+\begin{equation}
+  T_\lambda(Z)
+  =\frac{1}{\lambda-1}
+     \left\{
+       1-\int_{0}^{1}\bigl(Q'(p)\bigr)^{1-\lambda}\,\mathrm{d}p
+     \right\}.
+  \label{eq:Tsallis-quantile}
+\end{equation}
+
+Be bold, and
+
+::: {.incremental}
+* Approximate $Q(p)$ by order statistics, and $Q'(p)$ by their differences (spacings),
+* Approximate the integral by a sum.
+
+::: 
+
+## {.fullsmall}
+
+Let $\mathbf{Z}=(Z_1,Z_2,\dots,Z_n)$ be an i.i.d.\ sample from $F$, with order statistics $Z_{(1)}\le Z_{(2)} \le \cdots\le Z_{(n)}$.
+Our estimator becomes
+\begin{align}
+  \widehat T_{\lambda}(\mathbf{Z})
+  &=\frac{1}{\lambda-1}\left\{
+1-\frac{1}{n}\sum_{i=1}^{n}\bigl[\widehat{Q'}(p_i)\bigr]^{\,1-\lambda}
+\right\} \nonumber\\[4pt]
+  &= \frac{1}{\lambda-1}
+  \left\{
+    1-\frac{1}{n}
+       \sum_{i=1}^{n}
+       \left(
+         \frac{Z_{(i+k)}-Z_{(i-k)}}{(k/n) \, c_i}
+       \right)^{1-\lambda}
+  \right\},
+  \label{eq:Tsallis-spacing-estimator}
+\end{align}
+where
+$$
+c_i=
+\begin{cases}
+\dfrac{k+i-1}{k} & \text{if } \; 1\le i\le k,\\
+2 & \text{if } \; k+1\le i\le n-k,\\
+\dfrac{n+k-i}{k} & \text{if } \; n-k+1\le i\le n.
+\end{cases}
+$$
+We use the heuristic spacing $k=\lfloor\sqrt{n}+0.5\rfloor$.
+
+## Noteworthy facts
+
+Our estimator
+$$
+\color{DarkOrchid}{\widehat T_{\lambda}(\mathbf{Z})
+  = \frac{1}{\lambda-1}
+  \left\{
+    1-\frac{1}{n}
+       \sum_{i=1}^{n}
+       \left(
+         \frac{Z_{(i+k)}-Z_{(i-k)}}{(k/n) \, c_i}
+       \right)^{1-\lambda}
+  \right\}},
+$$
+
+::: {.incremental}
+* estimates the Tsallis entropy regardless the model,
+* converges to the Shannon entropy when $\lambda\rightarrow1$,
+* requires sorting the typically small vector $\mathbf Z$ and simple operations,
+* does not suffer from numerical instabilities.
+
+:::
+
+## But we want [more]{.alert}
+
+We improve $\widehat T_{\lambda}(\mathbf{Z})$ by simple bootstrap, and use $\widetilde T_{\lambda}(\mathbf{Z})$ that
+
+* is less biased than $\widehat T_{\lambda}(\mathbf{Z})$, and
+* is more sensitive to outliers (recall that we will measure departures from the fully-developed speckle hypothesis).
 
 # Results
 
 # Discussion
 
-## References
+## References  {.references-slide}

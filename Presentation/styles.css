@@ -52,7 +52,7 @@
 }
 
 .alert {
-  color: orange;
+  color: darkorange;
   font-weight: bold;
 }
 
@@ -61,7 +61,7 @@
 */
 
 /* Target the slide section by id (use the same id in your .qmd slide) */
-.reveal .slides section#orange-slide {
+.reveal .slides section.orange-slide {
   background-color: #FFF4E6 !important; /* very light orange / cream */
   color: #111;                             /* dark text for contrast */
 }
@@ -80,4 +80,18 @@
 
 .reveal .slides section#orange-slide a {
   color: #1a3b5c; /* darker accent for links */
+}
+
+/* Style for Reveal.js slide numbers */
+.reveal .slide-number {
+  font-family: "Times New Roman", Times, serif !important; /* Serif font */
+  font-size: .7em !important;  /* Slightly larger than default */
+  font-weight: 500;
+  color: #333;  /* Optional: make it a bit darker for contrast */
+}
+
+/* Allow overflow (scrolling) for long reference slides */
+.reveal .slide.references-slide {
+  overflow-y: auto !important;
+  height: 100% !important;
 }
