@@ -95,3 +95,12 @@
   overflow-y: auto !important;
   height: 100% !important;
 }
+
+/* Make Reveal.js progress bar thicker */
+.reveal .progress {
+  height: 8px !important;   /* default is about 3px */
+}
+
+.reveal .progress span {
+  background-color: #9932CC !important;  /* optional: change color */
+}

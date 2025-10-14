@@ -55,7 +55,7 @@ $\phi_\ell$ is the phase of the signal returned by the $\ell$-th elementary back
 and $m$ is the number of backscatterers.
 :::
 
---- 
+## 
 
 The complex observation $S$ is the summation of complex quantities.
 
@@ -95,7 +95,7 @@ ggplot(data=DATA) +
   xlab("Real components") + ylab("Imaginary components") 
 ```
 
----
+##
 
 ::: {.incremental}
 * If we had the distribution of $S$ for every conceivable target, enviromental condition, and sensor configuration, we'd be omniscient.
@@ -334,15 +334,14 @@ Our proposal has the good properties of semiparametric statistics:
 #| fig-height: 10
 #| out-width: "100%"
 
-knitr::include_graphics("/Users/acfrery/Library/CloudStorage/OneDrive-VictoriaUniversityofWellington-STAFF/Documents/Slides/entropy.jpg")
+knitr::include_graphics("../Figures/entropy.jpg")
 ```
 
 ## Why do we use the entropy?
 
-According to @EnergyandInformation, Shannon used this name because
+According to @EnergyandInformation, Claude Shannon used the word [entropy]{.alert} for the quantity he had defined because
 
-> "My
-greatest concern was what to call it. I
+> "My greatest concern was what to call it. I
 thought of calling it 'information,' but
 the word was overly used, so I decided
 to call it 'uncertainty.' When I discussed
@@ -419,7 +418,7 @@ This means that
 \end{equation*}
 where the term $\Delta_\alpha$ measures the increase in entropy induced by the texture level, with the level controlled by the parameter $\alpha$.
 
---- 
+##
 
 The relationship 
 \begin{equation*}
@@ -446,16 +445,17 @@ $$
 $$
 but we don't trust $\widehat\mu$ and don't want to compute $\widehat\alpha$.
 
-## Direct estimation of the entropy
+## Model-free estimation of the entropy
 
 The technique consists of 
 
 1. Writing the Tsallis entropy as a function of the quantile function.
 1. Make sensible approximations
 
-@vasicek1976test and @Ebrahimi1994 proposed spacing-based estimation for the Shannon entropy.
-@AlLabadi2024 followed the approach for the Rényi entropy.
-We proceed in the same way, and obtain a non-parametric estimator for the Tsallis entropy.
+@vasicek1976test and @Ebrahimi1994 proposed spacing-based estimation for the Shannon entropy; we used it in @Frery2024.
+@AlLabadi2024 followed the approach for the Rényi entropy; we used it in @Alpala2025.
+
+We proceed in the same way, and obtain a non-parametric (model-free) estimator for the Tsallis entropy.
 
 ## {.fullsmall}
 
@@ -542,15 +542,89 @@ $$
 
 :::
 
-## But we want [more]{.alert}
+## We want [more]{.alert} I
 
-We improve $\widehat T_{\lambda}(\mathbf{Z})$ by simple bootstrap, and use $\widetilde T_{\lambda}(\mathbf{Z})$ that
+We improve $\widehat T_{\lambda}(\mathbf{Z})$ by simple bootstrap, and use $\widetilde T_{\lambda}(\mathbf{Z})$ that is less biased than $\widehat T_{\lambda}(\mathbf{Z})$.
 
-* is less biased than $\widehat T_{\lambda}(\mathbf{Z})$, and
-* is more sensitive to outliers (recall that we will measure departures from the fully-developed speckle hypothesis).
+## We want [more]{.alert} II
+
+We optimise $\lambda$ with simulated data to achieve maximum discrimination between the models, and obtain 
+$$
+\lambda_{\text{optimal}} = 0.85.
+$$
+
+## We want [more]{.alert} III
+
+We used adaptive windows, i.e., the sample size varies according to a rough initial estimate of homogeneity based on the the coefficient of variation [@Park1999].
 
 # Results
 
+## San Francisco
+
+```{r}
+#| echo: false
+#| results: asis
+
+cat('
+<div style="display: flex; justify-content: center; gap: 1em;">
+  <img src="../Figures/sanFrancisco1400.png" style="width:37%;">
+  <img src="../Figures/p-values_San-fran1400_eta2_B100_lambda_085-5x11_L4_1.png" style="width:46%;">
+</div>
+')
+```
+
+## Munich
+
+```{r}
+#| echo: false
+#| results: asis
+
+cat('
+<div style="display: flex; justify-content: center; gap: 1em;">
+  <img src="../Figures/munich_1024.png" style="width:37%;">
+  <img src="../Figures/p-values_munich1024_eta2.0_lambda085_5x11_b100.png" style="width:46%;">
+</div>
+')
+```
+
+## Dublin port
+
+```{r}
+#| echo: false
+#| results: asis
+
+cat('
+<div style="display: flex; justify-content: center; gap: 1em;">
+  <img src="../Figures/dubli_1600.png" style="width:37%;">
+  <img src="../Figures/p-values_dublin1600_eta2.0_lambda085_5x11_b1005.png" style="width:46%;">
+</div>
+')
+```
+
+## Foggia
+
+```{r}
+#| echo: false
+#| results: asis
+
+cat('
+<div style="display: flex; justify-content: center; gap: 1em;">
+  <img src="../Figures/Foggia_new.png" style="width:37%;">
+  <img src="../Figures/p-values_FoggiaL24_eta_2.00_5x11_B100_lambda_0852.png" style="width:46%;">
+</div>
+')
+```
+
 # Discussion
+
+## Conclusions {.fullsmall .orange-slide}
+
+This work presented a statistical approach based on Tsallis entropy to detect deviations from fully-developed speckle in intensity SAR images. 
+The proposed  test integrates a bootstrap correction and an adaptive windowing scheme to balance speckle suppression and texture preservation without requiring training data or parametric modeling.
+
+Experiments with simulated and real SAR data demonstrated that the method is well-calibrated, robust for small samples, and effective in delineating heterogeneous regions from homogeneous ones. 
+A Monte Carlo validation confirmed that the test maintains proper control of the Type&nbsp;I error while improving detection power with increasing sample size.
+
+Although machine learning-based SAR classifiers are widely used, this framework offers a statistically grounded alternative that provides interpretable significance measures and requires no labelled data, making it suitable for rapid detection, screening, and scenarios with limited data availability.
 
 ## References  {.references-slide}
