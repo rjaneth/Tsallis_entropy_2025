@@ -1,0 +1,83 @@
+/* styles.css */
+
+/* General text and headings */
+.reveal {
+  font-family: "Times New Roman", Times, serif;
+}
+
+.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+  font-family: "Times New Roman", Times, serif;
+}
+
+/* Code blocks and inline code */
+.reveal code,
+.reveal pre {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 0.95em;
+}
+
+.reveal .slides section.fullsmall {
+  padding: 0 !important;     /* no inner padding */
+  margin: 0 !important;      /* no outer margin */
+  font-size: 70% !important; /* shrink text size */
+}
+
+.reveal .slides section.fullverysmall {
+  padding: 0 !important;     /* no inner padding */
+  margin: 0 !important;      /* no outer margin */
+  font-size: 60% !important; /* shrink text size */
+}
+
+
+.reveal .slides section.fullsmall img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+
+/* apply to most content inside a slide that has class `tiny` */
+.reveal .slides section.tiny,
+.reveal .slides section.tiny * {
+  font-size: 0.3em !important;
+  line-height: 0.7 !important;
+}
+
+/* keep the slide heading at normal size — tweak the value if needed */
+.reveal .slides section.tiny h1,
+.reveal .slides section.tiny h2,
+.reveal .slides section.tiny h3 {
+  font-size: 1.8rem !important; /* adjust so heading looks like the other slides' headings */
+  line-height: 1.1 !important;
+}
+
+.alert {
+  color: orange;
+  font-weight: bold;
+}
+
+/* styles.css
+   Very light orange background for a single slide (targeted by slide id)
+*/
+
+/* Target the slide section by id (use the same id in your .qmd slide) */
+.reveal .slides section#orange-slide {
+  background-color: #FFF4E6 !important; /* very light orange / cream */
+  color: #111;                             /* dark text for contrast */
+}
+
+/* Make sure the content area doesn't override the section background */
+.reveal .slides section#orange-slide .remark-slide-content {
+  background: transparent !important;
+}
+
+/* Optional: tune headings and links on that slide */
+.reveal .slides section#orange-slide h1,
+.reveal .slides section#orange-slide h2,
+.reveal .slides section#orange-slide h3 {
+  color: #111;
+}
+
+.reveal .slides section#orange-slide a {
+  color: #1a3b5c; /* darker accent for links */
+}

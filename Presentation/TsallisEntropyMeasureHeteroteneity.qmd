@@ -1,0 +1,231 @@
+---
+title: "Entropy as a Measure of Heterogeity"
+subtitle: "Statistics Still Have A Saying"
+author: "Janeth Alpala, Alejandro C.\ Frery, Paolo Gamba, Andrea&nbsp;Rey"
+format:
+  revealjs:
+    transition: slide
+    background-transition: fade
+    slideNumber: "c/t"
+    progress: true
+    self-contained: true
+    theme: simple
+    css: styles.css
+editor: source
+bibliography:
+  - ../references.bib
+csl: /Users/acfrery/Zotero/styles/apa.csl
+highlight-style: github
+---
+
+```{r setup}
+library(ggplot2)
+library(ggthemes)
+  theme_set(theme_tufte() +
+  theme(text=element_text(size=20, family="serif")))
+library(caret)
+library(patchwork)
+library(scales)
+
+set.seed(123456789, kind="Mersenne-Twister")
+```
+
+# Introduction
+
+## What is "heterogeneity"?
+
+::: {.incremental}
+* There is no consensus.
+* Some use the word to refer to a mixed sample.
+* Others, to situations where the speckle is not fully-developed.
+* We adopt the latter definition.
+:::
+
+## What is "speckle"? 
+
+::: {.incremental}
+* Speckle is an interference phenomenon common to every image produced by coherent imaging.
+* Imagine the pixe value is formed by the addition of the return from $n$ elementary backscatterers:
+$$
+S = \sum_{\ell=1}^n S_\ell e^{j \phi_\ell},
+$$
+where $S$ is the complex observation,
+$S_\ell$ is the amplitude returned by the $\ell$-th elementary backscatter,
+$\phi_\ell$ is the phase of the signal returned by the $\ell$-th elementary backscatter,
+and $n$ is the number of backscatterers.
+:::
+
+--- 
+
+The complex observation $S$ is the summation of complex quantities.
+
+```{r ComplexReturn}
+N <- 15 # number of scatterers
+sigma2 <- 1
+RAi <- c(rnorm(n = N, mean = 0, sd = sqrt(sigma2)))
+IAi <- c(rnorm(n = N, mean = 0, sd = sqrt(sigma2)))
+
+DATA <- data.frame(RAi, IAi)
+
+ggplot(data=DATA) +
+  geom_segment(aes(x=c(0, cumsum(RAi)[1:(N-1)]), # All vectors
+                   y=c(0, cumsum(IAi)[1:(N-1)]), 
+                   xend=cumsum(RAi), yend=cumsum(IAi)), 
+               arrow=arrow(ends="last", 
+                           type = "closed", 
+                           angle = 15, 
+                           length = unit(.3, units="cm")), 
+               linewidth=.3, color="black") +
+  geom_segment(aes(x=0, y=0, xend=sum(RAi), yend=sum(IAi)), # Sum of the vectors
+               arrow=arrow(ends="last", 
+                           type = "closed", 
+                           angle = 15, 
+                           length = unit(.4, units="cm")), 
+               linewidth=1.2,
+               col="maroon") +
+  geom_segment(aes(x=RAi[1], xend=RAi[1], y=0, yend=IAi[1]), linewidth=.2, linetype="dashed") +
+  geom_segment(aes(x=0, xend=RAi[1], y=IAi[1], yend=IAi[1]), linewidth=.2, linetype="dashed") +
+  annotate("text", label="Re(italic(S)[1])", parse=TRUE, x=RAi[1], y=0, vjust=0, size=5, family="serif") +
+  annotate("text", label="Im(italic(S)[1])", parse=TRUE, x=0, y=IAi[1], hjust=1, size=5, family="serif") +
+  annotate("text", label="italic(S)[1]", parse=TRUE, x=RAi[1], y=IAi[1], hjust=0, size=5, family="serif") +
+  annotate("text", label="italic(S)", parse=TRUE, x=sum(RAi)-.05, y=sum(IAi), hjust=1, size=7, family="serif") +
+  geom_hline(yintercept=0, col="grey32") +
+  geom_vline(xintercept=0, col="grey32") +
+  coord_fixed() +
+  xlab("Real components") + ylab("Imaginary components") 
+```
+
+---
+
+::: {.incremental}
+* If we had the distribution of $S$ for every conceivable target, enviromental condition, and sensor configuration, we'd be omniscient.
+* We are far from that.
+* We are satisfied with making broad assumptions.
+* The most common assumption is the "fully-developed speckle".
+:::
+
+## What is "fully-developed speckle"? {.fullsmall #orange-slide}
+
+Recall that the observation in a pixel is
+$$
+S = \sum_{\ell=1}^n S_\ell e^{j \phi_\ell}.
+$$
+If
+
+* $n\to\infty$ (infinitely many scatterers in the resolution cell),
+* $\max\operatorname{Var}(S_\ell)<\infty$ (no scatterer dominates),
+* $|S_\ell| \perp |S_m|$ (independent amplitudes),
+* $\phi_\ell\sim\mathcal U(-\pi,\pi]$ (uninformative phases),
+* $\phi_\ell \perp \phi_m$ (independent phases),
+* the amplitudes are collectively independent of the phases,
+
+then$\dots$
+
+## What is "fully-developed speckle"? {.fullsmall #orange-slide}
+
+$\dots$ we can invoke the Central Limit Theorem:
+$$
+S = \sum_{\ell=1}^n S_\ell e^{j \phi_\ell} =
+\underbrace{\sum_{\ell=1}^n |S_\ell| \cos \phi_\ell}_{\Re(S)} +
+j \underbrace{\sum_{\ell=1}^n |S_\ell| \sin \phi_\ell}_{\Im(S)},
+$$
+and say that $\Re(S)$ and $\Im(S)$ are asymptotically normal distributed and independent.
+
+With that,
+$$
+|S|^2\sim\text{E}(\sigma^2),
+$$
+which is far from the usual normal additive noise.
+
+Equivalently,
+$$
+|S|^2\sim\sigma^2\text{E}(1),
+$$
+the basis for the multiplicative model.
+
+## Do we observe fully-developed speckle in practice?
+
+::: columns
+
+::: column 
+
+::: {.incremental}
+* The number of backscatterers $n$ is the number of elements in the resolution cell of the order of the wavelength
+   * X-band: $\approx 3\text{ cm}$
+   * L-band: $\approx 20\text{ cm}$
+* Pasture, calm water, bare soil usually verify $n\to\infty$ and the other hypotheses.
+:::
+
+:::
+
+::: column 
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-width: 10
+#| fig-height: 10
+#| out-width: "100%"
+
+knitr::include_graphics("../Figures/foggia-italy_1900.png")
+```
+
+:::
+
+:::
+
+## Multilook imaging
+
+:::{.incremental}
+* Exponentially distributed observations are very noisy.
+* We average $L$ (ideally independent) pixels, and obtain a multilook image with (ideally) $L$ looks.
+* Under the assumptions of fully-developed speckle,
+$$
+Z=|S|^2 \sim \Gamma_{\text{SAR}}(\mu, L),
+$$
+a gamma distribution conveniently parametrised by the mean $\mu>0$ and
+the shape $L\geq 1$.
+* If $L=1$, we fall back to the exponential model.
+:::
+
+## Properties of the gamma distribution
+
+:::{.incremental}
+* It is characterised by the probability density function
+\begin{equation}
+	f_{\Gamma_{\mathrm{SAR}}}\bigl(z;\mu, L\bigr) 
+    = \frac{L^L}{\Gamma(L)\,\mu^L} z^{L-1} 
+    \exp \biggl(-\frac{Lz}{\mu}\biggr)
+    \mathbb I_{\mathbb R_+}(z). \label{E:gamma1}
+\end{equation}
+* Its variance and coefficient of variation are
+$$
+\operatorname{Var}(Z) = \frac{\mu^2}{L},\text{ and }
+\operatorname{CV}(Z) = \frac{\sqrt{\operatorname{Var}(Z)}}{\mu} = \frac{1}{\sqrt{L}}.
+$$
+* The coefficient of variation is widely used to check if the observations are fully-developed speckle.
+:::
+
+
+## Flavours of Entropy
+
+The notion of "entropy" encompasses several measures of unpredictability.
+
+For a continuous random variable characterised by a probability density function $f$, we have (among infinitely many others):
+
+:::{.incremental}
+* Shannon entropy: $-\int f \ln f$.
+* Rényi entropy of order $\lambda\in\mathbb R_+\setminus\{1\}$: $\frac{1}{\lambda-1} \ln \int f^\lambda$.
+* Tsallis entropy of order $\lambda\in\mathbb R_+\setminus\{1\}$: 
+$$
+\frac{1}{\lambda-1}\bigg(1-\int f^\lambda\bigg).
+$$
+:::
+
+# Methodology
+
+# Results
+
+# Discussion
+
+## References
