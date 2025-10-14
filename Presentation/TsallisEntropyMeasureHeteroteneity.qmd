@@ -141,7 +141,7 @@ Equivalently,
 $$
 |S|^2\sim\sigma^2\text{E}(1),
 $$
-the basis for the multiplicative model.
+the basis for the multiplicative model [@SARImageStatisticalModelingPartISinglePixelStatisticalModels].
 
 ## Do we observe fully-developed speckle in practice?
 
@@ -192,12 +192,12 @@ the shape $L\geq 1$.
 
 :::{.incremental}
 * It is characterised by the probability density function
-\begin{equation}
-	f_{\Gamma_{\mathrm{SAR}}}\bigl(z;\mu, L\bigr) 
+$$
+	\color{DarkOrchid}{f_{\Gamma_{\mathrm{SAR}}}\bigl(z;\mu, L\bigr) 
     = \frac{L^L}{\Gamma(L)\,\mu^L} z^{L-1} 
     \exp \biggl(-\frac{Lz}{\mu}\biggr)
-    \mathbb I_{\mathbb R_+}(z). \label{E:gamma1}
-\end{equation}
+    \mathbb I_{\mathbb R_+}(z)}. 
+$$
 * Its variance and coefficient of variation are
 $$
 \operatorname{Var}(Z) = \frac{\mu^2}{L},\text{ and }
@@ -218,9 +218,13 @@ For a continuous random variable characterised by a probability density function
 * Rényi entropy of order $\lambda\in\mathbb R_+\setminus\{1\}$: $\frac{1}{\lambda-1} \ln \int f^\lambda$.
 * Tsallis entropy of order $\lambda\in\mathbb R_+\setminus\{1\}$: 
 $$
-\frac{1}{\lambda-1}\bigg(1-\int f^\lambda\bigg).
+\color{DarkOrchid}{\frac{1}{\lambda-1}\bigg(1-\int f^\lambda\bigg)}.
 $$
 :::
+
+## What happens if the speckle is not fully-developed?
+
+
 
 # Methodology
 
