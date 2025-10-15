@@ -14,7 +14,7 @@ format:
 editor: source
 bibliography:
   - ../references.bib
-csl: /Users/acfrery/Zotero/styles/apa.csl
+csl: apa.csl
 highlight-style: github
 ---
 
