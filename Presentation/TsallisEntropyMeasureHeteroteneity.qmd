@@ -1,7 +1,7 @@
 ---
 title: "Entropy as a Measure of Heterogeity"
-subtitle: "Statistics Still Have A Saying"
-author: "Janeth Alpala, Alejandro C.\ Frery, Paolo Gamba, Andrea&nbsp;Rey"
+subtitle: "Statistics Still Have Still Much to Say"
+author: "Janeth Alpala, Alejandro C.\ Frery, Paolo Gamba, Abraão&nbsp;D.&nbsp;C.&nbsp;Nascimento, Andrea&nbsp;Rey"
 format:
   revealjs:
     transition: slide
