@@ -45,7 +45,7 @@ set.seed(123456789, kind="Mersenne-Twister")
 
 ::: {.incremental}
 * Speckle is an interference phenomenon common to every image produced by coherent imaging.
-* Imagine the pixe value is formed by the addition of the return from $m$ elementary backscatterers:
+* Imagine the pixel value is formed by the addition of the return from $m$ elementary backscatterers:
 $$
 S = \sum_{\ell=1}^m S_\ell e^{j \phi_\ell},
 $$
@@ -183,12 +183,12 @@ knitr::include_graphics("../Figures/foggia-italy_1900.png")
 $$
 Z=|S|^2 \sim \Gamma_{\text{SAR}}(\mu, L),
 $$
-a gamma distribution conveniently parametrised by the mean $\mu>0$ and
+a Gamma distribution conveniently parametrised by the mean $\mu>0$ and
 the shape $L\geq 1$.
 * If $L=1$, we fall back to the exponential model.
 :::
 
-## Properties of the gamma distribution
+## Properties of the Gamma distribution
 
 :::{.incremental}
 * It is characterised by the probability density function
@@ -206,7 +206,7 @@ $$
 * The coefficient of variation is widely used to check if the observations are fully-developed speckle.
 :::
 
-## Properties of the gamma distribution
+## Properties of the Gamma distribution
 
 Multiplicative property:
 if 
@@ -256,7 +256,7 @@ knitr::include_graphics("../Figures/dubli_1600.png")
 
 Instead of assuming $\mu$ constant, we may assume that it is a random variable.
 
-@Frery1997 proposed the inverse gamma distribution for the backscatter, leading to the $\mathcal G^0_{\text{SAR}}$ model, characterised by the probability density function
+@Frery1997 proposed the inverse Gamma distribution for the backscatter, leading to the $\mathcal G^0_{\text{SAR}}$ model, characterised by the probability density function
 $$    
 \color{DarkOrchid}{f_{\mathcal{G}^0_{\text{SAR}}}\bigl(z; \mu, \alpha, L \bigr) 
     = \frac{L^L\,\Gamma(L-\alpha)}
@@ -414,7 +414,7 @@ This means that
   =
   \underbrace{T_\lambda \bigl(\Gamma_{\mathrm{SAR}}(\mu,L)\bigr)}_{\text{baseline entropy}} 
   \hspace{1.8em} + \hspace{-1.8em}
-  \underbrace{\Delta(\mu, L, \alpha)}_{\text{entropy excess caused by texture}}\hspace{-4.0em}}
+  \underbrace{\Delta(\mu, L, \alpha)}_{\text{entropy excess caused by texture}}.\hspace{-4.0em}}
 \end{equation*}
 where the term $\Delta_\alpha$ measures the increase in entropy induced by the texture level, with the level controlled by the parameter $\alpha$.
 
