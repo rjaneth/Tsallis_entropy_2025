@@ -1,6 +1,6 @@
 ---
-title: "Entropy as a Measure of Heterogeity"
-subtitle: "Statistics Still Have Still Much to Say"
+title: "Entropy as a Measure of Heterogeneity"
+subtitle: "Statistics Still Have Much to Say"
 author: "Janeth Alpala, Alejandro C.\ Frery, Paolo Gamba, Abraão&nbsp;D.&nbsp;C.&nbsp;Nascimento, Andrea&nbsp;Rey"
 format:
   revealjs:
@@ -412,7 +412,7 @@ and
 
 This means that
 \begin{equation*}
-  \color{DarkOrchid}{T_\lambda(\mathcal{G}^0_I)
+  \color{DarkOrchid}{T_\lambda\bigl(\mathcal{G}^0_{\text{SAR}}(\mu,\alpha,L)\bigr)
   =
   \underbrace{T_\lambda \bigl(\Gamma_{\mathrm{SAR}}(\mu,L)\bigr)}_{\text{baseline entropy}} 
   \hspace{1.8em} + \hspace{-1.8em}
@@ -424,7 +424,7 @@ where the term $\Delta_\alpha$ measures the increase in entropy induced by the t
 
 The relationship 
 \begin{equation*}
-  \color{DarkOrchid}{T_\lambda(\mathcal{G}^0_I)
+  \color{DarkOrchid}{T_\lambda\bigl(\mathcal{G}^0_{\text{SAR}}(\mu,\alpha,L)\bigr)
   =
 T_\lambda \bigl(\Gamma_{\mathrm{SAR}}(\mu,L)\bigr) +
   \Delta(\mu, L, \alpha)}
@@ -433,7 +433,7 @@ gives a hint to build a test statistic:
 
 ::: {.incremental}
 * Estimate the Tsallis entropy with the random sample $\mathbf Z=(Z_1,Z_2,\dots,Z_n)$.
-* Check if it close to the theoretical Tsallis entropy under the $\Gamma_{\mathrm{SAR}}$ model or to the Tsallis entropy under the $\Gamma_{\mathrm{SAR}}(\mu,L)$.
+* Check if it is close to the theoretical Tsallis entropy under the $\Gamma_{\mathrm{SAR}}$ model or to the Tsallis entropy under the $\Gamma_{\mathrm{SAR}}(\mu,L)$.
 :::
 
 ## But$\dots$ how?
@@ -557,7 +557,7 @@ $$
 
 ## We want [more]{.alert} III
 
-We used adaptive windows, i.e., the sample size varies according to a rough initial estimate of homogeneity based on the the coefficient of variation [@Park1999].
+We used adaptive windows, i.e., the sample size varies according to a rough initial estimate of homogeneity based on the coefficient of variation [@Park1999].
 
 # Results
 
@@ -570,7 +570,7 @@ We used adaptive windows, i.e., the sample size varies according to a rough init
 cat('
 <div style="display: flex; justify-content: center; gap: 1em;">
   <img src="../Figures/sanFrancisco1400.png" style="width:37%;">
-  <img src="../Figures/p-values_San-fran1400_eta2_B100_lambda_085-5x11_L4_1.png" style="width:46%;">
+  <img src="../Figures/p-values_San-fran1400_eta2_B100_lambda_085-5x11_L4_1.png" style="width:46.3%;">
 </div>
 ')
 ```
@@ -584,7 +584,7 @@ cat('
 cat('
 <div style="display: flex; justify-content: center; gap: 1em;">
   <img src="../Figures/munich_1024.png" style="width:37%;">
-  <img src="../Figures/p-values_munich1024_eta2.0_lambda085_5x11_b100.png" style="width:46%;">
+  <img src="../Figures/p-values_munich1024_eta2.0_lambda085_5x11_b100.png" style="width:46.5%;">
 </div>
 ')
 ```
@@ -598,7 +598,7 @@ cat('
 cat('
 <div style="display: flex; justify-content: center; gap: 1em;">
   <img src="../Figures/dubli_1600.png" style="width:37%;">
-  <img src="../Figures/p-values_dublin1600_eta2.0_lambda085_5x11_b1005.png" style="width:46%;">
+  <img src="../Figures/p-values_dublin1600_eta2.0_lambda085_5x11_b1005.png" style="width:47%;">
 </div>
 ')
 ```
@@ -611,8 +611,8 @@ cat('
 
 cat('
 <div style="display: flex; justify-content: center; gap: 1em;">
-  <img src="../Figures/Foggia_new.png" style="width:37%;">
-  <img src="../Figures/p-values_FoggiaL24_eta_2.00_5x11_B100_lambda_0852.png" style="width:46%;">
+  <img src="../Figures/foggia-italy_1900.png" style="width:37%;">
+  <img src="../Figures/p-values_FoggiaL24_eta_2.00_5x11_B100_lambda_0852.png" style="width:46.5%;">
 </div>
 ')
 ```
