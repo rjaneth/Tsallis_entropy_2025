@@ -433,7 +433,7 @@ gives a hint to build a test statistic:
 
 ::: {.incremental}
 * Estimate the Tsallis entropy with the random sample $\mathbf Z=(Z_1,Z_2,\dots,Z_n)$.
-* Check if it is close to the theoretical Tsallis entropy under the $\Gamma_{\mathrm{SAR}}$ model or to the Tsallis entropy under the $\Gamma_{\mathrm{SAR}}(\mu,L)$.
+* Check if it is close to the theoretical Tsallis entropy under the $\Gamma_{\mathrm{SAR}}$ model or to the Tsallis entropy under the $\mathcal{G}^0_{\text{SAR}}(\mu,L)$.
 :::
 
 ## But$\dots$ how?
@@ -461,34 +461,47 @@ We proceed in the same way, and obtain a non-parametric (model-free) estimator f
 
 ## {.fullsmall}
 
-Denote $Q(p)=F^{-1}(p)$ the quantile function for $p\in(0,1)$. 
-Then:
+We want the Tsallis entropy of order $\lambda$ from an arbitrary probability density function $f$:
 $$
-\int_{\mathcal B} f(z)^\lambda\,\mathrm{d}z
-=\int_{\mathcal B} f(z)^{\lambda-1} f(z)\,\mathrm{d}z
-=\mathbb{E}\!\left[f(Z)^{\lambda-1}\right].
+T_\lambda = \frac{1}{1-\lambda}\biggl(1-
+\int_{-\infty}^{\infty} f^\lambda(x) dx \biggr) .
 $$
-Using the change of variables $p=F(z)$ (hence $\mathrm{d}p=f(z)\,\mathrm{d}z$) and the identity $f(Q(p))=1/Q'(p)$, we obtain
-$$
-  \mathbb{E}\!\left[f(Z)^{\lambda-1}\right]
-  = \int_{0}^{1} \bigl(Q'(p)\bigr)^{1-\lambda}\,\mathrm{d}p,
-$$
+We tranform variables:
+\begin{align}
+x &= Q(p), \text{ the quantile function with } 0\leq p\leq 1,\\
+dx &= Q'(p) dp,\\
+f(x) &= f(Q(p)), \\
+f(Q(p)) &= \frac{1}{Q'(p)} \text{ (use the chain rule on }F(Q(p))=p\text{)},
+\end{align}
 which yields the representation
-\begin{equation}
-  T_\lambda(Z)
-  =\frac{1}{\lambda-1}
-     \left\{
+$$  
+T_\lambda
+  =
+\frac{1}{1-\lambda}\biggl(1-
+\int_{-\infty}^{\infty} f^\lambda(x) dx \biggr) =  
+  \frac{1}{\lambda-1}
+     \left(
        1-\int_{0}^{1}\bigl(Q'(p)\bigr)^{1-\lambda}\,\mathrm{d}p
-     \right\}.
-  \label{eq:Tsallis-quantile}
-\end{equation}
+     \right).
+$$
 
-Be bold, and
+##
+
+In 
+$$  
+T_\lambda
+  =
+  \frac{1}{\lambda-1}
+     \left(
+       1-\int_{0}^{1}\bigl(Q'(p)\bigr)^{1-\lambda}\,\mathrm{d}p
+     \right),
+$$
+be bold, and
 
 ::: {.incremental}
 * Approximate $Q(p)$ by order statistics, and $Q'(p)$ by their differences (spacings),
 * Approximate the integral by a sum.
-
+- [Our main result is ready!]{.alert}
 ::: 
 
 ## {.fullsmall}
