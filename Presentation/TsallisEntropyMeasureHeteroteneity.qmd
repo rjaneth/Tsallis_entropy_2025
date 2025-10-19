@@ -496,10 +496,11 @@ T_\lambda
        1-\int_{0}^{1}\bigl(Q'(p)\bigr)^{1-\lambda}\,\mathrm{d}p
      \right),
 $$
-be bold, and
+be bold (*an statistician*), and
 
 ::: {.incremental}
-* Approximate $Q(p)$ by order statistics, and $Q'(p)$ by their differences (spacings),
+* Approximate $Q(p)$ by order statistics, 
+* and $Q'(p)$ by their differences (spacings).
 * Approximate the integral by a sum.
 - [Our main result is ready!]{.alert}
 ::: 
@@ -642,6 +643,8 @@ A Monte Carlo validation confirmed that the test maintains proper control of the
 
 Although machine learning-based SAR classifiers are widely used, this framework offers a statistically grounded alternative that provides interpretable significance measures and requires no labelled data, making it suitable for rapid detection, screening, and scenarios with limited data availability.
 
+[In the same way, you can make your distribution-free test for the problem you are studying]{.alert}
+
 ## Contact
 
 ::: columns
@@ -650,14 +653,12 @@ Although machine learning-based SAR classifiers are widely used, this framework 
 :::
 
 ::: {.column width="63%"}
-<ul style="list-style-type: none; padding-left: 0;">
-  <li>Alejandro C. Frery</li>
-  <li>School of Mathematics and Statistics</li>
-  <li>Victoria University of Wellington</li>
-  <li>New Zealand</li>
-  <li></li>
-  <li>alejandro.frery at vuw.ac.nz</li>
-</ul>
+  Alejandro C. Frery\
+School of Mathematics and Statistics\
+Victoria University of Wellington\
+New Zealand\
+  \
+alejandro.frery at vuw.ac.nz
 ::: 
 :::
 
