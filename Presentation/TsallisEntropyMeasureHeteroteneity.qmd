@@ -280,7 +280,7 @@ We have two models to describe the observations:
 * The $\Gamma_{\text{SAR}}(\mu,L)$ model for fully-developed speckle, and
 * The more general $\mathcal G^0_{\text{SAR}}(\mu,\alpha,L)$ law that includes the fully-developed speckle situation.
 
-[We want to identify where we are, but using small samples possibly contaminated by outliers.]{.alert}
+[We want to measure how close (or far) we are from the fully-developed speckle model, but using small samples possibly contaminated by outliers.]{.alert}
 
 # Methodology
 
@@ -451,8 +451,8 @@ but we don't trust $\widehat\mu$ and don't want to compute $\widehat\alpha$.
 
 The technique consists of 
 
-1. Writing the Tsallis entropy as a function of the quantile function.
-1. Make sensible approximations
+1. writing the Tsallis entropy as a function of the quantile function, and
+1. making sensible "approximations" (estimation).
 
 @vasicek1976test and @Ebrahimi1994 proposed spacing-based estimation for the Shannon entropy; we used it in @Frery2024.
 @AlLabadi2024 followed the approach for the Rényi entropy; we used it in @Alpala2025.
@@ -499,7 +499,7 @@ $$
 be bold (*an statistician*), and
 
 ::: {.incremental}
-* Approximate $Q(p)$ by order statistics, 
+* approximate $Q(p)$ by order statistics, 
 * and $Q'(p)$ by their differences (spacings).
 * Approximate the integral by a sum.
 - [Our main result is ready!]{.alert}
