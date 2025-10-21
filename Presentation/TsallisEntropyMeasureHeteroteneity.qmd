@@ -512,7 +512,7 @@ Our estimator becomes
 \begin{align}
   \widehat T_{\lambda}(\mathbf{Z})
   &=\frac{1}{\lambda-1}\left\{
-1-\frac{1}{n}\sum_{i=1}^{n}\bigl[\widehat{Q'}(p_i)\bigr]^{\,1-\lambda}
+1-\frac{1}{n}\sum_{i=1}^{n}\bigl[\widehat{Q'}(p_i)\bigr]^{1-\lambda}
 \right\} \nonumber\\[4pt]
   &= \frac{1}{\lambda-1}
   \left\{
@@ -633,17 +633,31 @@ cat('
 
 # Discussion
 
-## Conclusions {.fullsmall .orange-slide}
+## Reproducibility {.orange-slide}
 
-This work presented a statistical approach based on Tsallis entropy to detect deviations from fully-developed speckle in intensity SAR images. 
+The manuscript and these slides are fully reproducible because
+
+::: {.incremental}
+* they were typed in Quarto, embedding
+   * text and references with $\LaTeX$ and <span style="font-variant: small-caps;">Bib</span>$\TeX$,
+   * R code for functions definitions, simulations, optimisations, plots,
+   * extracted tables
+* Everything is available at [https://github.com/rjaneth/Tsallis_entropy_2025](https://github.com/rjaneth/Tsallis_entropy_2025).
+:::
+
+## Conclusions {.fullsmall}
+
+::: {.incremental}
+* This work presented a statistical approach based on Tsallis entropy to detect deviations from fully-developed speckle in intensity SAR images. 
 The proposed  test integrates a bootstrap correction and an adaptive windowing scheme to balance speckle suppression and texture preservation without requiring training data or parametric modeling.
 
-Experiments with simulated and real SAR data demonstrated that the method is well-calibrated, robust for small samples, and effective in delineating heterogeneous regions from homogeneous ones. 
+* Experiments with simulated and real SAR data demonstrated that the method is well-calibrated, robust for small samples, and effective in delineating heterogeneous regions from homogeneous ones. 
 A Monte Carlo validation confirmed that the test maintains proper control of the Type&nbsp;I error while improving detection power with increasing sample size.
 
-Although machine learning-based SAR classifiers are widely used, this framework offers a statistically grounded alternative that provides interpretable significance measures and requires no labelled data, making it suitable for rapid detection, screening, and scenarios with limited data availability.
+* Although machine learning-based SAR classifiers are widely used, this framework offers a statistically grounded alternative that provides interpretable significance measures and requires no labelled data, making it suitable for rapid detection, screening, and scenarios with limited data availability.
 
-[In the same way, you can make your distribution-free test for the problem you are studying]{.alert}
+* [In the same way, you can make your distribution-free test for the problem you are studying]{.alert}
+:::
 
 ## Contact
 
