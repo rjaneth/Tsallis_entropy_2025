@@ -1,7 +1,7 @@
 ---
 title: "Entropy as a Measure of Heterogeneity"
 subtitle: "Statistics Still Have Much to Say"
-author: "Janeth Alpala, Alejandro C.\ Frery, Paolo Gamba, Abraão&nbsp;D.&nbsp;C.&nbsp;Nascimento, Andrea&nbsp;Rey"
+author: "Janeth Alpala, <u>Alejandro C.\ Frery</u>, Paolo Gamba, Abraão&nbsp;D.&nbsp;C.&nbsp;Nascimento, Andrea&nbsp;Rey"
 format:
   revealjs:
     transition: slide
@@ -32,7 +32,7 @@ set.seed(123456789, kind="Mersenne-Twister")
 
 # Introduction
 
-## What is "heterogeneity"?
+## What is "heterogeneity" in a SAR image?
 
 ::: {.incremental}
 * There is no consensus.
@@ -173,7 +173,19 @@ knitr::include_graphics("../Figures/foggia-italy_1900.png")
 ```
 
 :::
+:::
 
+## Do we observe fully-developed speckle in practice?
+
+We took a sample of $15561$ observations over crops.
+
+::: columns
+::: column
+![](../Figures/dark_HV_Re.svg){out-width="90%"}
+:::
+::: column
+![](../Figures/darkHVfit.svg){out-width="90%"}
+:::
 :::
 
 ## Multilook imaging
@@ -284,9 +296,15 @@ We have two models to describe the observations:
 
 # Methodology
 
-## Goodness-of-fit tests
+## Goodness-of-fit tests {.fullsmall}
 
 Given a random sample $\mathbf Z = (Z_1,Z_2,\dots,Z_n)$, our problem can be stated as a goodness-of-fit test:
+\begin{align}
+\mathcal H_0 &: \mathbf Z \text{ is compatible with } \Gamma_{\text{SAR}}(\mu,L),\\
+\mathcal H_1 &:  \mathbf Z \text{ is not compatible with } \mathcal \Gamma_{\text{SAR}}(\mu,L).
+\end{align}
+
+We make it more specific:
 \begin{align}
 \mathcal H_0 &: \mathbf Z \text{ is compatible with } \Gamma_{\text{SAR}}(\mu,L),\\
 \mathcal H_1 &:  \mathbf Z \text{ is compatible with } \mathcal G^0_{\text{SAR}}(\mu,\alpha,L).
@@ -373,9 +391,7 @@ $$
 $$
 :::
 
-## Tsallis entropy {.fullsmall}
-
-Under the $\Gamma_{\mathrm{SAR}}$ and the $\mathcal{G}^0_{\text{SAR}}$ distributions:
+## Tsallis entropy: $\Gamma_{\mathrm{SAR}}$ and $\mathcal{G}^0_{\text{SAR}}$ distributions {.fullsmall}
 
 \begin{multline}
 \label{eq:gammasar-Tsallis}
@@ -633,18 +649,6 @@ cat('
 
 # Discussion
 
-## Reproducibility {.orange-slide}
-
-The manuscript and these slides are fully reproducible because
-
-::: {.incremental}
-* they were typed in Quarto, embedding
-   * text and references with $\LaTeX$ and <span style="font-variant: small-caps;">Bib</span>$\TeX$,
-   * R code for functions definitions, simulations, optimisations, plots,
-   * extracted tables
-* Everything is available at [https://github.com/rjaneth/Tsallis_entropy_2025](https://github.com/rjaneth/Tsallis_entropy_2025).
-:::
-
 ## Conclusions {.fullsmall}
 
 ::: {.incremental}
@@ -659,11 +663,26 @@ A Monte Carlo validation confirmed that the test maintains proper control of the
 * [In the same way, you can make your distribution-free test for the problem you are studying]{.alert}
 :::
 
+## Reproducibility {.orange-slide}
+
+The manuscript and these slides are fully reproducible because
+
+::: {.incremental}
+* they were typed in Quarto, embedding
+   * text and references with $\LaTeX$ and <span style="font-variant: small-caps;">Bib</span>$\TeX$,
+   * R code for functions definitions, simulations, optimisations, plots,
+   * extracted tables
+* Everything is available at [https://github.com/rjaneth/Tsallis_entropy_2025](https://github.com/rjaneth/Tsallis_entropy_2025).
+:::
+
+
+
 ## Contact
 
 ::: columns
-::: {.column width="35%"}
-![](../Figures/QRCode-WebPageVUW.png)
+::: {.column width="25%"}
+![](../Figures/QRCode-WebPageVUW.png){out-width="40%"}
+![](../Figures/QRCodeACFreryWeChat.jpeg)
 :::
 
 ::: {.column width="63%"}
@@ -672,7 +691,9 @@ School of Mathematics and Statistics\
 Victoria University of Wellington\
 New Zealand\
   \
-alejandro.frery at vuw.ac.nz
+alejandro.frery at vuw.ac.nz\
+ \
+[Feel free to contact me!]{.alert}
 ::: 
 :::
 
