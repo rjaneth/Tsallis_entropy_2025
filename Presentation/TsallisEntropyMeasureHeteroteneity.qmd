@@ -1,5 +1,5 @@
 ---
-title: "Entropy as a Measure of Heterogeneity"
+title: "Entropy as a Measure of Texture"
 subtitle: "Statistics Still Have Much to Say"
 author: "Janeth Alpala, <u>Alejandro C.\ Frery</u>, Paolo Gamba, Abraão&nbsp;D.&nbsp;C.&nbsp;Nascimento, Andrea&nbsp;Rey"
 format:
@@ -32,13 +32,13 @@ set.seed(123456789, kind="Mersenne-Twister")
 
 # Introduction
 
-## What is "heterogeneity" in a SAR image?
+## What is "texture" in a SAR image?
 
 ::: {.incremental}
-* There is no consensus.
-* Some use the word to refer to a mixed sample.
-* Others, to situations where the speckle is not fully-developed.
-* We adopt the latter definition.
+*	There is no consensus on the meaning of the term.
+*	Some use it to describe a mixed sample, while others refer to the local structural organization of observations.
+*	Another common usage relates to situations where the speckle is not fully developed.
+*	We adopt the latter definition.
 :::
 
 ## What is "speckle"? 
@@ -512,7 +512,7 @@ T_\lambda
        1-\int_{0}^{1}\bigl(Q'(p)\bigr)^{1-\lambda}\,\mathrm{d}p
      \right),
 $$
-be bold (*an statistician*), and
+be bold (*a statistician*), and
 
 ::: {.incremental}
 * approximate $Q(p)$ by order statistics, 
