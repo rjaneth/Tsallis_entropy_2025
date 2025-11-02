@@ -272,7 +272,7 @@
   pdftitle={Adaptive Tsallis Entropy Estimation for Detecting Non-Fully-Developed Speckle in SAR Imagery},
   pdfauthor={Janeth Alpala; Alejandro C. Frery; Paolo Gamba; Abraão D. C. Nascimento; Andrea A. Rey},
   pdfkeywords={Tsallis entropy, Gamma distribution, GI0
-distribution, heterogeneity, SAR, hypothesis test},
+distribution, heterogeneity, SAR, hypothesis testing},
   colorlinks=true,
   linkcolor={black},
   filecolor={Maroon},
@@ -324,12 +324,7 @@ paolo.gamba@unipv.it)
 Andrea A. Rey is with the Laboratorio de Investigación y Desarrollo
 Experimental en Computación, Universidad Nacional de Hurlingham
 (UNAHUR), Villa Tesei, 1688, Argentina (e-mail:
-andrea.rey@unahur.edu.ar).
-
-This research, including its outputs, e.g., this manuscript, was
-executed in Quarto and is fully reproducible. We used RStudio version
-2025.09.1+401, and R version 4.5.1. Data and code are available at:
-\url{https://github.com/rjaneth/Tsallis_entropy_2025}}
+andrea.rey@unahur.edu.ar).}
 }
 \begin{document}
 
@@ -365,7 +360,7 @@ distinguishing between homogeneous and heterogeneous regions.
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
 Tsallis entropy, Gamma distribution, GI0
-distribution, heterogeneity, SAR, hypothesis test
+distribution, heterogeneity, SAR, hypothesis testing
 \end{IEEEkeywords}
 
 % For peer review papers, you can put extra information on the cover
@@ -383,7 +378,7 @@ distribution, heterogeneity, SAR, hypothesis test
 
 \section{Introduction}\label{introduction}
 
-\IEEEPARstart{S}ynthetic Aperture Radar (SAR) technology has become a
+\IEEEPARstart{S}{ynthetic} Aperture Radar (SAR) technology has become a
 key tool in remote sensing, offering high-resolution imaging
 capabilities independent of solar illumination and weather conditions,
 which enables continuous and reliable Earth
@@ -408,7 +403,7 @@ Among the statistical models used for SAR intensities, the
 \(\mathcal{G}_I^0\) distribution ~\citeproc{ref-Frery1997}{{[}12{]}},
 \citeproc{ref-Ferreira2020}{{[}13{]}} is widely recognized for its
 ability to capture different levels of scene heterogeneity. It
-generalizes the Gamma distribution, which represents fully developed
+generalizes the Gamma distribution, which represents fully-developed
 speckle in homogeneous regions. While these models are effective,
 parameter estimation becomes unstable when applied to small local
 windows, which are often required to preserve spatial resolution. This
@@ -449,7 +444,7 @@ regions to improve statistical stability, and shrinks in heterogeneous
 regions to avoid mixing different structures and to preserve local
 details.
 
-The proposed method is unsupervised, and produces interpretable
+The proposed method is unsupervised and produces interpretable
 \(p\)-value maps, making it suitable for scenarios where ground-truth
 information is scarce or unavailable.
 
@@ -584,8 +579,8 @@ T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr)=
   -\ln\Gamma\bigl(\lambda(L-\alpha)\bigr)
   \bigr]\Bigr\}.
 \end{multline} The derivation of the latter result is proven in the
-Appendix. Equation~\eqref{eq:GI0-Tsallis} can be interpreted as:
-\begin{equation*}
+\href{}{Appendix}. Equation~\eqref{eq:GI0-Tsallis} can be interpreted
+as: \begin{equation*}
   T_\lambda\bigl(\mathcal{G}^0_I(\alpha, \mu, L)\bigr)
   =
   \underbrace{T_\lambda \bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr)}_{\text{baseline entropy}}
@@ -593,7 +588,7 @@ Appendix. Equation~\eqref{eq:GI0-Tsallis} can be interpreted as:
   \underbrace{\Delta_\alpha}_{\text{entropy excess caused by texture}}\hspace{-4.0em},
 \end{equation*} where the term \(\Delta_\alpha\) measures the increase
 in entropy induced by the texture level, with the level controlled by
-the parameter \(\alpha\). As \(\alpha \to -\infty\) (fully developed
+the parameter \(\alpha\). As \(\alpha \to -\infty\) (fully-developed
 speckle), \(\Delta_\alpha \to 0\) and \eqref{eq:GI0-Tsallis} reduces to
 the homogeneous case in \eqref{eq:gammasar-Tsallis}, \emph{i.e.}, \[
 \lim_{\alpha \to -\infty} T_{\lambda}\bigl(\mathcal{G}^0_I(\alpha, \mu, L)\bigr) =  T_{\lambda}\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr).
@@ -778,7 +773,7 @@ illustrative: the estimator performs properly for \(L>1\), while for
 \(L=1\) the bootstrap correction produces no noticeable improvement. The
 results confirm that, for \(\lambda=0.85\), the bootstrap-corrected
 estimator \(\widetilde{T}_{\lambda}\) with \(B=200\) reduces both bias
-and MSE compared with the original estimator \(\widehat{T}_{\lambda}\),
+and MSE, compared with the original estimator \(\widehat{T}_{\lambda}\),
 with significant improvements for small samples, as shown in
 Figure~\ref{fig-bias_mse_Tsallis}.
 
@@ -836,7 +831,7 @@ S_{\widetilde T_\lambda}
 \underbrace{T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\widehat{\mu},L)\bigr)}_{\text{theoretical under } \mathcal{H}_0}\hspace{-0.1em},
 \] \emph{i.e.}, the difference between the estimated entropy and the
 expected value under homogeneity. Values close to zero indicate that the
-region behaves like fully developed speckle, while large positive values
+region behaves like fully-developed speckle, while large positive values
 signal entropy excess, hence heterogeneity. This formulation avoids the
 need to estimate the \(\mathcal{G}^0_I\) parameter \(\alpha\), offering
 a simple, interpretable, and statistically grounded test. Moreover, the
@@ -1108,7 +1103,7 @@ labels in each quadrant of the image. Light regions correspond to
 textured observations (heterogeneous), while darker regions represent
 textureless areas (homogeneous).
 
-\begin{figure}[H]
+\begin{figure}[hbt]
   \centering
   \includegraphics[width=0.85\columnwidth]{Figures/phantom_18.pdf}
   \caption{Simulated SAR intensity image ($L=18$).}
@@ -1124,13 +1119,14 @@ decreases, it indicates regions with moderate texture (in the
 correspond to textureless regions, such as pasture, agricultural fields,
 and water bodies~\citeproc{ref-Neto2023}{{[}33{]}}.
 
-The proposed Tsallis-based test statistic, \(S_{\widetilde{T}\lambda}\),
-was applied to the simulated image using the adaptive windowing strategy
-with window sides ranging from \(5\times5\) to \(11\times11\)
-(\emph{i.e.}, \(N_{\min}=2\), \(N_{\max}=5\), hence \(W_{\min}=5\) and
-\(W_{\max}=11\)). For comparison, a fixed \(7\times7\) window was also
-considered. For each window, \(B=100\) bootstrap replications were
-performed to estimate the corrected test statistic.
+The proposed Tsallis-based test statistic,
+\(S_{\widetilde{T}_{\lambda}}\), was applied to the simulated image
+using the adaptive windowing strategy with window sides ranging from
+\(5\times5\) to \(11\times11\) (\emph{i.e.}, \(N_{\min}=2\),
+\(N_{\max}=5\), hence \(W_{\min}=5\) and \(W_{\max}=11\)). For
+comparison, a fixed \(7\times7\) window was also considered. For each
+window, \(B=100\) bootstrap replications were performed to estimate the
+corrected test statistic.
 
 Figure~\ref{fig:simc1} shows the \(p\)-value map with the fixed window,
 while Figures~\ref{fig:simc2}-\ref{fig:simc4} display the adaptive
@@ -1304,7 +1300,7 @@ looks. Table~\ref{tab:table_param} reports the acquisition parameters.
 
 \renewcommand{\arraystretch}{2.5}
 
-\begin{table}[H]
+\begin{table}[hbt]
 \centering\centering
 \caption{\label{tab:table_param}Parameters of selected SAR images}
 \centering
@@ -1576,8 +1572,8 @@ uniform surfaces. Intermediate values reveal transitional textures,
 where the adaptive approach provides cleaner and more stable estimates
 in homogeneous regions, while preserving finer edges in heterogeneous
 regions. The binary maps make the separation between homogeneous and
-heterogeneous areas explicit, showing that the adaptive strategy
-preserves fine details that are partially lost with the fixed window.
+textured areas explicit, showing that the adaptive strategy preserves
+fine details that are partially lost with the fixed window.
 
 The effect of the number of looks is evident. In San Francisco
 (\(L=4\)), where speckle is stronger, adaptive maps, especially for
@@ -1639,13 +1635,13 @@ scenes, whereas the adaptive version requires longer processing times
 due to the per-pixel window-size selection (border-statistics and
 thresholding) and the frequent use of larger windows.
 
-The total runtime also depends on the number of bootstrap replications
-(\(B\)), since each replication recomputes the test statistic to obtain
-a more stable estimate of the Tsallis entropy measure. In our
-simulations, we used \(B=100\), which provides stable and reliable
-estimates with moderate computational cost. Stable results can already
-be achieved with \(B\geq50\), whereas larger values yield smoother
-\(p\)-value distributions at the expense of longer processing times.
+The total runtime also depends on the number of bootstrap replications,
+since each replication recomputes the test statistic to obtain a more
+stable estimate of the Tsallis entropy measure. In our simulations, we
+used \(B=100\), which provides stable and reliable estimates with
+moderate computational cost. Stable results can already be achieved with
+\(B\geq50\), whereas larger values yield smoother \(p\)-value
+distributions at the expense of longer processing times.
 
 \subsection{Quantitative Evaluation}\label{quantitative-evaluation}
 
@@ -1796,14 +1792,15 @@ false positives, particularly in highly speckled regions.
 This work presented a statistical approach based on Tsallis entropy to
 detect deviations from fully-developed speckle in SAR images. The
 proposed test integrates a bootstrap correction and an adaptive
-windowing scheme to balance speckle suppression and texture preservation
-without requiring training data or parametric modeling.
+windowing scheme to balance speckle suppression and texture
+preservation, without requiring training data or parametric modeling.
 
-Experiments with simulated and real SAR data demonstrated that the
-method is well-calibrated, robust for small samples, and effective in
+Experiments with simulated and real SAR data showed that the method is
+well calibrated, robust to small samples sizes, and effective in
 delineating heterogeneous regions from homogeneous ones. A Monte Carlo
-validation confirmed that the test maintains proper control of the Type
-I error while improving detection power with increasing sample size.
+validation confirmed that the test maintains proper control of the
+Type~I error while improving detection power with increasing sample
+size.
 
 Comparative analysis using \(p\)-value maps, binary decisions, and
 quantitative metrics, such as \(F_1\)-score, Kappa coefficient, and
@@ -1863,6 +1860,21 @@ I = [-\mu(\alpha + 1)]^{1-\lambda} L^{\lambda-1}
 obtain the final expression for
 \(T_\lambda\bigl(\mathcal{G}^0_I(\alpha, \mu, L)\bigr)\) in
 \eqref{eq:GI0-Tsallis}.
+
+\section*{Computational Information}\label{computational-information}
+\addcontentsline{toc}{section}{Computational Information}
+
+This research, including its outputs, e.g., this manuscript, was
+executed in \texttt{Quarto} and is fully reproducible. We used
+\texttt{RStudio} version 2025.09.1+401 and \texttt{R} version 4.5.1.
+Data and code are available at:
+\url{https://github.com/rjaneth/Tsallis_entropy_2025}.
+
+All simulations and SAR image processing were run on a workstation
+equipped with an Intel\textsuperscript{\textregistered}
+Core\texttrademark{} Ultra 9 285 CPU (2.5 GHz, 24 cores), 128 GB RAM,
+and an NVIDIA\textsuperscript{\textregistered} GeForce RTX 5090 GPU (31
+GB VRAM), running Windows 11 Pro (24H2).
 
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
