@@ -1927,7 +1927,7 @@ I = [-\mu(\alpha + 1)]^{1-\lambda} L^{\lambda-1}
 
 # Computational Information {.unnumbered}
 
-This research, including its outputs, e.g., this manuscript, was executed in \texttt{Quarto} and is fully reproducible. We used \texttt{RStudio} version 2025.09.1+401 and \texttt{R} version 4.5.1. 
+This research, including its outputs (e.g., this manuscript), was executed in \texttt{Quarto} version 1.825 and is fully reproducible. We used \texttt{RStudio} version 2025.09.2+418 and \texttt{R} version 4.5.2.
 Data and code are available at: <https://github.com/rjaneth/Tsallis_entropy_2025>.
 
 All simulations and SAR image processing were run on a workstation equipped with an Intel\textsuperscript{\textregistered} Core\texttrademark{} Ultra 9 285 CPU (2.5 GHz, 24 cores), 128 GB RAM, and an NVIDIA\textsuperscript{\textregistered} GeForce RTX 5090 GPU (31 GB VRAM), running Windows 11 Pro (24H2).
