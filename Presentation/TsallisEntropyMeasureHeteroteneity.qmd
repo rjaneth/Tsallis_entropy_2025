@@ -482,7 +482,7 @@ $$
 T_\lambda = \frac{1}{1-\lambda}\biggl(1-
 \int_{-\infty}^{\infty} f^\lambda(x) dx \biggr) .
 $$
-We tranform variables:
+We transform variables:
 \begin{align}
 x &= Q(p), \text{ the quantile function with } 0\leq p\leq 1,\\
 dx &= Q'(p) dp,\\
