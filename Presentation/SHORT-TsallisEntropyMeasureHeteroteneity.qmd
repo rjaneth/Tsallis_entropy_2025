@@ -157,6 +157,7 @@ knitr::include_graphics("../Figures/dubli_1600.png")
    * a few in forested regions,
    * even less in urban areas.
 * When the backscatter changes among resolution cells.
+* [The $\Gamma_{\text{SAR}}$ model fails to describe the extreme variability.]{.alert}
 
 :::
 
@@ -167,8 +168,7 @@ knitr::include_graphics("../Figures/dubli_1600.png")
 ## Non fully-developed speckle
 
 The $\mathcal G^0_{\text{SAR}}$ model generalises the $\Gamma_{\text{SAR}}$ 
-distribution and incorporates $\alpha<0$, whose absolute value is proportional
-to $m$, the number of backscatterers:
+distribution and incorporates $\alpha<0$, such that $|\alpha|\propto m$, the number of backscatterers:
 \begin{multline}    
 \color{DarkOrchid}{f_{\mathcal{G}^0_{\text{SAR}}}\bigl(z; \mu, \alpha, L \bigr)} 
     = \\ \color{DarkOrchid}{\frac{L^L\,\Gamma(L-\alpha)}
