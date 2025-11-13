@@ -1219,66 +1219,130 @@ Although the differences were subtle, the adaptive scheme exhibits the expected 
 \captionsetup[sub]{aboveskip=2pt,belowskip=2pt}
 ```
 
+<!-- ```{=latex} -->
+<!-- \begin{figure*}[!t] -->
+<!-- \centering -->
+
+<!-- \begin{subfigure}[t]{0.204\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values__sim_L18_lambda085_7x7.png} -->
+<!--   \caption{$p$-value map ($7\times7$)} -->
+<!--   \label{fig:simc1} -->
+<!-- \end{subfigure}%\hfill -->
+<!-- \hspace{0.001\textwidth} -->
+<!-- \begin{subfigure}[t]{0.204\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_sim_L18_6_w200_eta1.0_lambda085_5x11.png} -->
+<!--   \caption{$p$-value map ($\eta=1.0$)} -->
+<!--   \label{fig:simc2} -->
+<!-- \end{subfigure}%\hfill -->
+<!-- \hspace{0.001\textwidth} -->
+<!-- \begin{subfigure}[t]{0.204\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_sim_L18_6_w200_eta2_lambda085_5x11.png} -->
+<!--   \caption{$p$-value map  ($\eta=2.0$)} -->
+<!--   \label{fig:simc3} -->
+<!-- \end{subfigure}%\hfill -->
+<!-- \hspace{0.001\textwidth} -->
+<!-- \begin{subfigure}[t]{0.204\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_sim_L18_6_w200_eta3.0_lambda085_5x11.png} -->
+<!--   \caption{$p$-value map  ($\eta=3.0$)} -->
+<!--   \label{fig:simc4} -->
+<!-- \end{subfigure} -->
+
+<!-- \medskip  -->
+<!-- \vspace{-4pt} -->
+
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_sim_L18_lambda085_7x7.png} -->
+<!--   \caption{Binary map ($7\times7$)} -->
+<!--   \label{fig:simbc1} -->
+<!-- \end{subfigure}%\hfill -->
+<!-- \hspace{0.01\textwidth} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_sim_L18_6_w200_eta1.0_lambda085_5x11.png} -->
+<!--   \caption{Binary map  ($\eta=1.0$)} -->
+<!--   \label{fig:simbc2} -->
+<!-- \end{subfigure}%\hfill -->
+<!-- \hspace{0.01\textwidth} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_sim_L18_6_w200_eta2_lambda085_5x11.png} -->
+<!--   \caption{Binary map  ($\eta=2.0$)} -->
+<!--   \label{fig:simbc3} -->
+<!-- \end{subfigure}%\hfill -->
+<!-- \hspace{0.01\textwidth} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_sim_L18_6_w200_eta3.0_lambda085_5x11.png} -->
+<!--   \caption{Binary map  ($\eta=3.0$)} -->
+<!--   \label{fig:simbc4} -->
+<!-- \end{subfigure} -->
+
+<!-- \caption{Simulated-scene results with the test $S_{\widetilde{T}_{\lambda}}$. -->
+<!-- (a) $p$-value map with a fixed $7\times7$ window. -->
+<!-- (b–d) $p$-value maps with adaptive windows ($W_{\min}=5$, $W_{\max}=11$) for -->
+<!-- $\eta=1.0$, $2.0$, and $3.0$. (e-h) Binary decision maps at 0.05 significance level.} -->
+
+<!-- \label{fig:grid10} -->
+<!-- \end{figure*} -->
+<!-- ``` -->
 ```{=latex}
 \begin{figure*}[!t]
 \centering
+\captionsetup{font=footnotesize}
+\captionsetup[sub]{aboveskip=2pt,belowskip=2pt}
 
-\begin{subfigure}[t]{0.204\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values__sim_L18_lambda085_7x7.png}
-  \caption{$p$-value map ($7\times7$)}
-  \label{fig:simc1}
-\end{subfigure}%\hfill
-\hspace{0.001\textwidth}
-\begin{subfigure}[t]{0.204\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_sim_L18_6_w200_eta1.0_lambda085_5x11.png}
-  \caption{$p$-value map ($\eta=1.0$)}
-  \label{fig:simc2}
-\end{subfigure}%\hfill
-\hspace{0.001\textwidth}
-\begin{subfigure}[t]{0.204\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_sim_L18_6_w200_eta2_lambda085_5x11.png}
-  \caption{$p$-value map  ($\eta=2.0$)}
-  \label{fig:simc3}
-\end{subfigure}%\hfill
-\hspace{0.001\textwidth}
-\begin{subfigure}[t]{0.204\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_sim_L18_6_w200_eta3.0_lambda085_5x11.png}
-  \caption{$p$-value map  ($\eta=3.0$)}
-  \label{fig:simc4}
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values__sim_L18_lambda085_7x7.png}
+\caption{$p$-value map ($7\times7$)}
+\label{fig:simc1}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_sim_L18_6_w200_eta1.0_lambda085_5x11.png}
+\caption{$p$-value map ($\eta=1.0$)}
+\label{fig:simc2}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_sim_L18_6_w200_eta2_lambda085_5x11.png}
+\caption{$p$-value map ($\eta=2.0$)}
+\label{fig:simc3}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_sim_L18_6_w200_eta3.0_lambda085_5x11.png}
+\caption{$p$-value map ($\eta=3.0$)}
+\label{fig:simc4}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_Sim_L18_eta4.png}
+\caption{$p$-value map ($\eta=4.0$)}
+\label{fig:simc5}
 \end{subfigure}
 
-\medskip 
-\vspace{-4pt}
+\vspace{4pt}
 
 \begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_sim_L18_lambda085_7x7.png}
-  \caption{Binary map ($7\times7$)}
-  \label{fig:simbc1}
-\end{subfigure}%\hfill
-\hspace{0.01\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_sim_L18_lambda085_7x7.png}
+\caption{Binary map ($7\times7$)}
+\label{fig:simbc1}
+\end{subfigure}\hfill
 \begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_sim_L18_6_w200_eta1.0_lambda085_5x11.png}
-  \caption{Binary map  ($\eta=1.0$)}
-  \label{fig:simbc2}
-\end{subfigure}%\hfill
-\hspace{0.01\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_sim_L18_6_w200_eta1.0_lambda085_5x11.png}
+\caption{Binary map ($\eta=1.0$)}
+\label{fig:simbc2}
+\end{subfigure}\hfill
 \begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_sim_L18_6_w200_eta2_lambda085_5x11.png}
-  \caption{Binary map  ($\eta=2.0$)}
-  \label{fig:simbc3}
-\end{subfigure}%\hfill
-\hspace{0.01\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_sim_L18_6_w200_eta2_lambda085_5x11.png}
+\caption{Binary map ($\eta=2.0$)}
+\label{fig:simbc3}
+\end{subfigure}\hfill
 \begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_sim_L18_6_w200_eta3.0_lambda085_5x11.png}
-  \caption{Binary map  ($\eta=3.0$)}
-  \label{fig:simbc4}
+\includegraphics[width=\linewidth]{./Figures/H_005_sim_L18_6_w200_eta3.0_lambda085_5x11.png}
+\caption{Binary map ($\eta=3.0$)}
+\label{fig:simbc4}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_Sim_L18_eta4.png}
+\caption{Binary map ($\eta=4.0$)}
+\label{fig:simbc5}
 \end{subfigure}
 
-\caption{Simulated-scene results with the test $S_{\widetilde{T}_{\lambda}}$.
-(a) $p$-value map with a fixed $7\times7$ window.
-(b–d) $p$-value maps with adaptive windows ($W_{\min}=5$, $W_{\max}=11$) for
-$\eta=1.0$, $2.0$, and $3.0$. (e-h) Binary decision maps at 0.05 significance level.}
-
+\caption{Simulated-scene results with the test $S_{\widetilde{T}*{\lambda}}$. (a) $p$-value map with a fixed $7\times7$ window. (b–e) $p$-value maps with adaptive windows ($W*{\min}=5$, $W_{\max}=11$) for $\eta=1.0$--$4.0$. (f–j) Binary decision maps at $0.05$ significance level.}
 \label{fig:grid10}
 \end{figure*}
 ```
@@ -1298,7 +1362,8 @@ We evaluated the proposed test statistic on four SAR scenes from different radar
 ```{=latex}
 \begin{figure*}[!t]
 \centering
-
+\captionsetup{font=footnotesize}
+\captionsetup[sub]{aboveskip=2pt,belowskip=2pt}
 \begin{subfigure}[t]{0.19\textwidth}
   \includegraphics[width=\linewidth]{./Figures/sanFrancisco1400.png}
   \caption{SAR image (San Francisco)}
@@ -1402,15 +1467,15 @@ kable(SAR_data,
       caption = "Parameters of selected SAR images",
       table.envir = "table", position = "hbt") %>%
   row_spec(0, align = "c") %>%
-  kable_styling(latex_options = "scale_down", font_size = 22) %>% 
+  kable_styling(latex_options = "scale_down", font_size = 24) %>% 
   kable_styling(full_width = TRUE) %>%
   column_spec(1, width = "4.0cm") %>%
-  column_spec(2, width = "4.5cm") %>%
+  column_spec(2, width = "4.3cm") %>%
   column_spec(3, width = "1.5cm") %>%
   column_spec(4, width = "4cm") %>%
   column_spec(5, width = "1.5cm") %>%
   column_spec(6, width = "4.0cm") %>%
-  column_spec(7, width = "4.5cm")
+  column_spec(7, width = "4.0cm")
 
 ```
 
@@ -1430,59 +1495,128 @@ Figures \ref{fig:sanfrancisco}–\ref{fig:foggia} present the outcomes, organiz
 \captionsetup[sub]{aboveskip=1pt,belowskip=1pt}
 ```
 
+<!-- ```{=latex} -->
+<!-- \begin{figure*}[!t] -->
+<!-- \centering -->
+<!-- \captionsetup[sub]{aboveskip=0pt,belowskip=0pt} -->
+
+<!-- \begin{subfigure}[t]{0.205\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_San-fran1400-fijo-7x7.png} -->
+<!--   \caption{$p$-value map ($7\times7$)} -->
+<!--   \label{fig:SFc1} -->
+<!-- \end{subfigure}\hspace{0.001\textwidth} -->
+<!-- \begin{subfigure}[t]{0.205\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_San-fran1400_eta1.0_B100_lambda_085-5x11_L4_1.png} -->
+<!--   \caption{$p$-value map ($\eta=1.0$)} -->
+<!--   \label{fig:SFc2} -->
+<!-- \end{subfigure}\hspace{0.001\textwidth} -->
+<!-- \begin{subfigure}[t]{0.205\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_San-fran1400_eta2_B100_lambda_085-5x11_L4_1.png} -->
+<!--   \caption{$p$-value map  ($\eta=2.0$)} -->
+<!--   \label{fig:SFc3} -->
+<!-- \end{subfigure}\hspace{0.001\textwidth} -->
+<!-- \begin{subfigure}[t]{0.205\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_San-fran1400_eta3_B100_lambda_085-5x11_L4_1.png} -->
+<!--   \caption{$p$-value map  ($\eta=3.0$)} -->
+<!--   \label{fig:SFc4} -->
+<!-- \end{subfigure} -->
+
+<!-- \medskip  -->
+<!-- \vspace{-4pt} -->
+
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_SF_7x7.png} -->
+<!--   \caption{Binary map ($7\times7$)} -->
+<!--   \label{fig:SFbc1} -->
+<!-- \end{subfigure}\hspace{0.01\textwidth} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_San-fran1400_eta1_B100_lambda_085-5x11_L4_1.png} -->
+<!--   \caption{Binary map  ($\eta=1.0$)} -->
+<!--   \label{fig:SFbc2} -->
+<!-- \end{subfigure}\hspace{0.01\textwidth} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_San-fran1400_eta2_B100_lambda_085-5x11_L4_1.png} -->
+<!--   \caption{Binary map  ($\eta=2.0$)} -->
+<!--   \label{fig:SFbc3} -->
+<!-- \end{subfigure}\hspace{0.01\textwidth} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_San-fran1400_eta3_B100_lambda_085-5x11_L4.png} -->
+<!--   \caption{Binary map  ($\eta=3.0$)} -->
+<!--   \label{fig:SFbc4} -->
+<!-- \end{subfigure} -->
+
+<!-- \caption{Detection of heterogeneous areas in a SAR image over San Francisco. (a) $p$-value map with a fixed $7\times7$ window. -->
+<!-- (b–d) $p$-value maps with adaptive windows ($W_{\min}=5$, $W_{\max}=11$) for -->
+<!-- $\eta=1.0$, $2.0$, and $3.0$. (e-h) Binary decision maps at $0.05$ significance level.} -->
+<!-- \label{fig:sanfrancisco} -->
+<!-- \end{figure*} -->
+<!-- ``` -->
+
+
 ```{=latex}
 \begin{figure*}[!t]
 \centering
-\captionsetup[sub]{aboveskip=0pt,belowskip=0pt}
 
-\begin{subfigure}[t]{0.205\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_San-fran1400-fijo-7x7.png}
-  \caption{$p$-value map ($7\times7$)}
-  \label{fig:SFc1}
-\end{subfigure}\hspace{0.001\textwidth}
-\begin{subfigure}[t]{0.205\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_San-fran1400_eta1.0_B100_lambda_085-5x11_L4_1.png}
-  \caption{$p$-value map ($\eta=1.0$)}
-  \label{fig:SFc2}
-\end{subfigure}\hspace{0.001\textwidth}
-\begin{subfigure}[t]{0.205\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_San-fran1400_eta2_B100_lambda_085-5x11_L4_1.png}
-  \caption{$p$-value map  ($\eta=2.0$)}
-  \label{fig:SFc3}
-\end{subfigure}\hspace{0.001\textwidth}
-\begin{subfigure}[t]{0.205\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_San-fran1400_eta3_B100_lambda_085-5x11_L4_1.png}
-  \caption{$p$-value map  ($\eta=3.0$)}
-  \label{fig:SFc4}
+\captionsetup{font=footnotesize}
+\captionsetup[sub]{aboveskip=2pt,belowskip=2pt}
+
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_San-fran1400-fijo-7x7.png}
+\caption{$p$-value map ($7\times7$)}
+\label{fig:SFc1}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_San-fran1400_eta1.0_B100_lambda_085-5x11_L4_1.png}
+\caption{$p$-value map ($\eta=1.0$)}
+\label{fig:SFc2}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_San-fran1400_eta2_B100_lambda_085-5x11_L4_1.png}
+\caption{$p$-value map ($\eta=2.0$)}
+\label{fig:SFc3}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_San-fran1400_eta3_B100_lambda_085-5x11_L4_1.png}
+\caption{$p$-value map ($\eta=3.0$)}
+\label{fig:SFc4}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_San-fran1400-eta4.png} % (o deja esta vacía si solo tienes 4)
+\caption{$p$-value ($\eta=4.0$)}
+\label{fig:SFc5}
 \end{subfigure}
 
-\medskip 
-\vspace{-4pt}
+\vspace{4pt} % separa filas (ajusta si hace falta)
 
-\begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_SF_7x7.png}
-  \caption{Binary map ($7\times7$)}
-  \label{fig:SFbc1}
-\end{subfigure}\hspace{0.01\textwidth}
-\begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_San-fran1400_eta1_B100_lambda_085-5x11_L4_1.png}
-  \caption{Binary map  ($\eta=1.0$)}
-  \label{fig:SFbc2}
-\end{subfigure}\hspace{0.01\textwidth}
-\begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_San-fran1400_eta2_B100_lambda_085-5x11_L4_1.png}
-  \caption{Binary map  ($\eta=2.0$)}
-  \label{fig:SFbc3}
-\end{subfigure}\hspace{0.01\textwidth}
-\begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_San-fran1400_eta3_B100_lambda_085-5x11_L4.png}
-  \caption{Binary map  ($\eta=3.0$)}
-  \label{fig:SFbc4}
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_SF_7x7.png}
+\caption{Binary map ($7\times7$)}
+\label{fig:SFbc1}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_San-fran1400_eta1_B100_lambda_085-5x11_L4_1.png}
+\caption{Binary map ($\eta=1.0$)}
+\label{fig:SFbc2}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_San-fran1400_eta2_B100_lambda_085-5x11_L4_1.png}
+\caption{Binary map ($\eta=2.0$)}
+\label{fig:SFbc3}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_San-fran1400_eta3_B100_lambda_085-5x11_L4.png}
+\caption{Binary map ($\eta=3.0$)}
+\label{fig:SFbc4}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_San-fran_eta4.png}
+\caption{Binary map  ($\eta=4.0$)}
+\label{fig:SFbc5}
 \end{subfigure}
-
-\caption{Detection of heterogeneous areas in a SAR image over San Francisco. (a) $p$-value map with a fixed $7\times7$ window.
-(b–d) $p$-value maps with adaptive windows ($W_{\min}=5$, $W_{\max}=11$) for
-$\eta=1.0$, $2.0$, and $3.0$. (e-h) Binary decision maps at $0.05$ significance level.}
+\caption{Detection of heterogeneous areas in a SAR image over San Francisco. 
+(a) $p$-value map with a fixed $7\times7$ window.
+(b–e) $p$-value maps with adaptive windows ($W_{\min}=5$, $W_{\max}=11$) for
+$\eta=1.0$-$4.0$. (f-j) Binary decision maps at $0.05$ significance level.}
 \label{fig:sanfrancisco}
 \end{figure*}
 ```
@@ -1490,166 +1624,358 @@ $\eta=1.0$, $2.0$, and $3.0$. (e-h) Binary decision maps at $0.05$ significance 
 ```{=latex}
 \begin{figure*}[!t]
 \centering
-\begin{subfigure}[t]{0.205\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_munich1024_lambda085_7x7.png}
-  \caption{$p$-value map ($7\times7$)}
-  \label{fig:muc1}
-\end{subfigure}\hspace{0.001\textwidth}
-\begin{subfigure}[t]{0.205\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_munich1024_eta1.0_lambda085_5x11_b100.png}
-  \caption{$p$-value map ($\eta=1.0$)}
-  \label{fig:muc2}
-\end{subfigure}\hspace{0.001\textwidth}
-\begin{subfigure}[t]{0.205\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_munich1024_eta2.0_lambda085_5x11_b100.png}
-  \caption{$p$-value map  ($\eta=2.0$)}
-  \label{fig:muc3}
-\end{subfigure}\hspace{0.001\textwidth}
-\begin{subfigure}[t]{0.205\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_munich1024_eta3.0_lambda085_5x11_b100.png}
-  \caption{$p$-value map  ($\eta=3.0$)}
-  \label{fig:muc4}
+\captionsetup{font=footnotesize}
+\captionsetup[sub]{aboveskip=2pt,belowskip=2pt}
+
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_munich1024_lambda085_7x7.png}
+\caption{$p$-value map ($7\times7$)}
+\label{fig:muc1}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_munich1024_eta1.0_lambda085_5x11_b100.png}
+\caption{$p$-value map ($\eta=1.0$)}
+\label{fig:muc2}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_munich1024_eta2.0_lambda085_5x11_b100.png}
+\caption{$p$-value map ($\eta=2.0$)}
+\label{fig:muc3}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_munich1024_eta3.0_lambda085_5x11_b100.png}
+\caption{$p$-value map ($\eta=3.0$)}
+\label{fig:muc4}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_munich1024_eta_4.png}
+\caption{$p$-value map ($\eta=4.0$)}
+\label{fig:muc5}
 \end{subfigure}
 
-\medskip 
-\vspace{-4pt}
-\begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_munich1024_lambda085_7x7.png}
-  \caption{Binary map ($7\times7$)}
-  \label{fig:munc1}
-\end{subfigure}\hspace{0.01\textwidth}
-\begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_munich1024_eta1.0_lambda085_5x11b100.png}
-  \caption{Binary map  ($\eta=1.0$)}
-  \label{fig:munc2}
-\end{subfigure}\hspace{0.01\textwidth}
-\begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_munich1024_eta2.0_lambda085_5x11b100.png}
-  \caption{Binary map  ($\eta=2.0$)}
-  \label{fig:munc3}
-\end{subfigure}\hspace{0.01\textwidth}
-\begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_munich1024_eta3.0_lambda085_5x11b100.png}
-  \caption{Binary map  ($\eta=3.0$)}
-  \label{fig:munc4}
+\vspace{4pt}
+
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_munich1024_lambda085_7x7.png}
+\caption{Binary map ($7\times7$)}
+\label{fig:munc1}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_munich1024_eta1.0_lambda085_5x11b100.png}
+\caption{Binary map ($\eta=1.0$)}
+\label{fig:munc2}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_munich1024_eta2.0_lambda085_5x11b100.png}
+\caption{Binary map ($\eta=2.0$)}
+\label{fig:munc3}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_munich1024_eta3.0_lambda085_5x11b100.png}
+\caption{Binary map ($\eta=3.0$)}
+\label{fig:munc4}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_munich_eta_4.png}
+\caption{Binary map ($\eta=4.0$)}
+\label{fig:munc5}
 \end{subfigure}
 
-\caption{Detection of heterogeneous areas in a SAR image over the outskirts of
-Munich. (a) $p$-value map with a fixed $7\times7$ window.
-(b–d) $p$-value maps with adaptive windows ($W_{\min}=5$, $W_{\max}=11$) for
-$\eta=1.0$, $2.0$, and $3.0$. (e-h) Binary decision maps at $0.05$ significance level.}
+\caption{Detection of heterogeneous areas in a SAR image over the outskirts of Munich. (a) $p$-value map with a fixed $7\times7$ window. (b–e) $p$-value maps with adaptive windows ($W_{\min}=5$, $W_{\max}=11$) for $\eta=1.0$--$4.0$. (f–j) Binary decision maps at $0.05$ significance level.}
 \label{fig:munich}
 \end{figure*}
 ```
 
+<!-- ```{=latex} -->
+<!-- \begin{figure*}[!t] -->
+<!-- \centering -->
+<!-- \begin{subfigure}[t]{0.205\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_munich1024_lambda085_7x7.png} -->
+<!--   \caption{$p$-value map ($7\times7$)} -->
+<!--   \label{fig:muc1} -->
+<!-- \end{subfigure}\hspace{0.001\textwidth} -->
+<!-- \begin{subfigure}[t]{0.205\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_munich1024_eta1.0_lambda085_5x11_b100.png} -->
+<!--   \caption{$p$-value map ($\eta=1.0$)} -->
+<!--   \label{fig:muc2} -->
+<!-- \end{subfigure}\hspace{0.001\textwidth} -->
+<!-- \begin{subfigure}[t]{0.205\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_munich1024_eta2.0_lambda085_5x11_b100.png} -->
+<!--   \caption{$p$-value map  ($\eta=2.0$)} -->
+<!--   \label{fig:muc3} -->
+<!-- \end{subfigure}\hspace{0.001\textwidth} -->
+<!-- \begin{subfigure}[t]{0.205\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_munich1024_eta3.0_lambda085_5x11_b100.png} -->
+<!--   \caption{$p$-value map  ($\eta=3.0$)} -->
+<!--   \label{fig:muc4} -->
+<!-- \end{subfigure} -->
+
+<!-- \medskip  -->
+<!-- \vspace{-4pt} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_munich1024_lambda085_7x7.png} -->
+<!--   \caption{Binary map ($7\times7$)} -->
+<!--   \label{fig:munc1} -->
+<!-- \end{subfigure}\hspace{0.01\textwidth} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_munich1024_eta1.0_lambda085_5x11b100.png} -->
+<!--   \caption{Binary map  ($\eta=1.0$)} -->
+<!--   \label{fig:munc2} -->
+<!-- \end{subfigure}\hspace{0.01\textwidth} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_munich1024_eta2.0_lambda085_5x11b100.png} -->
+<!--   \caption{Binary map  ($\eta=2.0$)} -->
+<!--   \label{fig:munc3} -->
+<!-- \end{subfigure}\hspace{0.01\textwidth} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_munich1024_eta3.0_lambda085_5x11b100.png} -->
+<!--   \caption{Binary map  ($\eta=3.0$)} -->
+<!--   \label{fig:munc4} -->
+<!-- \end{subfigure} -->
+
+<!-- \caption{Detection of heterogeneous areas in a SAR image over the outskirts of -->
+<!-- Munich. (a) $p$-value map with a fixed $7\times7$ window. -->
+<!-- (b–d) $p$-value maps with adaptive windows ($W_{\min}=5$, $W_{\max}=11$) for -->
+<!-- $\eta=1.0$, $2.0$, and $3.0$. (e-h) Binary decision maps at $0.05$ significance level.} -->
+<!-- \label{fig:munich} -->
+<!-- \end{figure*} -->
+<!-- ``` -->
 ```{=latex}
 \begin{figure*}[!t]
 \centering
-\begin{subfigure}[t]{0.205\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_dublinlambda085_7x7_b100.png}
-  \caption{$p$-value map ($7\times7$)}
-  \label{fig:duc1}
-\end{subfigure}\hspace{0.001\textwidth}
-\begin{subfigure}[t]{0.205\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_dublin1600_eta1.0nn_lambda085_5x11_b100.png}
-  \caption{$p$-value map ($\eta=1.0$)}
-  \label{fig:duc2}
-\end{subfigure}\hspace{0.001\textwidth}
-\begin{subfigure}[t]{0.205\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_dublin1600_eta2.0_lambda085_5x11_b1005.png}
-  \caption{$p$-value map  ($\eta=2.0$)}
-  \label{fig:duc3}
-\end{subfigure}\hspace{0.001\textwidth}
-\begin{subfigure}[t]{0.205\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_dublin1600_eta3.0_lambda085_5x11_b100.png}
-  \caption{$p$-value map  ($\eta=3.0$)}
-  \label{fig:duc4}
+\captionsetup{font=footnotesize}
+\captionsetup[sub]{aboveskip=2pt,belowskip=2pt}
+
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_dublinlambda085_7x7_b100.png}
+\caption{$p$-value map ($7\times7$)}
+\label{fig:duc1}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_dublin1600_eta1.0nn_lambda085_5x11_b100.png}
+\caption{$p$-value map ($\eta=1.0$)}
+\label{fig:duc2}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_dublin1600_eta2.0_lambda085_5x11_b1005.png}
+\caption{$p$-value map ($\eta=2.0$)}
+\label{fig:duc3}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_dublin1600_eta3.0_lambda085_5x11_b100.png}
+\caption{$p$-value map ($\eta=3.0$)}
+\label{fig:duc4}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_dublin_eta4.png}
+\caption{$p$-value map ($\eta=4.0$)}
+\label{fig:duc5}
 \end{subfigure}
 
-\medskip 
-\vspace{-4pt}
-\begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_dublin7x7_B100_lambda_081.png}
-  \caption{Binary map ($7\times7$)}
-  \label{fig:dubc1}
-\end{subfigure}\hspace{0.01\textwidth}
-\begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_dublin1600_eta1.0_lambda085_5x11_b100.png}
-  \caption{Binary map  ($\eta=1.0$)}
-  \label{fig:dubc2}
-\end{subfigure}\hspace{0.01\textwidth}
-\begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_dublin1600_eta2.0_lambda085_5x11_b1005.png}
-  \caption{Binary map  ($\eta=2.0$)}
-  \label{fig:dubc3}
-\end{subfigure}\hspace{0.01\textwidth}
-\begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_dublin1600_OR_eta3.0_lambda085_5x11_b100.png}
-  \caption{Binary map  ($\eta=3.0$)}
-  \label{fig:dubc4}
+\vspace{4pt}
+
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_dublin7x7_B100_lambda_081.png}
+\caption{Binary map ($7\times7$)}
+\label{fig:dubc1}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_dublin1600_eta1.0_lambda085_5x11_b100.png}
+\caption{Binary map ($\eta=1.0$)}
+\label{fig:dubc2}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_dublin1600_eta2.0_lambda085_5x11_b1005.png}
+\caption{Binary map ($\eta=2.0$)}
+\label{fig:dubc3}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_dublin1600_OR_eta3.0_lambda085_5x11_b100.png}
+\caption{Binary map ($\eta=3.0$)}
+\label{fig:dubc4}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_dublin_eta4.png}
+\caption{Binary map ($\eta=4.0$)}
+\label{fig:dubc5}
 \end{subfigure}
 
-\caption{Detection of heterogeneous areas in a SAR image over Dublin Port. (a) $p$-value map with a fixed $7\times7$ window.
-(b–d) $p$-value maps with adaptive windows ($W_{\min}=5$, $W_{\max}=11$) for
-$\eta=1.0$, $2.0$, and $3.0$. (e-h) Binary decision maps at 0.05 significance level.}
+\caption{Detection of heterogeneous areas in a SAR image over Dublin Port. (a) $p$-value map with a fixed $7\times7$ window. (b–e) $p$-value maps with adaptive windows ($W_{\min}=5$, $W_{\max}=11$) for $\eta=1.0$--$4.0$. (f–j) Binary decision maps at $0.05$ significance level.}
 \label{fig:dublin}
 \end{figure*}
 ```
+<!-- ```{=latex} -->
+<!-- \begin{figure*}[!t] -->
+<!-- \centering -->
+<!-- \begin{subfigure}[t]{0.205\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_dublinlambda085_7x7_b100.png} -->
+<!--   \caption{$p$-value map ($7\times7$)} -->
+<!--   \label{fig:duc1} -->
+<!-- \end{subfigure}\hspace{0.001\textwidth} -->
+<!-- \begin{subfigure}[t]{0.205\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_dublin1600_eta1.0nn_lambda085_5x11_b100.png} -->
+<!--   \caption{$p$-value map ($\eta=1.0$)} -->
+<!--   \label{fig:duc2} -->
+<!-- \end{subfigure}\hspace{0.001\textwidth} -->
+<!-- \begin{subfigure}[t]{0.205\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_dublin1600_eta2.0_lambda085_5x11_b1005.png} -->
+<!--   \caption{$p$-value map  ($\eta=2.0$)} -->
+<!--   \label{fig:duc3} -->
+<!-- \end{subfigure}\hspace{0.001\textwidth} -->
+<!-- \begin{subfigure}[t]{0.205\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_dublin1600_eta3.0_lambda085_5x11_b100.png} -->
+<!--   \caption{$p$-value map  ($\eta=3.0$)} -->
+<!--   \label{fig:duc4} -->
+<!-- \end{subfigure} -->
+
+<!-- \medskip  -->
+<!-- \vspace{-4pt} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_dublin7x7_B100_lambda_081.png} -->
+<!--   \caption{Binary map ($7\times7$)} -->
+<!--   \label{fig:dubc1} -->
+<!-- \end{subfigure}\hspace{0.01\textwidth} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_dublin1600_eta1.0_lambda085_5x11_b100.png} -->
+<!--   \caption{Binary map  ($\eta=1.0$)} -->
+<!--   \label{fig:dubc2} -->
+<!-- \end{subfigure}\hspace{0.01\textwidth} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_dublin1600_eta2.0_lambda085_5x11_b1005.png} -->
+<!--   \caption{Binary map  ($\eta=2.0$)} -->
+<!--   \label{fig:dubc3} -->
+<!-- \end{subfigure}\hspace{0.01\textwidth} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_dublin1600_OR_eta3.0_lambda085_5x11_b100.png} -->
+<!--   \caption{Binary map  ($\eta=3.0$)} -->
+<!--   \label{fig:dubc4} -->
+<!-- \end{subfigure} -->
+
+<!-- \caption{Detection of heterogeneous areas in a SAR image over Dublin Port. (a) $p$-value map with a fixed $7\times7$ window. -->
+<!-- (b–d) $p$-value maps with adaptive windows ($W_{\min}=5$, $W_{\max}=11$) for -->
+<!-- $\eta=1.0$, $2.0$, and $3.0$. (e-h) Binary decision maps at 0.05 significance level.} -->
+<!-- \label{fig:dublin} -->
+<!-- \end{figure*} -->
+<!-- ``` -->
 
 ```{=latex}
 \begin{figure*}[!t]
 \centering
-\begin{subfigure}[t]{0.205\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_foggia7_7.png}
-  \caption{$p$-value map ($7\times7$)}
-  \label{fig:foc1}
-\end{subfigure}\hspace{0.001\textwidth}
-\begin{subfigure}[t]{0.205\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_FoggiaL24_eta_1.00_5x11_B100_lambda_085.png}
-  \caption{$p$-value map ($\eta=1.0$)}
-  \label{fig:foc2}
-\end{subfigure}\hspace{0.001\textwidth}
-\begin{subfigure}[t]{0.205\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_FoggiaL24_eta_2.00_5x11_B100_lambda_0852.png}
-  \caption{$p$-value map  ($\eta=2.0$)}
-  \label{fig:foc3}
-\end{subfigure}\hspace{0.001\textwidth}
-\begin{subfigure}[t]{0.205\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/p-values_FoggiaL24_eta_3.0n_5x11_B100_lambda_085.png}
-  \caption{$p$-value map  ($\eta=3.0$)}
-  \label{fig:foc4}
+\captionsetup{font=footnotesize}
+\captionsetup[sub]{aboveskip=2pt,belowskip=2pt}
+
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_foggia7_7.png}
+\caption{$p$-value map ($7\times7$)}
+\label{fig:foc1}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_FoggiaL24_eta_1.00_5x11_B100_lambda_085.png}
+\caption{$p$-value map ($\eta=1.0$)}
+\label{fig:foc2}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_FoggiaL24_eta_2.00_5x11_B100_lambda_0852.png}
+\caption{$p$-value map ($\eta=2.0$)}
+\label{fig:foc3}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_FoggiaL24_eta_3.0n_5x11_B100_lambda_085.png}
+\caption{$p$-value map ($\eta=3.0$)}
+\label{fig:foc4}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.19\textwidth}
+\includegraphics[width=\linewidth]{./Figures/p-values_Foggia_eta4.png}
+\caption{$p$-value map ($\eta=4.0$)}
+\label{fig:foc5}
 \end{subfigure}
 
-\medskip 
-\vspace{-4pt}
-\begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_fogia_7x7.png}
-  \caption{Binary map ($7\times7$)}
-  \label{fig:fogc1}
-\end{subfigure}\hspace{0.01\textwidth}
-\begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_FoggiaL24_eta_1.00_5x11_B100_lambda_081.png}
-  \caption{Binary map  ($\eta=1.0$)}
-  \label{fig:fogc2}
-\end{subfigure}\hspace{0.01\textwidth}
-\begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_FoggiaL24_eta_2.00_5x11_B100_lambda_085.png}
-  \caption{Binary map  ($\eta=2.0$)}
-  \label{fig:fogc3}
-\end{subfigure}\hspace{0.01\textwidth}
-\begin{subfigure}[t]{0.19\textwidth}
-  \includegraphics[width=\linewidth]{./Figures/H_005_FoggiaL24_eta_3.0n_5x11_B100_lambda_081.png}
-  \caption{Binary map  ($\eta=3.0$)}
-  \label{fig:fogc4}
+\vspace{4pt}
+
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_fogia_7x7.png}
+\caption{Binary map ($7\times7$)}
+\label{fig:fogc1}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_FoggiaL24_eta_1.00_5x11_B100_lambda_081.png}
+\caption{Binary map ($\eta=1.0$)}
+\label{fig:fogc2}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_FoggiaL24_eta_2.00_5x11_B100_lambda_085.png}
+\caption{Binary map ($\eta=2.0$)}
+\label{fig:fogc3}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_FoggiaL24_eta_3.0n_5x11_B100_lambda_081.png}
+\caption{Binary map ($\eta=3.0$)}
+\label{fig:fogc4}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.18\textwidth}
+\includegraphics[width=\linewidth]{./Figures/H_005_foggia_eta4.png}
+\caption{Binary map ($\eta=4.0$)}
+\label{fig:fogc5}
 \end{subfigure}
 
-\caption{Detection of heterogeneous areas in a SAR image over Foggia. (a) $p$-value map with a fixed $7\times7$ window.
-(b–d) $p$-value maps with adaptive windows ($W_{\min}=5$, $W_{\max}=11$) for
-$\eta=1.0$, $2.0$, and $3.0$. (e-h) Binary decision maps at 0.05 significance level.}
-
+\caption{Detection of heterogeneous areas in a SAR image over Foggia. (a) $p$-value map with a fixed $7\times7$ window. (b–e) $p$-value maps with adaptive windows ($W_{\min}=5$, $W_{\max}=11$) for $\eta=1.0$--$4.0$. (f–j) Binary decision maps at $0.05$ significance level.}
 \label{fig:foggia}
 \end{figure*}
 ```
+<!-- ```{=latex} -->
+<!-- \begin{figure*}[!t] -->
+<!-- \centering -->
+<!-- \begin{subfigure}[t]{0.205\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_foggia7_7.png} -->
+<!--   \caption{$p$-value map ($7\times7$)} -->
+<!--   \label{fig:foc1} -->
+<!-- \end{subfigure}\hspace{0.001\textwidth} -->
+<!-- \begin{subfigure}[t]{0.205\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_FoggiaL24_eta_1.00_5x11_B100_lambda_085.png} -->
+<!--   \caption{$p$-value map ($\eta=1.0$)} -->
+<!--   \label{fig:foc2} -->
+<!-- \end{subfigure}\hspace{0.001\textwidth} -->
+<!-- \begin{subfigure}[t]{0.205\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_FoggiaL24_eta_2.00_5x11_B100_lambda_0852.png} -->
+<!--   \caption{$p$-value map  ($\eta=2.0$)} -->
+<!--   \label{fig:foc3} -->
+<!-- \end{subfigure}\hspace{0.001\textwidth} -->
+<!-- \begin{subfigure}[t]{0.205\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/p-values_FoggiaL24_eta_3.0n_5x11_B100_lambda_085.png} -->
+<!--   \caption{$p$-value map  ($\eta=3.0$)} -->
+<!--   \label{fig:foc4} -->
+<!-- \end{subfigure} -->
+
+<!-- \medskip  -->
+<!-- \vspace{-4pt} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_fogia_7x7.png} -->
+<!--   \caption{Binary map ($7\times7$)} -->
+<!--   \label{fig:fogc1} -->
+<!-- \end{subfigure}\hspace{0.01\textwidth} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_FoggiaL24_eta_1.00_5x11_B100_lambda_081.png} -->
+<!--   \caption{Binary map  ($\eta=1.0$)} -->
+<!--   \label{fig:fogc2} -->
+<!-- \end{subfigure}\hspace{0.01\textwidth} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_FoggiaL24_eta_2.00_5x11_B100_lambda_085.png} -->
+<!--   \caption{Binary map  ($\eta=2.0$)} -->
+<!--   \label{fig:fogc3} -->
+<!-- \end{subfigure}\hspace{0.01\textwidth} -->
+<!-- \begin{subfigure}[t]{0.19\textwidth} -->
+<!--   \includegraphics[width=\linewidth]{./Figures/H_005_FoggiaL24_eta_3.0n_5x11_B100_lambda_081.png} -->
+<!--   \caption{Binary map  ($\eta=3.0$)} -->
+<!--   \label{fig:fogc4} -->
+<!-- \end{subfigure} -->
+
+<!-- \caption{Detection of heterogeneous areas in a SAR image over Foggia. (a) $p$-value map with a fixed $7\times7$ window. -->
+<!-- (b–d) $p$-value maps with adaptive windows ($W_{\min}=5$, $W_{\max}=11$) for -->
+<!-- $\eta=1.0$, $2.0$, and $3.0$. (e-h) Binary decision maps at 0.05 significance level.} -->
+
+<!-- \label{fig:foggia} -->
+<!-- \end{figure*} -->
+<!-- ``` -->
 
 In the $p$-value maps, dark-red tones ($p \approx 0$) concentrate on heterogeneous areas such as urban blocks, harbor structures, and field boundaries, while blue tones ($p \approx 1$) dominate open water and uniform surfaces. Intermediate values reveal transitional textures, where the adaptive approach provides cleaner and more stable estimates in homogeneous regions, while preserving finer edges in heterogeneous regions. The binary maps make the separation between homogeneous and textured areas explicit, showing that the adaptive strategy preserves fine details that are partially lost with the fixed window.
 
@@ -1659,10 +1985,10 @@ As $L$ increases (Munich, Dublin, Foggia), speckle decreases and the overall per
 
 Visual inspection suggests that $\eta=2.0$ and $\eta=3.0$ yield the most balanced results. With $\eta=1.0$, the outcome is close to the fixed-window case, offering little improvement. Values above $\eta=3.0$ tend to oversmooth the images, causing blurred edges and loss of fine details. These findings highlight the advantages of the adaptive approach, which better preserves heterogeneous features while enhancing the clarity of homogeneous areas, consistent with the behavior observed in the simulated experiment.
 
-In addition to the visual analysis presented, we measured execution times to assess the computational cost of the proposed method. Table \ref{tbl-exec-times} reports the processing times for the Tsallis entropy-based test using fixed $7\times7$ windows and, for comparison, the adaptive variant with window sizes ranging from $5\times5$ to $11\times11$ for $\eta=1.0$, $2.0$, and $3.0$. Times are reported in minutes and seconds (mm:ss).
+In addition to the visual analysis presented, we measured execution times to assess the computational cost of the proposed method. Table \ref{tbl-exec-times} reports the processing times for the Tsallis entropy-based test using fixed $7\times7$ windows and, for comparison, the adaptive variant with window sizes ranging from $5\times5$ to $11\times11$ for $\eta=1.0$, $2.0$, $3.0$, and $4.0$. Times are reported in minutes and seconds (mm:ss).
+
 
 \renewcommand{\arraystretch}{1.4}
-
 ```{r}
 #| label: tbl-exec-times
 #| echo: false
@@ -1674,51 +2000,55 @@ In addition to the visual analysis presented, we measured execution times to ass
 
 #library(kableExtra)
 
-
 Times_data <- data.frame(
 Scene = c( "Simulated", "San Francisco",   "Munich",  "Dublin", "Foggia"),
 Fixed = c( "03:23", "10:58",   "07:02",  "14:31", "21:01"),
 Adapt1 = c( "03:20", "11:26",   "8:54",  "15:22", "23:10"),
 Adapt2 = c( "03:36", "13:37",  "10:52",  "16:14", "26:07"),
-Adapt3 = c("03:44",   "14:11", "11:29",  "16:24", "26:22")
+Adapt3 = c("03:44",   "14:11", "11:29",  "16:24", "26:22"),
+Adapt4 = c("03:49", "14:27", "11:45", "16:43", "26:55")
 )
-
 
 colnames(Times_data) <- c(
 "\\textbf{Scene}",
-"\\textbf{Fixed} $7\\times7$",
-"\\textbf{Adapt.} $\\eta=1$",
-"\\textbf{Adapt.} $\\eta=2$",
-"\\textbf{Adapt.} $\\eta=3$"
+" $7\\times7$",
+" $\\eta=1$",
+" $\\eta=2$",
+" $\\eta=3$",
+" $\\eta=4$"
 )
-  
+
 # colnames(Times_data) <- c(
-#   "\\textbf{Scene}",
-#   "\\textbf{Shannon (mm:ss)}",
-#   "\\textbf{Rényi (mm:ss)}",
-#   "\\textbf{Tsallis (mm:ss)}"
+
+# "\textbf{Scene}",
+
+# "\textbf{Shannon (mm:ss)}",
+
+# "\textbf{Rényi (mm:ss)}",
+
+# "\textbf{Tsallis (mm:ss)}"
+
 # )
 
 kable(Times_data,
 format = "latex",
 booktabs = TRUE,
-align = "ccccc",
+align = "cccccc",
 escape = FALSE,
 #label = "table_exec_times",#adaptive windows with side lengths ranging from $5\times5$ ($N{\min}=5$) to $11\times11$ ($N_{\max}=11$)
 centering = TRUE
-#caption = "Execution times for the heterogeneity detection using fixed $7\\times7$ and adaptive windows ($N_{\\min}=5$, $N_{\\max}=11$), with $B=100$ bootstrap replications per scenario. Times are given in minutes and seconds (mm:ss). Rényi entropy uses $\\lambda=0.9$ and Tsallis entropy uses $\\lambda=0.85$.",
+#caption = "Execution times for the heterogeneity detection using fixed $7\times7$ and adaptive windows ($N_{\min}=5$, $N_{\max}=11$), with $B=100$ bootstrap replications per scenario. Times are given in minutes and seconds (mm:ss). Rényi entropy uses $\lambda=0.9$ and Tsallis entropy uses $\lambda=0.85$.",
 #table.envir = "table", position = "hbt"
 ) %>%
 row_spec(0, align = "c") %>%
 kable_styling(latex_options = "scale_down", font_size = 24) %>%
 #kable_styling(full_width = TRUE) %>%
 column_spec(1, width = "5.5cm") %>%
-column_spec(2, width = "4cm") %>%
-column_spec(3, width = "4cm") %>%
-column_spec(4, width = "4cm") %>%
-column_spec(5, width = "4cm")
-
-
+column_spec(2, width = "3cm") %>%
+column_spec(3, width = "3cm") %>%
+column_spec(4, width = "3cm") %>%
+column_spec(5, width = "3cm") %>%
+column_spec(6, width = "3cm")
 ```
 
 Overall, the fixed-window Tsallis approach is the fastest across all scenes, whereas the adaptive version requires longer processing times due to the per-pixel window-size selection (border-statistics and thresholding) and the frequent use of larger windows.
