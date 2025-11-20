@@ -1,5 +1,5 @@
 ---
-title: Adaptive Tsallis Entropy Estimation for Detecting Non-Fully-Developed Speckle in SAR Imagery
+title: Adaptive Nonparametric Tsallis Entropy Estimation for Detecting Non-Fully-Developed Speckle
 format:
   ieee-pdf:
     pdf-engine: pdflatex # xelatex
@@ -37,7 +37,7 @@ author:
         postal-code: 6140
     orcid: 0000-0002-8002-5341
     email: alejandro.frery@vuw.ac.nz
-    membership: Fellow, IEEE
+    membership: Life Fellow, IEEE
     attributes:
       corresponding: true
   - name: Paolo Gamba
@@ -68,6 +68,7 @@ author:
         postal-code: 1688
     orcid: 0000-0002-9185-1382
     email: andrea.rey@unahur.edu.ar
+    membership: Member, IEEE
     
     note: |
       Janeth Alpala and  Abraão D. C. Nascimento are with the Departamento de Estatística, Universidade Federal de Pernambuco, Recife, 50670-901 PE, Brazil (e-mail: janeth.alpala@ufpe.br, abraao@de.ufpe.br ).
