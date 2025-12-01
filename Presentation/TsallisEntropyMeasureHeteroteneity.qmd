@@ -45,7 +45,7 @@ set.seed(123456789, kind="Mersenne-Twister")
 
 ::: {.incremental}
 * Speckle is an interference phenomenon common to every image produced by coherent imaging.
-* Imagine the pixel value is formed by the addition of the return from $m$ elementary backscatterers:
+* Each pixel value is the addition of the return from $m$ elementary backscatterers:
 $$
 S = \sum_{\ell=1}^m S_\ell e^{j \phi_\ell},
 $$
@@ -116,7 +116,7 @@ If
 
 * $m\to\infty$ (infinitely many scatterers in the resolution cell),
 * $\max\operatorname{Var}(S_\ell)<\infty$ (no scatterer dominates),
-* $|S_\ell| \perp |S_k|$ (independent amplitudes),
+* $S_\ell \perp S_k$ (independent amplitudes),
 * $\phi_\ell\sim\mathcal U(-\pi,\pi]$ (uninformative phases),
 * $\phi_\ell \perp \phi_k$ (independent phases),
 * the amplitudes are collectively independent of the phases,
@@ -197,12 +197,12 @@ We took a sample of $15561$ observations over crops.
 $$
 Z=|S|^2 \sim \Gamma_{\text{SAR}}(\mu, L),
 $$
-a Gamma distribution conveniently parametrised by the mean $\mu>0$ and
+a gamma distribution conveniently parametrised by the mean $\mu>0$ and
 the shape $L\geq 1$.
 * If $L=1$, we fall back to the exponential model.
 :::
 
-## Properties of the Gamma distribution
+## Properties of the gamma distribution
 
 :::{.incremental}
 * It is characterised by the probability density function
@@ -212,15 +212,11 @@ $$
     \exp \biggl(-\frac{Lz}{\mu}\biggr)
     \mathbb I_{\mathbb R_+}(z)}. 
 $$
-* Its variance and coefficient of variation are
-$$
-\operatorname{Var}(Z) = \frac{\mu^2}{L},\text{ and }
-\operatorname{CV}(Z) = \frac{\sqrt{\operatorname{Var}(Z)}}{\mu} = \frac{1}{\sqrt{L}}.
-$$
-* The coefficient of variation is widely used to check if the observations are fully-developed speckle.
+* Its coefficient of variation is $\operatorname{CV}(Z) = \frac{\sqrt{\operatorname{Var}(Z)}}{\mu} = \frac{1}{\sqrt{L}}$.
+* [The coefficient of variation is used to check if the observations are fully-developed speckle because it does not depend on the mean. It is an intrinsic property of the model.]{.alert}
 :::
 
-## Properties of the Gamma distribution
+## Properties of the gamma distribution
 
 Multiplicative property:
 if 
@@ -268,9 +264,9 @@ knitr::include_graphics("../Figures/dubli_1600.png")
 
 ## What happens if the speckle is not fully-developed? {.fullsmall}
 
-Instead of assuming $\mu$ constant, we may assume that it is a random variable.
+Instead of assuming $\mu$ constant in $Z=\mu W$, we may assume that it is a random variable.
 
-@Frery1997 proposed the inverse Gamma distribution for the backscatter, leading to the $\mathcal G^0_{\text{SAR}}$ model, characterised by the probability density function
+@Frery1997 proposed the inverse gamma distribution for the backscatter, leading to the $\mathcal G^0_{\text{SAR}}$ model, characterised by the probability density function
 $$    
 \color{DarkOrchid}{f_{\mathcal{G}^0_{\text{SAR}}}\bigl(z; \mu, \alpha, L \bigr) 
     = \frac{L^L\,\Gamma(L-\alpha)}
@@ -296,15 +292,15 @@ We have two models to describe the observations:
 
 # Methodology
 
-## Goodness-of-fit tests {.fullsmall}
+## Goodness-of-fit tests
 
 Given a random sample $\mathbf Z = (Z_1,Z_2,\dots,Z_n)$, our problem can be stated as a goodness-of-fit test:
-\begin{align}
-\mathcal H_0 &: \mathbf Z \text{ is compatible with } \Gamma_{\text{SAR}}(\mu,L),\\
-\mathcal H_1 &:  \mathbf Z \text{ is not compatible with } \mathcal \Gamma_{\text{SAR}}(\mu,L).
-\end{align}
+<!-- \begin{align} -->
+<!-- \mathcal H_0 &: \mathbf Z \text{ is compatible with } \Gamma_{\text{SAR}}(\mu,L),\\ -->
+<!-- \mathcal H_1 &:  \mathbf Z \text{ is not compatible with } \mathcal \Gamma_{\text{SAR}}(\mu,L). -->
+<!-- \end{align} -->
 
-We make it more specific:
+<!-- We make it more specific: -->
 \begin{align}
 \mathcal H_0 &: \mathbf Z \text{ is compatible with } \Gamma_{\text{SAR}}(\mu,L),\\
 \mathcal H_1 &:  \mathbf Z \text{ is compatible with } \mathcal G^0_{\text{SAR}}(\mu,\alpha,L).
@@ -652,13 +648,15 @@ cat('
 ## Conclusions {.fullsmall}
 
 ::: {.incremental}
-* This work presented a statistical approach based on Tsallis entropy to detect deviations from fully-developed speckle in intensity SAR images. 
-The proposed  test integrates a bootstrap correction and an adaptive windowing scheme to balance speckle suppression and texture preservation without requiring training data or parametric modeling.
+* We presented a statistical approach based on Tsallis entropy to detect deviations from fully-developed speckle in intensity SAR images. 
 
-* Experiments with simulated and real SAR data demonstrated that the method is well-calibrated, robust for small samples, and effective in delineating heterogeneous regions from homogeneous ones. 
-A Monte Carlo validation confirmed that the test maintains proper control of the Type&nbsp;I error while improving detection power with increasing sample size.
+* The test integrates bootstrap correction and adaptive windowing to balance speckle suppression and texture preservation [without requiring training data or parametric modeling]{.alert}.
 
-* Although machine learning-based SAR classifiers are widely used, this framework offers a statistically grounded alternative that provides interpretable significance measures and requires no labelled data, making it suitable for rapid detection, screening, and scenarios with limited data availability.
+* Simulated and real SAR data demonstrated that the method is well-calibrated, robust for small samples, and effective in delineating heterogeneous regions from homogeneous ones. 
+
+* The test maintains proper control of the Type&nbsp;I error while improving detection power with increasing sample size.
+
+* Although machine learning-based SAR classifiers are widely used, this framework offers a [statistically grounded interpretable]{.alert} significance measures and requires [no labelled data]{.alert}, making it suitable for rapid detection, screening, and scenarios with limited data availability.
 
 * [In the same way, you can make your distribution-free test for the problem you are studying]{.alert}
 :::
