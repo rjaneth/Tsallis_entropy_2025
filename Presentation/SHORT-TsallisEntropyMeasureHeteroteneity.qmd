@@ -32,6 +32,22 @@ set.seed(123456789, kind="Mersenne-Twister")
 
 # Introduction
 
+## Measurement
+
+::: columns
+::: {.column width="40%"}
+![](SpeckleFormation.png)
+<span style="font-size:50%;">From @SomeFundamentalPropertiesofSpeckle.</span>
+:::
+:::{.column width="60%"}
+Speckle is an interference phenomenon common to all coherent imaging systems (laser, ultrasound-B, sonar, SAR -- Synthetic Aperture Radar).
+
+We often assume that the total return is the sum of infinitely many elementary returns.
+:::
+:::
+
+
+
 ## What is "texture" in a SAR image? {.fullsmall .orange-slide}
 
 "Texture" is any departure from the fully-developed speckle hypothesis.
@@ -77,10 +93,10 @@ the basis for the multiplicative model [@SARImageStatisticalModelingPartISingleP
 
 ::: columns
 
-::: column 
+::: {.column width="60%"}
 
 ::: {.incremental}
-* The number of backscatterers $m$ is the number of elements in the resolution cell of the order of the wavelength
+* The number of backscatterers $m$ is the number of elements in the resolution cell ($\propto 1\text{ m}\times1\text{ m}$) of the order of the wavelength
    * X-band: $\approx 3\text{ cm}$
    * L-band: $\approx 20\text{ cm}$
 * Pasture, crops, and bare soil usually verify $m\to\infty$ and the other hypotheses.
@@ -88,7 +104,7 @@ the basis for the multiplicative model [@SARImageStatisticalModelingPartISingleP
 
 :::
 
-::: column 
+::: {.column width="40%"}
 
 ```{r}
 #| echo: false
@@ -126,8 +142,13 @@ $$
 Z=|S|^2 \sim \Gamma_{\text{SAR}}(\mu, L),
 $$
 a Gamma distribution conveniently parametrised by the mean $\mu>0$ and
-the shape $L\geq 1$.
-* If $L=1$, we fall back to the exponential model.
+the shape $L\geq 1$:
+$$
+\color{DarkOrchid}{f_{\Gamma_{\mathrm{SAR}}}\bigl(z;\mu, L\bigr) 
+    = \frac{L^L}{\Gamma(L)\,\mu^L} z^{L-1} 
+    \exp \biggl(-\frac{Lz}{\mu}\biggr)
+    \mathbb I_{\mathbb R_+}(z)}. 
+$$
 :::
 
 ## What happens if the speckle is not fully-developed? {.fullsmall}
@@ -192,15 +213,15 @@ We have two models to describe the observations:
 
 # Methodology
 
-## Goodness-of-fit tests {.fullsmall}
+## Goodness-of-fit tests 
 
 Given a random sample $\mathbf Z = (Z_1,Z_2,\dots,Z_n)$, our problem can be stated as a goodness-of-fit test:
-\begin{align}
-\mathcal H_0 &: \mathbf Z \text{ is compatible with } \Gamma_{\text{SAR}}(\mu,L),\\
-\mathcal H_1 &:  \mathbf Z \text{ is not compatible with } \mathcal \Gamma_{\text{SAR}}(\mu,L).
-\end{align}
+<!-- \begin{align} -->
+<!-- \mathcal H_0 &: \mathbf Z \text{ is compatible with } \Gamma_{\text{SAR}}(\mu,L),\\ -->
+<!-- \mathcal H_1 &:  \mathbf Z \text{ is not compatible with } \mathcal \Gamma_{\text{SAR}}(\mu,L). -->
+<!-- \end{align} -->
 
-We make it more specific:
+<!-- We make it more specific: -->
 \begin{align}
 \mathcal H_0 &: \mathbf Z \text{ is compatible with } \Gamma_{\text{SAR}}(\mu,L),\\
 \mathcal H_1 &:  \mathbf Z \text{ is compatible with } \mathcal G^0_{\text{SAR}}(\mu,\alpha,L).
@@ -235,8 +256,8 @@ The notion of "entropy" encompasses several measures of unpredictability.
 
 For a continuous random variable characterised by a probability density function $f$, we have (among infinitely many others):
 
-* Shannon entropy: $\int ( - \ln f) f$.
-* Rényi entropy of order $\lambda\in\mathbb R_+\setminus\{1\}$: $\frac{1}{\lambda-1} \ln \int f^\lambda$.
+* Shannon entropy [@Frery2024]: $\int ( - \ln f) f$.
+* Rényi entropy [@Alpala2025] of order $\lambda\in\mathbb R_+\setminus\{1\}$: $\frac{1}{\lambda-1} \ln \int f^\lambda$.
 * Tsallis entropy of order $\lambda\in\mathbb R_+\setminus\{1\}$: 
 $$
 \color{DarkOrchid}{\frac{1}{\lambda-1}\bigg(1-\int f^\lambda\bigg)}.
@@ -366,7 +387,10 @@ We use the heuristic spacing $k=\lfloor\sqrt{n}+0.5\rfloor$.
 
 ## Noteworthy facts
 
-Our [model-free]{.alert} estimator of $T_\lambda$ 
+Our [model-free]{.alert} estimator of $T_\lambda=\frac{1}{\lambda-1}
+     \left(
+       1-\int_{0}^{1}\bigl(Q'(p)\bigr)^{1-\lambda}\,\mathrm{d}p
+     \right)$
 $$
 \color{DarkOrchid}{\widehat T_{\lambda}(\mathbf{Z})
   = \frac{1}{\lambda-1}
@@ -389,7 +413,11 @@ $$
 
 ## We want [more]{.alert} I
 
-We improve $\widehat T_{\lambda}(\mathbf{Z})$ by simple bootstrap, and use $\widetilde T_{\lambda}(\mathbf{Z})$ that is less biased than $\widehat T_{\lambda}(\mathbf{Z})$.
+We improve $\widehat T_{\lambda}(\mathbf{Z})$ by simple bootstrap [@davisonhinkleybootstrap97], and use 
+$$
+\widetilde T_{\lambda}(\mathbf{Z}) = 2\widehat T_{\lambda}(\mathbf{Z}) - \frac1B \sum_{b=1}^B \widehat T_{\lambda}(\mathbf{Z^{(b)}})
+$$ 
+that is less biased than $\widehat T_{\lambda}(\mathbf{Z})$.
 
 ## We want [more]{.alert} II
 
@@ -465,19 +493,24 @@ cat('
 ## Conclusions {.orange-slide}
 
 ::: {.incremental}
-* We detect deviations from fully-developed speckle in intensity SAR images estimating the Tsallis entropy. 
+* We [detect and quantify]{.alert} deviations from fully-developed speckle in intensity SAR images estimating the Tsallis entropy. 
 
-* We improve the test with bootstrap correction and adaptive windows.
+* We [improve]{.alert} the test with bootstrap correction and adaptive windows.
 
-* We do not need training data or parametric modeling.
+* We do not need [training data or parametric modeling]{.alert}.
 
-* The method is robust for small samples, and effective in delineating heterogeneous regions from homogeneous ones. 
+* The method is [robust]{.alert} for small samples, and [effective]{.alert} in delineating heterogeneous regions from homogeneous ones. 
 
-* The results are interpretable.
+* The results are [interpretable]{.alert}.
 
 * [In the same way, you can make your distribution-free test for the problem you are studying]{.alert}
 :::
 
+## Our tool
+
+We used the [sexiest]{.alert} organ of the human body:
+
+![](BrainZombie.png){width=60% .fragment}
 
 ## Contact
 
