@@ -510,7 +510,7 @@ cat('
 
 We used the [sexiest]{.alert} organ of the human body:
 
-![](BrainZombie.png){width=60% .fragment}
+![](BrainZombie.png){width=60%}
 
 ## Contact
 
