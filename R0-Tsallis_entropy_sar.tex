@@ -271,7 +271,7 @@
 \hypersetup{
   pdftitle={Adaptive Model-Free Tsallis Entropy Estimation for Detecting Non-Fully-Developed Speckle},
   pdfauthor={Janeth Alpala; Alejandro C. Frery; Paolo Gamba; Abraão D. C. Nascimento; Andrea A. Rey},
-  pdfkeywords={Tsallis entropy, Gamma distribution, GI0
+  pdfkeywords={Tsallis entropy, Gamma distribution, \(\mathcal{G}_I^0\)
 distribution, heterogeneity, SAR, hypothesis testing, nonparametric
 estimation, bootstrap},
   colorlinks=true,
@@ -365,7 +365,7 @@ training data or scene-specific calibration.
 \end{abstract}
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-Tsallis entropy, Gamma distribution, GI0
+Tsallis entropy, Gamma distribution, \(\mathcal{G}_I^0\)
 distribution, heterogeneity, SAR, hypothesis testing, nonparametric
 estimation, bootstrap
 \end{IEEEkeywords}
@@ -790,12 +790,15 @@ observations with replacement from \(\bm{Z}\).
 A Monte Carlo study with \(1000\) replicas for each sample size
 \(n \in \{9, 25, 49, 81, 121\}\) was conducted using samples from
 \(\Gamma_{\mathrm{SAR}}(1,5)\). The choice of \(L=5\) and \(\mu=1\)
-(physically accepted) is illustrative: the estimator performs properly
-for \(L\geq1\). The results confirm that, for \(\lambda=0.85\), the
-bootstrap-corrected estimator \(\widetilde{T}_{\lambda}\) with \(B=200\)
-reduces both bias and MSE, compared with the original estimator
-\(\widehat{T}_{\lambda}\), with significant improvements for small
-samples, as shown in Figure~\ref{fig-bias_mse_Tsallis}.
+(physically accepted) is illustrative and corresponds to the case
+\(L>1\). For these values, the estimator performs properly with
+\(\lambda=0.85\), and the bootstrap-corrected estimator
+\(\widetilde{T}_{\lambda}\) with \(B=200\) reduces both bias and MSE
+compared with the original estimator \(\widehat{T}_{\lambda}\), as shown
+in Figure~\ref{fig-bias_mse_Tsallis}.
+
+For the case \(L=1\), the estimator also performs properly when using
+the bootstrap correction with \(\lambda=1.2\).
 
 \begin{figure}[hbt]
 
@@ -1930,6 +1933,8 @@ framework offers a statistically grounded alternative that provides
 interpretable significance measures and requires no labeled data, making
 it suitable for rapid detection, screening, and scenarios with limited
 data availability.
+
+\appendix[Derivation of the Tsallis Entropy of $\mathcal{G}^0_I$]{}
 
 Starting from the definition of the Tsallis entropy in
 \eqref{eq:tsallis} and the pdf that characterizes the

@@ -93,8 +93,8 @@ abstract: |
   Experimental validation using both simulated data and SAR imagery confirms the method's precision in detecting texture variability and discriminating between homogeneous and heterogeneous regions. 
   The proposed approach offers a principled, interpretable tool for automated SAR image analysis without requiring training data or scene-specific calibration.
 
-keywords: [Tsallis entropy, Gamma distribution, GI0 distribution, heterogeneity, SAR, hypothesis testing, nonparametric estimation, bootstrap]
-#, bootstrap]
+keywords: [Tsallis entropy, Gamma distribution, "$\\mathcal{G}_I^0$ distribution", heterogeneity, SAR, hypothesis testing, nonparametric estimation, bootstrap]
+
  
 #funding: 
  # statement: "The `quarto-ieee` "
@@ -490,8 +490,14 @@ Following Refs. [@Frery2024; @Alpala2024; @Alpala2025], we refine the nonparame
 \widetilde{T}_{\lambda} = 2\widehat{T}_{\lambda}(\bm{Z}) - \frac{1}{B} \sum_{b=1}^{B} \widehat{T}_{\lambda}(\bm{Z}^{(b)}),
 $$ where $B$ is the number of bootstrap replicas, and $\bm{Z}^{(b)}$ denotes the $b$-th resampled dataset obtained by drawing $n$ observations with replacement from $\bm{Z}$.
 
-A Monte Carlo study with $1000$ replicas for each sample size $n \in \{9, 25, 49, 81, 121\}$ was conducted using samples from $\Gamma_{\mathrm{SAR}}(1,5)$. The choice of $L=5$ and $\mu=1$ (physically accepted) is illustrative: the estimator performs properly for $L\geq1$. The results confirm that, for $\lambda=0.85$, the bootstrap-corrected estimator $\widetilde{T}_{\lambda}$ with $B=200$ reduces both bias and MSE, compared with the original estimator $\widehat{T}_{\lambda}$, with significant improvements for small samples, as shown in Figure \ref{fig-bias_mse_Tsallis}.
+A Monte Carlo study with $1000$ replicas for each sample size $n \in \{9, 25, 49, 81, 121\}$ was conducted using samples from $\Gamma_{\mathrm{SAR}}(1,5)$. 
+The choice of $L=5$ and $\mu=1$ (physically accepted) is illustrative and corresponds to the case $L>1$. 
+For these values, the estimator performs properly with $\lambda=0.85$, and the bootstrap-corrected 
+estimator $\widetilde{T}_{\lambda}$ with $B=200$ reduces both bias and MSE compared with the original 
+estimator $\widehat{T}_{\lambda}$, as shown in Figure&nbsp;\ref{fig-bias_mse_Tsallis}. 
 
+For the case $L=1$, the estimator also performs properly when using the bootstrap correction with 
+$\lambda=1.2$.
 ```{r Simulated_data_bias_tt, echo=FALSE, message=FALSE }
 set.seed(1234567890, kind = "Mersenne-Twister")
 #cache = TRUE, autodep = TRUE
@@ -1946,6 +1952,8 @@ Experiments with simulated and real SAR data showed that the method is well cali
 Comparative analysis using $p$-value maps, binary decisions, and quantitative metrics, such as F1-score, Kappa coefficient, and overall accuracy, showed that the adaptive Tsallis-based configuration outperforms the fixed sliding window in all evaluated scenes. The method thus provides a reliable and interpretable tool for heterogeneity detection in SAR imagery.
 
 Although machine learning-based SAR classifiers are widely used, this framework offers a statistically grounded alternative that provides interpretable significance measures and requires no labeled data, making it suitable for rapid detection, screening, and scenarios with limited data availability.
+
+[]{.appendix options="Derivation of the Tsallis Entropy of $\mathcal{G}^0_I$"}
 
 Starting from the definition of the Tsallis entropy in \eqref{eq:tsallis} and the pdf that characterizes the $\mathcal{G}^0_I(\alpha,\gamma,L)$ model, Eq. \eqref{E:gi01}, define: \begin{equation*}
 I = \int_0^\infty \left[ f_{\mathcal{G}_I^0}(z) \right]^\lambda \,\mathrm{d}z,
