@@ -17,7 +17,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-
+\usepackage{xcolor}
 \newtcolorbox{reviewbox}[1]{
 colback = white!5!white,
 colframe = purple!75!black,
@@ -31,7 +31,7 @@ title=#1
 	fonttitle=\bfseries,
 	title=#1
 }
-
+\newcommand{\assigned}[1]{\textcolor{blue}{\textbf{#1}}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
@@ -76,7 +76,7 @@ The topic fits TGRS, and the technical derivations appear sound. However, I have
 
 \begin{responsebox}{Response}
 
-% 
+\assigned{Revision assigned to Janeth}
 
 \end{responsebox}
 
@@ -99,7 +99,7 @@ Please clearly state—and quantitatively demonstrate—why Tsallis entropy is p
 
 \begin{responsebox}{Response}
 
-%
+\assigned{Revision assigned to Janeth}
 
 \end{responsebox}
 
@@ -126,7 +126,7 @@ At minimum, please provide a threshold sweep (e.g., $p$-threshold from $0.01$ to
 
 \begin{responsebox}{Response}
 
-% 
+\assigned{Revision assigned to Janeth}
 
 \end{responsebox}
 
@@ -149,7 +149,7 @@ Please discuss whether a fixed-window null distribution is an appropriate approx
 
 \begin{responsebox}{Response}
 
-% 
+\assigned{Revision assigned to Janeth}
 
 \end{responsebox}
 
