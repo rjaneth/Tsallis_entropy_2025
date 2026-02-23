@@ -3,7 +3,7 @@ title: Adaptive Model-Free Tsallis Entropy Estimation for Detecting Non-Fully-De
 format:
   ieee-pdf:
     pdf-engine: pdflatex # xelatex
-    #fig-dir: "Figures-R1"
+    fig-dir: "Figures-R1"
     keep-tex: true  
     classoption: lettersize
     tex-author-no-affiliation: true
@@ -140,7 +140,7 @@ bibliography: references.bib
 knitr::opts_chunk$set(
   echo = FALSE,
   cache = TRUE,
-  fig.path = "Figures/"
+  fig.path = "Figures-R1/"
 ) # unique path to save all code-generated and external figures
 
 # Configurar CRAN

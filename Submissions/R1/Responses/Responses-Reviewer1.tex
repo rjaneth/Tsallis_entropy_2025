@@ -1,0 +1,120 @@
+\documentclass[11pt]{report}
+
+\usepackage[pdftex]{geometry}
+\geometry{a4paper,left=2.8cm,right=2.8cm,top=1.5cm,bottom=1.5cm,twoside}
+
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{graphicx}
+	\graphicspath{./Comments/}
+\usepackage[many]{tcolorbox}
+\usepackage{natbib}
+\usepackage{hyperref}
+\usepackage{subfigure}
+\usepackage{bm,bbm}
+\usepackage{float}
+\usepackage{siunitx}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\newtcolorbox{reviewbox}[1]{
+colback = white!5!white,
+colframe = purple!75!black,
+fonttitle=\bfseries,
+title=#1
+}
+
+\newtcolorbox{responsebox}[1]{
+	colback = white!5!white,
+	colframe = white!75!black,
+	fonttitle=\bfseries,
+	title=#1
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+
+\begin{center}
+\large{\textbf{Response Letter to Reviewer \# 1}}
+
+\vglue 0.3cm
+
+\huge{ Adaptive Model-Free Tsallis Entropy Estimation for Detecting Non-Fully-Developed Speckle\\ (TGRS-2025-10064)}
+\end{center}
+
+%\authors
+\begin{center}
+\textbf{Janeth Alpala,  Alejandro C.\ Frery, Paolo Gamba, Abraão D. C. Nascimento, Andrea A. Rey }
+\end{center}
+
+\date{\today}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{0.5cm}
+\noindent Dear Editor
+\bigskip
+
+\noindent We are grateful to the reviewers for the valuable comments and the time spent on checking our manuscript. 
+We have addressed their comments towards improving the paper contents and presentation. 
+Below we detail the changes and updates incorporated into the manuscript in this round of review.
+
+\medskip
+
+%-------------------------------------
+\begin{reviewbox}{Comment 1}
+The core of the proposed method relies on Tsallis entropy, which introduces an additional entropic index $q$. However, the manuscript fails to provide a clear physical justification for the choice of $q$ in the context of SAR backscattering. The authors should explain how specific values of $q$ relate to different degrees of non-additivity in radar returns, or how they correspond to specific physical clutter models (e.g., $K$-distribution or $\mathcal{G}^{0}$ distribution).
+\end{reviewbox}
+
+\begin{responsebox}{Response}
+
+% 
+
+\end{responsebox}
+
+\vspace{1em}
+
+%-------------------------------------
+\begin{reviewbox}{Comment 2}
+While the bootstrap correction is intended to improve accuracy for small sample sizes, the paper does not discuss the computational cost associated with performing bootstrap resampling for every pixel or local window. Furthermore, in highly heterogeneous regions, the bootstrap might inadvertently sample across structural boundaries, leading to biased estimates. A more thorough analysis of the bootstrap’s variance reduction versus its potential bias in edge regions is needed.
+\end{reviewbox}
+
+\begin{responsebox}{Response}
+
+% 
+
+\end{responsebox}
+
+\vspace{1em}
+
+%-------------------------------------
+\begin{reviewbox}{Comment 3}
+The manuscript claims that the proposed tool does not require ``scene-specific calibration.'' However, nonparametric entropy estimators are known to be sensitive to the quantization of the input data (bit depth) and to any prior despeckling filters applied. The authors should include a sensitivity analysis showing how the $p$-value maps change when the input SAR data are scaled or filtered differently.
+\end{reviewbox}
+
+\begin{responsebox}{Response}
+
+% 
+
+\end{responsebox}
+
+\vspace{1em}
+
+%-------------------------------------
+\begin{reviewbox}{Comment 4}
+In the Related Work section, the authors focus heavily on classical information theory and basic statistical SAR modeling. While these are foundational, the discussion lacks a connection to contemporary SAR target detection and anomaly detection methodologies (2024--2025), such as ORPDet, PDE-guided approaches, BurgsVO, and S4Det.
+\end{reviewbox}
+
+\begin{responsebox}{Response}
+
+% 
+
+\end{responsebox}
+
+%-------------------------------------
+
+\end{document}
+

@@ -13,6 +13,54 @@ README.html
 #template.html
 #template.pdf
 
+### LaTeX ###
+## Core latex/pdflatex auxiliary files:
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+
+## Intermediate documents:
+*.dvi
+*.xdv
+*-converted-to.*
+# these rules might exclude image files for figures etc.
+# *.ps
+# *.eps
+# *.pdf
+
+## Generated if empty string is given at "Please type another file name for output:"
+.pdf
+
+## Bibliography auxiliary files (bibtex/biblatex/biber):
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+## Build tool auxiliary files:
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+
+## Build tool directories for auxiliary files
+# latexrun
+latex.out/
+
+
 *.log
 *.aux
 *.synctex.gz
@@ -29,18 +77,21 @@ R0-Tsallis_entropy_sar.tex
 /.quarto/
 _freeze/
 /R0-Tsallis_entropy_sar_cache
+/R1-Tsallis_entropy_sar_cache
 R0-Tsallis_entropy_sar.pdf
 Figures/fig-bias_mse_Tsallis-1.pdf
 Figures/fig-bias_mse_Tsallis-1.pdf
 Figures/fig-densities-tsallis6-1.pdf
 Figures/fig-optimal_order-tsallis-1.pdf
 Figures/fig-tsallis-convergence_L18-1.pdf
-R0-Tsallis_entropy_sar.tex
-R0-Tsallis_entropy_sar.tex
 Presentation/TsallisEntropyMeasureHeteroteneity.html
 R0-Tsallis_entropy_sar.tex
-R0-Tsallis_entropy_sar.tex
-R0-Tsallis_entropy_sar.tex
+R1-Tsallis_entropy_sar.tex
+R1-Tsallis_entropy_sar.pdf
 Presentation/SHORT-TsallisEntropyMeasureHeteroteneity.html
+
+*.log
+*.aux
+*.synctex.gz
 
 **/*.quarto_ipynb
