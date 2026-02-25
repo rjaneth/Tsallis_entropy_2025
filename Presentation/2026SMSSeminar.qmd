@@ -10,6 +10,7 @@ format:
     progress: true
     self-contained: true
     theme: vuw
+    # logo: /Users/acfrery/Library/CloudStorage/OneDrive-VictoriaUniversityofWellington-STAFF/Documents/VUW/Brand/Logo-1.png
 editor: source
 bibliography:
   - ../references.bib
@@ -64,7 +65,7 @@ With that,
 $$
 |S|^2\sim\text{E}(\mu),
 $$
-where $\mu$ is the backscatter, assumed [constant]{.alert} among pixels of the same type.
+where $\mu$ is the backscatter, assumed [constant]{.alert-warning} among pixels of the same type.
 
 Equivalently,
 $$
@@ -156,7 +157,7 @@ knitr::include_graphics("../Figures/dubli_1600.png")
    * a few in forested regions,
    * even less in urban areas.
 * When the backscatter changes among resolution cells.
-* [The $\Gamma_{\text{SAR}}$ model fails to describe the extreme variability.]{.alert}
+* [The $\Gamma_{\text{SAR}}$ model fails to describe the extreme variability.]{.alert-warning}
 
 :::
 
@@ -187,7 +188,7 @@ We have two models to describe the observations:
 * The $\Gamma_{\text{SAR}}(\mu,L)$ model for fully-developed speckle, and
 * The more general $\mathcal G^0_{\text{SAR}}(\mu,\alpha,L)$ law that includes the fully-developed speckle situation.
 
-[We want to measure how close (or far) we are from the fully-developed speckle model, but using small samples possibly contaminated by outliers.]{.alert}
+[We want to measure how close (or far) we are from the fully-developed speckle model, but using small samples possibly contaminated by outliers.]{.alert-warning}
 
 # Methodology
 
@@ -331,7 +332,7 @@ which allows us to
 * approximate the quantile function $Q(p)$ by order statistics, 
 * and its derivative $Q'(p)$ by their differences (spacings).
 * Approximate the integral by a sum.
-- [Our main result is ready!]{.alert}
+- [Our main result is ready!]{.alert-warning}
 
 ## {.fullsmall}
 
@@ -365,7 +366,7 @@ We use the heuristic spacing $k=\lfloor\sqrt{n}+0.5\rfloor$.
 
 ## Noteworthy facts
 
-Our [model-free]{.alert} estimator of $T_\lambda$ 
+Our [model-free]{.alert-warning} estimator of $T_\lambda$ 
 $$
 \color{DarkOrchid}{\widehat T_{\lambda}(\mathbf{Z})
   = \frac{1}{\lambda-1}
@@ -386,18 +387,18 @@ $$
 
 :::
 
-## We want [more]{.alert} I
+## We want [more]{.alert-warning} I
 
 We improve $\widehat T_{\lambda}(\mathbf{Z})$ by simple bootstrap, and use $\widetilde T_{\lambda}(\mathbf{Z})$ that is less biased than $\widehat T_{\lambda}(\mathbf{Z})$.
 
-## We want [more]{.alert} II
+## We want [more]{.alert-warning} II
 
 We optimise $\lambda$ with simulated data to achieve maximum discrimination between the models, and obtain 
 $$
 \lambda_{\text{optimal}} = 0.85.
 $$
 
-## We want [more]{.alert} III
+## We want [more]{.alert-warning} III
 
 We used adaptive windows, i.e., the sample size varies according to a rough initial estimate of homogeneity based on the coefficient of variation [@Park1999].
 
@@ -474,7 +475,7 @@ cat('
 
 * The results are interpretable.
 
-* [In the same way, you can make your distribution-free test for the problem you are studying]{.alert}
+* [In the same way, you can make your distribution-free test for the problem you are studying]{.alert-warning}
 :::
 
 
@@ -494,7 +495,7 @@ New Zealand\
   \
 alejandro.frery at vuw.ac.nz\
  \
-[Feel free to contact me!]{.alert}
+[Feel free to contact me!]{.alert-warning}
 ::: 
 :::
 
