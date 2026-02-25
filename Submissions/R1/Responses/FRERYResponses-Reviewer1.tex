@@ -1,0 +1,162 @@
+\documentclass[11pt]{report}
+
+\usepackage[pdftex]{geometry}
+\geometry{a4paper,left=2.8cm,right=2.8cm,top=1.5cm,bottom=1.5cm,twoside}
+
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{graphicx}
+	\graphicspath{./Comments/}
+\usepackage[many]{tcolorbox}
+\usepackage{natbib}
+\usepackage[hidelinks]{hyperref}
+\usepackage{subfigure}
+\usepackage{bm,bbm}
+\usepackage{float}
+\usepackage{siunitx}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+
+\newtcolorbox{reviewbox}[1]{
+colback = white!5!white,
+colframe = purple!75!black,
+fonttitle=\bfseries,
+title=#1
+}
+
+\newtcolorbox{responsebox}[1]{
+	colback = white!5!white,
+	colframe = white!75!black,
+	fonttitle=\bfseries,
+	title=#1
+}
+
+\newcommand{\assigned}[1]{\textcolor{blue}{\textbf{#1}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+
+\begin{center}
+\large{\textbf{Response Letter to Reviewer \# 1}}
+
+\vglue 0.3cm
+
+\huge{ Adaptive Model-Free Tsallis Entropy Estimation for Detecting Non-Fully-Developed Speckle\\ (TGRS-2025-10064)}
+\end{center}
+
+%\authors
+\begin{center}
+\textbf{Janeth Alpala,  Alejandro C.\ Frery, Paolo Gamba, Abraão D. C. Nascimento, Andrea A. Rey }
+\end{center}
+
+\date{\today}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{0.5cm}
+\noindent Dear Editor
+\bigskip
+
+\noindent We are grateful to the reviewers for the valuable comments and the time spent on checking our manuscript. 
+We have addressed their comments towards improving the paper contents and presentation. 
+Below we detail the changes and updates incorporated into the manuscript in this round of review.
+
+\medskip
+
+%-------------------------------------
+\begin{reviewbox}{Comment 1 }
+The core of the proposed method relies on Tsallis entropy, which introduces an additional entropic index $q$. However, the manuscript fails to provide a clear physical justification for the choice of $q$ in the context of SAR backscattering. The authors should explain how specific values of $q$ relate to different degrees of non-additivity in radar returns, or how they correspond to specific physical clutter models (e.g., $K$-distribution or $\mathcal{G}^{0}$ distribution).
+\end{reviewbox}
+
+\begin{responsebox}{Response}
+
+\citet{Tsallis1988} observed that in multifractal analysis, it is customary to scale probabilities raising them to a positive power $q$ because using $p_i^q$ renders ``richer and more complex [behavior]'' \citep{FractalMeasuresandTheirSingularitiestheCharacterizationofStrangeSets}.
+Tsallis took that idea and defined the quantity 
+$$
+S_q = k \frac{1-\sum_{i} p_i^q}{q-1}
+$$
+``to generalize the standard expression of the entropy $S$ in information theory''.
+He then proved that $S_q$ has several useful properties that collapse to classical results when $q\to1$.
+This variant of entropy later received his name and has been extensively used.
+In our article, we denote the Tsallis entropy as $T_\lambda$.
+
+The article by \citet{ImageThresholdingUsingTsallisEntropy} is one of the first that used the Tsallis entropy for image analysis, specifically for optical image segmentation.
+The authors state that
+\begin{quote}
+The parameter $q$ in Tsallis entropy is usually
+interpreted as a quantity characterizing the degree
+of nonextensivity of a system. An appropriate
+choice of the entropic index $q$ to nonextensive
+physical systems still remains an open field of
+study. In some cases the parameter $q$ has no
+physical meaning, but it gives new possibilities in
+the agreement of theoretical models and experi-
+mental data [\dots]. In
+othercases,q is solely determined by constraints of
+the problem and thereby $q$ may have a physical
+meaning [\dots].
+\end{quote}
+In line with this work, we used grid search to find the best value of $q$ in our problem and found that $q=0.85$ yielded the smallest bias and mean squared error in all but one case.
+Interestingly, \citet{TheApplicationofTsallisEntropyBasedSelfAdaptiveAlgorithmforMultiThresholdImageSegmentation} found that $q=0.80$ was the best parameter for optical image segmentation.
+
+There is an interpretation for the value we found ($q=0.85$).
+The summands that define $S_q$ are power transformations of probabilities.
+If $q=1$, $S_q$ reduces to the Shannon entropy.
+If $q>1$, then ``large'' probabilities have more weight in the sum.
+If $q<1$, then the effect of ``small'' probabilities is amplified.
+The difference between the gamma and $\mathcal G^0$ models lies mostly in the tails, i.e., in how these laws describe rare events.
+Then, $q<1$ highlights this difference, serving the purpose of the test we proposed.
+\end{responsebox}
+
+\vspace{1em}
+
+%-------------------------------------
+\begin{reviewbox}{Comment 2}
+While the bootstrap correction is intended to improve accuracy for small sample sizes, the paper does not discuss the computational cost associated with performing bootstrap resampling for every pixel or local window. Furthermore, in highly heterogeneous regions, the bootstrap might inadvertently sample across structural boundaries, leading to biased estimates. A more thorough analysis of the bootstrap’s variance reduction versus its potential bias in edge regions is needed.
+\end{reviewbox}
+
+\begin{responsebox}{Response}
+
+\assigned{Revision assigned to Prof. Alejandro}
+
+Influencia de outliers en bootstrap: lo resolvemos con las ventanas adaptativas 
+
+\end{responsebox}
+
+\vspace{1em}
+
+%-------------------------------------
+\begin{reviewbox}{Comment 3}
+The manuscript claims that the proposed tool does not require ``scene-specific calibration.'' However, nonparametric entropy estimators are known to be sensitive to the quantization of the input data (bit depth) and to any prior despeckling filters applied. The authors should include a sensitivity analysis showing how the $p$-value maps change when the input SAR data are scaled or filtered differently.
+\end{reviewbox}
+
+\begin{responsebox}{Response}
+
+\assigned{Revision assigned to Prof. Alejandro}
+Aclarar que no filtramos y usamos double (?) Si filtráramos tendríamos que estimar L localmente 
+
+\end{responsebox}
+
+\vspace{1em}
+
+%-------------------------------------
+\begin{reviewbox}{Comment 4}
+In the Related Work section, the authors focus heavily on classical information theory and basic statistical SAR modeling. While these are foundational, the discussion lacks a connection to contemporary SAR target detection and anomaly detection methodologies (2024--2025), such as ORPDet, PDE-guided approaches, BurgsVO, and S4Det.
+\end{reviewbox}
+
+\begin{responsebox}{Response}
+
+\assigned{Revision assigned to Prof. Andrea}
+
+\end{responsebox}
+
+%-------------------------------------
+
+\bibliography{../../../references}
+\bibliographystyle{agsm}
+
+\end{document}
+
