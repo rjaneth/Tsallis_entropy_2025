@@ -73,6 +73,8 @@ The core of the proposed method relies on Tsallis entropy, which introduces an a
 
 \begin{responsebox}{Response}
 
+For simplicity, our reply will focus on discrete probabilities.
+
 \citet{Tsallis1988} observed that in multifractal analysis, it is customary to scale probabilities raising them to a positive power $q$ because using $p_i^q$ renders ``richer and more complex [behavior]'' \citep{FractalMeasuresandTheirSingularitiestheCharacterizationofStrangeSets}.
 Tsallis took that idea and defined the quantity 
 $$
@@ -109,6 +111,8 @@ If $q>1$, then ``large'' probabilities have more weight in the sum.
 If $q<1$, then the effect of ``small'' probabilities is amplified.
 The difference between the gamma and $\mathcal G^0$ models lies mostly in the tails, i.e., in how these laws describe rare events.
 Then, $q<1$ highlights this difference, serving the purpose of the test we proposed.
+
+\textcolor{red}{Decidir qué poner en el artículo}
 \end{responsebox}
 
 \vspace{1em}
@@ -119,10 +123,14 @@ While the bootstrap correction is intended to improve accuracy for small sample 
 \end{reviewbox}
 
 \begin{responsebox}{Response}
+Outliers may have a detrimental effect in resampling techniques.
+\citet{JackknifeAfterBootstrapStandardErrorsandInfluenceFunctions} proposed checking bootstrap samples with a jackknife procedure to identify outliers.
+After that seminal work, many proposals have been studied, e.g., using the influence function \citep{RobustBootstrapwithNonRandomWeightsBasedontheInfluenceFunction}.
+To the best of our knowledge, those approaches consider a fixed sample size.
+Our proposal follows a different path: the adaptive windows are expected to discard samples which are in disagreement with the observations around the center pixel.
+Such trimming may reach almost \SI{80}{\percent} of the observations when reducing from a window of size $11\times11$ pixels to another of size $5\times5$ pixels.
 
-\assigned{Revision assigned to Prof. Alejandro}
-
-Influencia de outliers en bootstrap: lo resolvemos con las ventanas adaptativas 
+\textcolor{red}{Decidir qué se pone en el artículo.}
 
 \end{responsebox}
 
@@ -134,9 +142,14 @@ The manuscript claims that the proposed tool does not require ``scene-specific c
 \end{reviewbox}
 
 \begin{responsebox}{Response}
+The effect of the quantisation has been studied, among others, by \citet{beirlant1997nonparametric} and, as noted by the reviewer, it is not negligible when the number of possible values (bins) is not too big.
+In our case, the SAR images we used are stored in single or double precision.
+The IEEE 754 Standards stipulates that these formats are able to encode $2^{32}$ and $2^{64}$ bit patterns.
+Such amount of possible values has no effect on the estimation.
 
-\assigned{Revision assigned to Prof. Alejandro}
-Aclarar que no filtramos y usamos double (?) Si filtráramos tendríamos que estimar L localmente 
+Moreover, we do not apply any despeckling filter.
+
+\textcolor{red}{No creo que haga falta poner nada en el artículo.}
 
 \end{responsebox}
 
