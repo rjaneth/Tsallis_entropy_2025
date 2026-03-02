@@ -73,46 +73,46 @@ The core of the proposed method relies on Tsallis entropy, which introduces an a
 
 \begin{responsebox}{Response}
 
-For simplicity, our reply will focus on discrete probabilities.
+For simplicity, our reply will focus on discrete probabilities of the form $(p_i)_{I\geq 1}$.
 
-\citet{Tsallis1988} observed that in multifractal analysis, it is customary to scale probabilities raising them to a positive power $q$ because using $p_i^q$ renders ``richer and more complex [behavior]'' \citep{FractalMeasuresandTheirSingularitiestheCharacterizationofStrangeSets}.
+\citet{Tsallis1988} observed that in multifractal analysis, it is customary to scale probabilities raising them to a positive power $\lambda$, termed ``entropic index,'' because using $p_i^\lambda$ renders ``richer and more complex [behavior]'' \citep{FractalMeasuresandTheirSingularitiestheCharacterizationofStrangeSets}.
 Tsallis took that idea and defined the quantity 
 $$
-S_q = k \frac{1-\sum_{i} p_i^q}{q-1}
+S_\lambda = k \frac{1-\sum_{i} p_i^\lambda}{\lambda-1}
 $$
 ``to generalize the standard expression of the entropy $S$ in information theory''.
-He then proved that $S_q$ has several useful properties that collapse to classical results when $q\to1$.
+He then proved that $S_\lambda$ has several useful properties that collapse to classical results when $\lambda\to1$.
 This variant of entropy later received his name and has been extensively used.
 In our article, we denote the Tsallis entropy as $T_\lambda$.
 
 The article by \citet{ImageThresholdingUsingTsallisEntropy} is among the first to use the Tsallis entropy for image analysis, specifically for optical image segmentation.
 The authors state that
 \begin{quote}
-The parameter $q$ in Tsallis entropy is usually
+The parameter $\lambda$ in Tsallis entropy is usually
 interpreted as a quantity characterizing the degree
 of nonextensivity of a system. An appropriate
-choice of the entropic index $q$ to nonextensive
+choice of the entropic index $\lambda$ to nonextensive
 physical systems still remains an open field of
-study. In some cases the parameter $q$ has no
+study. In some cases the parameter $\lambda$ has no
 physical meaning, but it gives new possibilities in
 the agreement of theoretical models and experi-
 mental data [\dots]. In
 othercases,q is solely determined by constraints of
-the problem and thereby $q$ may have a physical
+the problem and thereby $\lambda$ may have a physical
 meaning [\dots].
 \end{quote}
-In line with this work, we used grid search to find the optimal value of $q$ for our problem and found that $q=0.85$ yielded the smallest bias and mean squared error in all but one case.
-Interestingly, \citet{TheApplicationofTsallisEntropyBasedSelfAdaptiveAlgorithmforMultiThresholdImageSegmentation} found that $q=0.80$ was the best parameter for optical image segmentation.
+In line with this work, we used grid search to find the optimal value of $\lambda$ for our problem and found that $\lambda=0.85$ yielded the smallest bias and mean squared error in all but one case.
+Interestingly, \citet{TheApplicationofTsallisEntropyBasedSelfAdaptiveAlgorithmforMultiThresholdImageSegmentation} found that $\lambda=0.80$ was the best parameter for optical image segmentation.
 
-There is an interpretation for the value we found ($q=0.85$).
-The summands that define $S_q$ are power transformations of probabilities.
-If $q=1$, $S_q$ reduces to the Shannon entropy.
-If $q>1$, then ``large'' probabilities have more weight in the sum.
-If $q<1$, then the effect of ``small'' probabilities is amplified.
+There is an interpretation for the value we found ($\lambda=0.85$).
+The summands that define $S_\lambda$ are power transformations of probabilities.
+If $\lambda=1$, $S_\lambda$ reduces to the Shannon entropy.
+If $\lambda>1$, then ``large'' probabilities have more weight in the sum.
+If $\lambda<1$, then the effect of ``small'' probabilities is amplified.
 The difference between the gamma and $\mathcal G^0$ models lies mostly in the tails, i.e., in how these laws describe rare events.
-Then, $q<1$ highlights this difference, serving the purpose of the test we proposed.
+Then, $\lambda<1$ highlights this difference, serving the purpose of the test we proposed.
 
-\textcolor{red}{Decidir qué poner en el artículo}
+\textcolor{red}{Va a un apéndice}
 \end{responsebox}
 
 \vspace{1em}
@@ -130,7 +130,7 @@ To the best of our knowledge, those approaches consider a fixed sample size.
 Our proposal follows a different path: the adaptive windows are expected to discard samples which are in disagreement with the observations around the center pixel.
 Such trimming may reach almost \SI{80}{\percent} of the observations when reducing from a window of size $11\times11$ pixels to another of size $5\times5$ pixels.
 
-\textcolor{red}{Decidir qué se pone en el artículo.}
+\textcolor{red}{Transformar esto en texto del artículo.}
 
 \end{responsebox}
 
