@@ -117,11 +117,24 @@ In the Related Work section, the authors focus heavily on classical information 
 
 \begin{responsebox}{Response}
 
-\assigned{Revision assigned to Prof. Andrea}
+In recent years, deep learning-based methods have demonstrated superior performance in automatic feature extraction for SAR imagery, particularly in ship detection. For instance, \cite{ORPSDOuterRectangularProjectionBasedRepresentationforOrientedShipDetectioninSARImages} proposes a methodology that incorporates an outer rectangular projection and a convex quadrilateral rectification scheme to feed a lightweight fully convolutional network. Additionally, the integration of partial differential equations into neural network architectures has yielded promising improvements in vessel identification \cite{PDEGuidedDiverseFeatureLearningforSARRotatedShipDetection, BurgsVOBurgsAssociatedVertexOffsetEncodingSchemeforDetectingRotatedShipsinSARImages, S4DetBreadthandAccurateSineSingleStageShipDetectionforRemoteSenseSARImagery}.
+
+Techniques such as convolutional neural networks, U-Net architectures, and transformer-based models leverage hierarchical feature representations learned from large annotated datasets, enabling robust detection even under complex clutter conditions.
+Nevertheless, deep learning algorithms present three primary limitations: \emph{(i)} their applicability is often restricted, as they require large volumes of labeled SAR data, rendering them costly and time-consuming; \emph{(ii)} they lack physical interpretability, complicating the validation of decision processes against known statistical properties of SAR imagery; and \emph{(iii)} they are highly sensitive to domain shift, as networks trained on a specific configuration frequently generalize poorly to images acquired under disparate conditions.
+
+In contrast, the proposed method directly exploits the statistical properties of SAR images through the use of Tsallis entropy as a segmentation criterion. 
+This choice is physically motivated by the fact that SAR images are well characterized by heavy-tailed distributions (such as the $\mathcal{G}^0$ family), while the non-extensive parameter $\lambda$ of the Tsallis entropy provides a flexible mechanism to adapt the measure to different levels of scene heterogeneity. 
+Consequently, the approach is inherently generalizable across sensors, resolutions, and target types, requiring no retraining or hyperparameter tuning beyond the selection of $\lambda$.
+Furthermore, methods based on entropic thresholding and region analysis are fully transparent and interpretable: the segmentation criterion has a closed-form expression and a clear statistical meaning, allowing practitioners to audit and validate results.
+Rather than competing with deep learning approaches, the proposed method offers a suitable alternative for scenarios where labeled data are scarce or unavailable, where physical interpretability is required, or where computational resources are constrained.
+
 
 \end{responsebox}
 
 %-------------------------------------
+
+\bibliography{../../../references}
+\bibliographystyle{plain}
 
 \end{document}
 
