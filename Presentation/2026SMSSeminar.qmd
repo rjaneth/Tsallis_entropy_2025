@@ -9,8 +9,8 @@ format:
     slideNumber: "c/t"
     progress: true
     self-contained: true
-    theme: vuw
-    # logo: /Users/acfrery/Library/CloudStorage/OneDrive-VictoriaUniversityofWellington-STAFF/Documents/VUW/Brand/Logo-1.png
+    theme: vuw 
+    logo: /Users/acfrery/Library/CloudStorage/OneDrive-VictoriaUniversityofWellington-STAFF/Documents/VUW/Brand/Logo-1.png
 editor: source
 bibliography:
   - ../references.bib
@@ -32,293 +32,124 @@ set.seed(123456789, kind="Mersenne-Twister")
 
 # Introduction
 
-## What is "texture" in a SAR image? {.fullsmall .orange-slide}
+## Problem statement
 
-"Texture" is any departure from the fully-developed speckle hypothesis.
+:::: {.columns}
 
-The observation in a pixel is
-$$
-S = \sum_{\ell=1}^m S_\ell e^{j \phi_\ell}.
-$$
-If
+::: {.column width="80%"}
+* Several imaging modalities employ coherent imaging, e.g.,
 
-* $m\to\infty$ (infinitely many scatterers in the resolution cell),
-* $\max\operatorname{Var}(S_\ell)<\infty$ (no scatterer dominates),
-* $|S_\ell| \perp |S_k|$ (independent amplitudes),
-* $\phi_\ell\sim\mathcal U(-\pi,\pi]$ (uninformative phases),
-* $\phi_\ell \perp \phi_k$ (independent phases),
-* the amplitudes are collectively independent of the phases,
+   * Laser (does a laser pointer produce a flat light spot?)
+   * Ultrasound-B
+   * Sonar
+   * Synthetic Aperture Radar (SAR)
+   
+* When a surface is illuminated with coherent illumination, the resulting image 
+is degraded by a granular interference pattern known as speckle.
 
-then$\dots$
-
-## What is "fully-developed speckle"? {.fullsmall .orange-slide}
-
-$\dots$ we can invoke the Central Limit Theorem:
-$$
-S = \sum_{\ell=1}^m S_\ell e^{j \phi_\ell} =
-\underbrace{\sum_{\ell=1}^m |S_\ell| \cos \phi_\ell}_{\Re(S)} +
-j \underbrace{\sum_{\ell=1}^m |S_\ell| \sin \phi_\ell}_{\Im(S)},
-$$
-and say that $\Re(S)$ and $\Im(S)$ are asymptotically normal distributed and independent.
-
-With that,
-$$
-|S|^2\sim\text{E}(\mu),
-$$
-where $\mu$ is the backscatter, assumed [constant]{.alert-warning} among pixels of the same type.
-
-Equivalently,
-$$
-|S|^2\sim\mu\text{E}(1),
-$$
-the basis for the multiplicative model [@SARImageStatisticalModelingPartISinglePixelStatisticalModels].
-
-## Do we observe fully-developed speckle in practice?
-
-::: columns
-
-::: column 
-
-::: {.incremental}
-* The number of backscatterers $m$ is the number of elements in the resolution cell of the order of the wavelength
-   * X-band: $\approx 3\text{ cm}$
-   * L-band: $\approx 20\text{ cm}$
-* Pasture, crops, and bare soil usually verify $m\to\infty$ and the other hypotheses.
+* Speckle is a high-contrast granular pattern that arises from the interference 
+of scattered wave fronts.
 :::
 
+::: {.column width="20%"}
+![](../Figures/SimulatedSpeckle.png){style="height: 60vh; width: auto; object-fit: contain;"}
+
+*Simulated and actual speckle; FROM: @SimulationSpatiallyCorrelatedClutter2009 *
 :::
 
-::: column 
+::::
 
-```{r}
-#| echo: false
-#| fig-align: center
-#| fig-width: 10
-#| fig-height: 10
-#| out-width: "100%"
+## 
 
-knitr::include_graphics("../Figures/foggia-italy_1900.png")
+The complex observation $S$ is the summation of complex quantities.
+
+```{r ComplexReturn}
+N <- 15 # number of scatterers
+sigma2 <- 1
+RAi <- c(rnorm(n = N, mean = 0, sd = sqrt(sigma2)))
+IAi <- c(rnorm(n = N, mean = 0, sd = sqrt(sigma2)))
+
+DATA <- data.frame(RAi, IAi)
+
+ggplot(data=DATA) +
+  geom_segment(aes(x=c(0, cumsum(RAi)[1:(N-1)]), # All vectors
+                   y=c(0, cumsum(IAi)[1:(N-1)]), 
+                   xend=cumsum(RAi), yend=cumsum(IAi)), 
+               arrow=arrow(ends="last", 
+                           type = "closed", 
+                           angle = 15, 
+                           length = unit(.3, units="cm")), 
+               linewidth=.3, color="black") +
+  geom_segment(aes(x=0, y=0, xend=sum(RAi), yend=sum(IAi)), # Sum of the vectors
+               arrow=arrow(ends="last", 
+                           type = "closed", 
+                           angle = 15, 
+                           length = unit(.4, units="cm")), 
+               linewidth=1.2,
+               col="maroon") +
+  geom_segment(aes(x=RAi[1], xend=RAi[1], y=0, yend=IAi[1]), linewidth=.2, linetype="dashed") +
+  geom_segment(aes(x=0, xend=RAi[1], y=IAi[1], yend=IAi[1]), linewidth=.2, linetype="dashed") +
+  annotate("text", label="Re(italic(S)[1])", parse=TRUE, x=RAi[1], y=0, vjust=0, size=5, family="serif") +
+  annotate("text", label="Im(italic(S)[1])", parse=TRUE, x=0, y=IAi[1], hjust=1, size=5, family="serif") +
+  annotate("text", label="italic(S)[1]", parse=TRUE, x=RAi[1], y=IAi[1], hjust=0, size=5, family="serif") +
+  annotate("text", label="italic(S)", parse=TRUE, x=sum(RAi)-.05, y=sum(IAi), hjust=1, size=7, family="serif") +
+  geom_hline(yintercept=0, col="grey32") +
+  geom_vline(xintercept=0, col="grey32") +
+  coord_fixed() +
+  xlab("Real components") + ylab("Imaginary components") 
 ```
 
-:::
-:::
 
-## Do we observe fully-developed speckle in practice?
+## What is Entropy?
 
-We took a sample of $15561$ observations over crops.
-
-::: columns
-::: column
-![](../Figures/dark_HV_Re.svg){out-width="90%"}
-:::
-::: column
-![](../Figures/darkHVfit.svg){out-width="90%"}
-:::
-:::
-
-## Multilook imaging
-
-:::{.incremental}
-* Exponentially distributed observations are very noisy.
-* We average $L$ (ideally independent) pixels, and obtain a multilook image with (ideally) $L$ looks.
-* Under the assumptions of fully-developed speckle,
-$$
-Z=|S|^2 \sim \Gamma_{\text{SAR}}(\mu, L),
-$$
-a Gamma distribution conveniently parametrised by the mean $\mu>0$ and
-the shape $L\geq 1$.
-* If $L=1$, we fall back to the exponential model.
-:::
-
-## What happens if the speckle is not fully-developed? {.fullsmall}
-
-::: columns
-
-::: column
-
+:::: columns
+::: {.column width="35%"}
 ```{r}
 #| echo: false
 #| fig-align: center
 #| fig-width: 10
 #| fig-height: 10
 #| out-width: "100%"
-
-knitr::include_graphics("../Figures/dubli_1600.png")
-```
-
-:::
-
-::: column
-
-:::{.incremental}
-
-* This may occur when at least one of the hypotheses is violated.
-* Typically, when $m$ is finite, i.e., the number of elementary backscatterers in the resolution cell is not big:
-   * a few in forested regions,
-   * even less in urban areas.
-* When the backscatter changes among resolution cells.
-* [The $\Gamma_{\text{SAR}}$ model fails to describe the extreme variability.]{.alert-warning}
-
-:::
-
-:::
-
-:::
-
-## Non fully-developed speckle
-
-The $\mathcal G^0_{\text{SAR}}$ model generalises the $\Gamma_{\text{SAR}}$ 
-distribution and incorporates $\alpha<0$, such that $|\alpha|\propto m$, the number of backscatterers:
-\begin{multline}    
-\color{DarkOrchid}{f_{\mathcal{G}^0_{\text{SAR}}}\bigl(z; \mu, \alpha, L \bigr)} 
-    = \\ \color{DarkOrchid}{\frac{L^L\,\Gamma(L-\alpha)}
-    {\bigl[-\mu(\alpha+1)\bigr]^{\alpha} \Gamma(-\alpha)\,\Gamma(L)}
-    \frac{z^{L-1}}
-    {\bigl[-\mu(\alpha+1)+Lz\bigr]^{L-\alpha}}
-    \mathbb I_{\mathbb R_+}(z)},
-\end{multline}
-where $\mu > 0$ is the mean intensity.
-
-This model can describe data with extreme variability ($\alpha\approx0$) and fully-developed speckle ($\alpha\to-\infty$).
-
-## Recap {.orange-slide}
-
-We have two models to describe the observations:
-
-* The $\Gamma_{\text{SAR}}(\mu,L)$ model for fully-developed speckle, and
-* The more general $\mathcal G^0_{\text{SAR}}(\mu,\alpha,L)$ law that includes the fully-developed speckle situation.
-
-[We want to measure how close (or far) we are from the fully-developed speckle model, but using small samples possibly contaminated by outliers.]{.alert-warning}
-
-# Methodology
-
-## Goodness-of-fit tests {.fullsmall}
-
-Given a random sample $\mathbf Z = (Z_1,Z_2,\dots,Z_n)$, our problem can be stated as a goodness-of-fit test:
-\begin{align}
-\mathcal H_0 &: \mathbf Z \text{ is compatible with } \Gamma_{\text{SAR}}(\mu,L),\\
-\mathcal H_1 &:  \mathbf Z \text{ is not compatible with } \mathcal \Gamma_{\text{SAR}}(\mu,L).
-\end{align}
-
-We make it more specific:
-\begin{align}
-\mathcal H_0 &: \mathbf Z \text{ is compatible with } \Gamma_{\text{SAR}}(\mu,L),\\
-\mathcal H_1 &:  \mathbf Z \text{ is compatible with } \mathcal G^0_{\text{SAR}}(\mu,\alpha,L).
-\end{align}
-
-It is a nested-distribution problem.
-There are plenty of tests for problems like this.
-We propose one that:
-
-::: {.incremental}
-* Performs well with relatively small samples.
-* Is resistant to departures from the hypothesised models.
-* Is computationally efficient.
-:::
-
-## What do we use?
-
-```{r}
-#| echo: false
-#| fig-align: center
-#| fig-width: 10
-#| fig-height: 10
-#| out-width: "100%"
-
 knitr::include_graphics("../Figures/entropy.jpg")
 ```
+:::
 
+::: {.column width="65%"}
+::: {.incremental}
+Citing @EntropyAMeasureofJustHowLittleWeReallyKnow:
+
+* Life is an anthology of destruction. 
+* Everything you build eventually breaks.
+* Everyone you love will die. 
+* The entire universe follows a dismal trek toward a dull state of ultimate turmoil.
+* **Entropy is always on the rise** is among nature's most inescapable commandments.
+* [Entropy is a measure of disorderliness.]{.alert-danger}
+:::
+:::
+::::
 
 ## Flavours of Entropy
 
 The notion of "entropy" encompasses several measures of unpredictability.
 
-For a continuous random variable characterised by a probability density function $f$, we have (among infinitely many others):
+For a continuous random variable with distribution $\mathcal D$ characterised by a probability density function $f$, we have (among infinitely many others):
 
-* Shannon entropy: $\int ( - \ln f) f$.
-* Rényi entropy of order $\lambda\in\mathbb R_+\setminus\{1\}$: $\frac{1}{\lambda-1} \ln \int f^\lambda$.
-* Tsallis entropy of order $\lambda\in\mathbb R_+\setminus\{1\}$: 
+* Shannon entropy: $H^{\text{S}}(\mathcal D)  = \int ( - \ln f) f$.
+* Rényi entropy of order $H^{\text{R}}_\lambda(\mathcal D)  = \frac{1}{\lambda-1} \ln \int f^\lambda$, $\lambda\in\mathbb R_+\setminus\{1\}$.
+* Tsallis entropy of order 
 $$
-\color{DarkOrchid}{\frac{1}{\lambda-1}\bigg(1-\int f^\lambda\bigg)}.
+H^{\text{T}}_\lambda(\mathcal D) = \color{DarkOrchid}{T_\lambda(\mathcal D)  = \frac{1}{\lambda-1}\bigg(1-\int f^\lambda\bigg)},
 $$
+with $\lambda\in\mathbb R_+\setminus\{1\}$.
 
-## Tsallis entropy: $\Gamma_{\mathrm{SAR}}$ and $\mathcal{G}^0_{\text{SAR}}$ distributions {.fullsmall}
-
-\begin{multline}
-\label{eq:gammasar-Tsallis}
-T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr)=
-\frac{1}{\lambda-1}\Bigl\{1-
-\exp\bigl[
-(1-\lambda)\ln\mu
-+(\lambda-1)\ln L
-+\ln\Gamma\bigl(\lambda(L-1)+1\bigr) \\
--\lambda\ln\Gamma(L)
--(\lambda(L-1)+1)\ln\lambda
-\bigr]\Bigr\}, 
-\end{multline}
-and
-\begin{multline}
-\label{eq:GI0-Tsallis}
-  T_\lambda\bigl(\mathcal{G}^0_{\text{SAR}}(\mu,\alpha,L)\bigr) = T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr) + 
-  \frac{1}{\lambda-1}\,
-  \exp\Bigl[
-  (1-\lambda)\ln\mu
-  +(\lambda-1)\ln L\\
-  +\ln\Gamma\bigl(\lambda(L-1)+1\bigr)
-  -\lambda\ln\Gamma(L)
-  \Bigr] 
-  \Bigl\{1-
-  \exp\bigl[
-  (1-\lambda)\ln(-\alpha-1)
-  +\lambda\ln\Gamma(L-\alpha)\\
-  -\lambda\ln\Gamma(-\alpha) 
-  +\ln\Gamma\bigl(\lambda(1-\alpha)-1\bigr)
-  -\ln\Gamma\bigl(\lambda(L-\alpha)\bigr)
-  \bigr]\Bigr\}.
-\end{multline}
-
-This means that
-\begin{equation*}
-  \color{DarkOrchid}{T_\lambda\bigl(\mathcal{G}^0_{\text{SAR}}(\mu,\alpha,L)\bigr)
-  =
-  \underbrace{T_\lambda \bigl(\Gamma_{\mathrm{SAR}}(\mu,L)\bigr)}_{\text{baseline entropy}} 
-  \hspace{1.8em} + \hspace{-1.8em}
-  \underbrace{\Delta(\mu, L, \alpha)}_{\text{entropy excess caused by texture}}.\hspace{-4.0em}}
-\end{equation*}
-where the term $\Delta_\alpha$ measures the increase in entropy induced by the texture level, with the level controlled by the parameter $\alpha$.
-
-##
-
-The relationship 
-\begin{equation*}
-  \color{DarkOrchid}{T_\lambda\bigl(\mathcal{G}^0_{\text{SAR}}(\mu,\alpha,L)\bigr)
-  =
-T_\lambda \bigl(\Gamma_{\mathrm{SAR}}(\mu,L)\bigr) +
-  \Delta(\mu, L, \alpha)}
-\end{equation*}
-gives a hint to build a test statistic:
-
-::: {.incremental}
-* Estimate the Tsallis entropy with the random sample $\mathbf Z=(Z_1,Z_2,\dots,Z_n)$.
-* Check if it is close to the theoretical Tsallis entropy under the $\Gamma_{\mathrm{SAR}}$ model or to the Tsallis entropy under the $\mathcal{G}^0_{\text{SAR}}(\mu,L)$.
-:::
-
-## But$\dots$ how?
-
-In the following, assume we know $L$, e.g., as the nominal number of looks.
-
-We need
-$$
-\widehat{T_\lambda} \bigl(\Gamma_{\mathrm{SAR}}(\mu)\bigr) \text { or }
-\widehat{T_\lambda} \bigl(\mathcal G^0_{\mathrm{SAR}}(\mu,\alpha)\bigr),
-$$
-but we don't trust $\widehat\mu$ and don't want to compute $\widehat\alpha$.
+The parameter $\lambda$ calibrates the sensitivity of $T_\lambda$ to
+small probability values.
 
 ##
 
 We make a clever transformation:
-\begin{multline}  
-T_\lambda
+\begin{multline}
+T_\lambda(\mathcal D)
   =
 \frac{1}{1-\lambda}\biggl(1-
 \int_{-\infty}^{\infty} f^\lambda(x) dx \biggr) =  \\
@@ -329,7 +160,7 @@ T_\lambda
 \end{multline}
 which allows us to
 
-* approximate the quantile function $Q(p)$ by order statistics, 
+* approximate the quantile function $Q(p)$ by order statistics,
 * and its derivative $Q'(p)$ by their differences (spacings).
 * Approximate the integral by a sum.
 - [Our main result is ready!]{.alert-warning}
@@ -366,7 +197,7 @@ We use the heuristic spacing $k=\lfloor\sqrt{n}+0.5\rfloor$.
 
 ## Noteworthy facts
 
-Our [model-free]{.alert-warning} estimator of $T_\lambda$ 
+Our [model-free]{.alert-warning} estimator of $T_\lambda$
 $$
 \color{DarkOrchid}{\widehat T_{\lambda}(\mathbf{Z})
   = \frac{1}{\lambda-1}
@@ -382,122 +213,481 @@ $$
 ::: {.incremental}
 * estimates the Tsallis entropy regardless the model,
 * converges to the Shannon entropy when $\lambda\rightarrow1$,
-* requires sorting the typically small vector $\mathbf Z$ and simple operations,
-* does not suffer from numerical instabilities.
-
+* requires sorting the typically small vector $\mathbf z = \mathbf Z(\omega)$ and simple operations,
+* does not suffer from numerical instabilities,
+* is asymptotically consistent and normal.
 :::
 
-## We want [more]{.alert-warning} I
-
-We improve $\widehat T_{\lambda}(\mathbf{Z})$ by simple bootstrap, and use $\widetilde T_{\lambda}(\mathbf{Z})$ that is less biased than $\widehat T_{\lambda}(\mathbf{Z})$.
-
-## We want [more]{.alert-warning} II
-
-We optimise $\lambda$ with simulated data to achieve maximum discrimination between the models, and obtain 
-$$
-\lambda_{\text{optimal}} = 0.85.
-$$
-
-## We want [more]{.alert-warning} III
-
-We used adaptive windows, i.e., the sample size varies according to a rough initial estimate of homogeneity based on the coefficient of variation [@Park1999].
-
-# Results
-
-## San Francisco
-
-```{r}
-#| echo: false
-#| results: asis
-
-cat('
-<div style="display: flex; justify-content: center; gap: 1em;">
-  <img src="../Figures/sanFrancisco1400.png" style="width:37%;">
-  <img src="../Figures/p-values_San-fran1400_eta2_B100_lambda_085-5x11_L4_1.png" style="width:46.3%;">
-</div>
-')
-```
-
-## Munich
-
-```{r}
-#| echo: false
-#| results: asis
-
-cat('
-<div style="display: flex; justify-content: center; gap: 1em;">
-  <img src="../Figures/munich_1024.png" style="width:37%;">
-  <img src="../Figures/p-values_munich1024_eta2.0_lambda085_5x11_b100.png" style="width:46.5%;">
-</div>
-')
-```
-
-## Dublin port
-
-```{r}
-#| echo: false
-#| results: asis
-
-cat('
-<div style="display: flex; justify-content: center; gap: 1em;">
-  <img src="../Figures/dubli_1600.png" style="width:37%;">
-  <img src="../Figures/p-values_dublin1600_eta2.0_lambda085_5x11_b1005.png" style="width:47%;">
-</div>
-')
-```
-
-## Foggia
-
-```{r}
-#| echo: false
-#| results: asis
-
-cat('
-<div style="display: flex; justify-content: center; gap: 1em;">
-  <img src="../Figures/foggia-italy_1900.png" style="width:37%;">
-  <img src="../Figures/p-values_FoggiaL24_eta_2.00_5x11_B100_lambda_0852.png" style="width:46.5%;">
-</div>
-')
-```
-
-# Discussion
-
-## Conclusions {.orange-slide}
-
-::: {.incremental}
-* We detect deviations from fully-developed speckle in intensity SAR images estimating the Tsallis entropy. 
-
-* We improve the test with bootstrap correction and adaptive windows.
-
-* We do not need training data or parametric modeling.
-
-* The method is robust for small samples, and effective in delineating heterogeneous regions from homogeneous ones. 
-
-* The results are interpretable.
-
-* [In the same way, you can make your distribution-free test for the problem you are studying]{.alert-warning}
-:::
-
-
-## Contact
-
-::: columns
-::: {.column width="25%"}
-![](../Figures/QRCode-WebPageVUW.png){out-width="40%"}
-![](../Figures/QRCodeACFreryWeChat.jpeg)
-:::
-
-::: {.column width="63%"}
-  Alejandro C. Frery\
-School of Mathematics and Statistics\
-Victoria University of Wellington\
-New Zealand\
-  \
-alejandro.frery at vuw.ac.nz\
- \
-[Feel free to contact me!]{.alert-warning}
-::: 
-:::
 
 ## References  {.references-slide}
+
+
+<!-- ## What is "texture" in a SAR image? {.fullsmall .orange-slide} -->
+
+<!-- "Texture" is any departure from the fully-developed speckle hypothesis. -->
+
+<!-- The observation in a pixel is -->
+<!-- $$ -->
+<!-- S = \sum_{\ell=1}^m S_\ell e^{j \phi_\ell}. -->
+<!-- $$ -->
+<!-- If -->
+
+<!-- * $m\to\infty$ (infinitely many scatterers in the resolution cell), -->
+<!-- * $\max\operatorname{Var}(S_\ell)<\infty$ (no scatterer dominates), -->
+<!-- * $|S_\ell| \perp |S_k|$ (independent amplitudes), -->
+<!-- * $\phi_\ell\sim\mathcal U(-\pi,\pi]$ (uninformative phases), -->
+<!-- * $\phi_\ell \perp \phi_k$ (independent phases), -->
+<!-- * the amplitudes are collectively independent of the phases, -->
+
+<!-- then$\dots$ -->
+
+<!-- ## What is "fully-developed speckle"? {.fullsmall .orange-slide} -->
+
+<!-- $\dots$ we can invoke the Central Limit Theorem: -->
+<!-- $$ -->
+<!-- S = \sum_{\ell=1}^m S_\ell e^{j \phi_\ell} = -->
+<!-- \underbrace{\sum_{\ell=1}^m |S_\ell| \cos \phi_\ell}_{\Re(S)} + -->
+<!-- j \underbrace{\sum_{\ell=1}^m |S_\ell| \sin \phi_\ell}_{\Im(S)}, -->
+<!-- $$ -->
+<!-- and say that $\Re(S)$ and $\Im(S)$ are asymptotically normal distributed and independent. -->
+
+<!-- With that, -->
+<!-- $$ -->
+<!-- |S|^2\sim\text{E}(\mu), -->
+<!-- $$ -->
+<!-- where $\mu$ is the backscatter, assumed [constant]{.alert-warning} among pixels of the same type. -->
+
+<!-- Equivalently, -->
+<!-- $$ -->
+<!-- |S|^2\sim\mu\text{E}(1), -->
+<!-- $$ -->
+<!-- the basis for the multiplicative model [@SARImageStatisticalModelingPartISinglePixelStatisticalModels]. -->
+
+<!-- ## Do we observe fully-developed speckle in practice? -->
+
+<!-- ::: columns -->
+
+<!-- ::: column  -->
+
+<!-- ::: {.incremental} -->
+<!-- * The number of backscatterers $m$ is the number of elements in the resolution cell of the order of the wavelength -->
+<!--    * X-band: $\approx 3\text{ cm}$ -->
+<!--    * L-band: $\approx 20\text{ cm}$ -->
+<!-- * Pasture, crops, and bare soil usually verify $m\to\infty$ and the other hypotheses. -->
+<!-- ::: -->
+
+<!-- ::: -->
+
+<!-- ::: column  -->
+
+<!-- ```{r} -->
+<!-- #| echo: false -->
+<!-- #| fig-align: center -->
+<!-- #| fig-width: 10 -->
+<!-- #| fig-height: 10 -->
+<!-- #| out-width: "100%" -->
+
+<!-- knitr::include_graphics("../Figures/foggia-italy_1900.png") -->
+<!-- ``` -->
+
+<!-- ::: -->
+<!-- ::: -->
+
+<!-- ## Do we observe fully-developed speckle in practice? -->
+
+<!-- We took a sample of $15561$ observations over crops. -->
+
+<!-- ::: columns -->
+<!-- ::: column -->
+<!-- ![](../Figures/dark_HV_Re.svg){out-width="90%"} -->
+<!-- ::: -->
+<!-- ::: column -->
+<!-- ![](../Figures/darkHVfit.svg){out-width="90%"} -->
+<!-- ::: -->
+<!-- ::: -->
+
+<!-- ## Multilook imaging -->
+
+<!-- :::{.incremental} -->
+<!-- * Exponentially distributed observations are very noisy. -->
+<!-- * We average $L$ (ideally independent) pixels, and obtain a multilook image with (ideally) $L$ looks. -->
+<!-- * Under the assumptions of fully-developed speckle, -->
+<!-- $$ -->
+<!-- Z=|S|^2 \sim \Gamma_{\text{SAR}}(\mu, L), -->
+<!-- $$ -->
+<!-- a Gamma distribution conveniently parametrised by the mean $\mu>0$ and -->
+<!-- the shape $L\geq 1$. -->
+<!-- * If $L=1$, we fall back to the exponential model. -->
+<!-- ::: -->
+
+<!-- ## What happens if the speckle is not fully-developed? {.fullsmall} -->
+
+<!-- ::: columns -->
+
+<!-- ::: column -->
+
+<!-- ```{r} -->
+<!-- #| echo: false -->
+<!-- #| fig-align: center -->
+<!-- #| fig-width: 10 -->
+<!-- #| fig-height: 10 -->
+<!-- #| out-width: "100%" -->
+
+<!-- knitr::include_graphics("../Figures/dubli_1600.png") -->
+<!-- ``` -->
+
+<!-- ::: -->
+
+<!-- ::: column -->
+
+<!-- :::{.incremental} -->
+
+<!-- * This may occur when at least one of the hypotheses is violated. -->
+<!-- * Typically, when $m$ is finite, i.e., the number of elementary backscatterers in the resolution cell is not big: -->
+<!--    * a few in forested regions, -->
+<!--    * even less in urban areas. -->
+<!-- * When the backscatter changes among resolution cells. -->
+<!-- * [The $\Gamma_{\text{SAR}}$ model fails to describe the extreme variability.]{.alert-warning} -->
+
+<!-- ::: -->
+
+<!-- ::: -->
+
+<!-- ::: -->
+
+<!-- ## Non fully-developed speckle -->
+
+<!-- The $\mathcal G^0_{\text{SAR}}$ model generalises the $\Gamma_{\text{SAR}}$  -->
+<!-- distribution and incorporates $\alpha<0$, such that $|\alpha|\propto m$, the number of backscatterers: -->
+<!-- \begin{multline}     -->
+<!-- \color{DarkOrchid}{f_{\mathcal{G}^0_{\text{SAR}}}\bigl(z; \mu, \alpha, L \bigr)}  -->
+<!--     = \\ \color{DarkOrchid}{\frac{L^L\,\Gamma(L-\alpha)} -->
+<!--     {\bigl[-\mu(\alpha+1)\bigr]^{\alpha} \Gamma(-\alpha)\,\Gamma(L)} -->
+<!--     \frac{z^{L-1}} -->
+<!--     {\bigl[-\mu(\alpha+1)+Lz\bigr]^{L-\alpha}} -->
+<!--     \mathbb I_{\mathbb R_+}(z)}, -->
+<!-- \end{multline} -->
+<!-- where $\mu > 0$ is the mean intensity. -->
+
+<!-- This model can describe data with extreme variability ($\alpha\approx0$) and fully-developed speckle ($\alpha\to-\infty$). -->
+
+<!-- ## Recap {.orange-slide} -->
+
+<!-- We have two models to describe the observations: -->
+
+<!-- * The $\Gamma_{\text{SAR}}(\mu,L)$ model for fully-developed speckle, and -->
+<!-- * The more general $\mathcal G^0_{\text{SAR}}(\mu,\alpha,L)$ law that includes the fully-developed speckle situation. -->
+
+<!-- [We want to measure how close (or far) we are from the fully-developed speckle model, but using small samples possibly contaminated by outliers.]{.alert-warning} -->
+
+<!-- # Methodology -->
+
+<!-- ## Goodness-of-fit tests {.fullsmall} -->
+
+<!-- Given a random sample $\mathbf Z = (Z_1,Z_2,\dots,Z_n)$, our problem can be stated as a goodness-of-fit test: -->
+<!-- \begin{align} -->
+<!-- \mathcal H_0 &: \mathbf Z \text{ is compatible with } \Gamma_{\text{SAR}}(\mu,L),\\ -->
+<!-- \mathcal H_1 &:  \mathbf Z \text{ is not compatible with } \mathcal \Gamma_{\text{SAR}}(\mu,L). -->
+<!-- \end{align} -->
+
+<!-- We make it more specific: -->
+<!-- \begin{align} -->
+<!-- \mathcal H_0 &: \mathbf Z \text{ is compatible with } \Gamma_{\text{SAR}}(\mu,L),\\ -->
+<!-- \mathcal H_1 &:  \mathbf Z \text{ is compatible with } \mathcal G^0_{\text{SAR}}(\mu,\alpha,L). -->
+<!-- \end{align} -->
+
+<!-- It is a nested-distribution problem. -->
+<!-- There are plenty of tests for problems like this. -->
+<!-- We propose one that: -->
+
+<!-- ::: {.incremental} -->
+<!-- * Performs well with relatively small samples. -->
+<!-- * Is resistant to departures from the hypothesised models. -->
+<!-- * Is computationally efficient. -->
+<!-- ::: -->
+
+<!-- ## What do we use? -->
+
+<!-- ```{r} -->
+<!-- #| echo: false -->
+<!-- #| fig-align: center -->
+<!-- #| fig-width: 10 -->
+<!-- #| fig-height: 10 -->
+<!-- #| out-width: "100%" -->
+
+<!-- knitr::include_graphics("../Figures/entropy.jpg") -->
+<!-- ``` -->
+
+
+<!-- ## Flavours of Entropy -->
+
+<!-- The notion of "entropy" encompasses several measures of unpredictability. -->
+
+<!-- For a continuous random variable characterised by a probability density function $f$, we have (among infinitely many others): -->
+
+<!-- * Shannon entropy: $\int ( - \ln f) f$. -->
+<!-- * Rényi entropy of order $\lambda\in\mathbb R_+\setminus\{1\}$: $\frac{1}{\lambda-1} \ln \int f^\lambda$. -->
+<!-- * Tsallis entropy of order $\lambda\in\mathbb R_+\setminus\{1\}$:  -->
+<!-- $$ -->
+<!-- \color{DarkOrchid}{\frac{1}{\lambda-1}\bigg(1-\int f^\lambda\bigg)}. -->
+<!-- $$ -->
+
+<!-- ## Tsallis entropy: $\Gamma_{\mathrm{SAR}}$ and $\mathcal{G}^0_{\text{SAR}}$ distributions {.fullsmall} -->
+
+<!-- \begin{multline} -->
+<!-- \label{eq:gammasar-Tsallis} -->
+<!-- T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr)= -->
+<!-- \frac{1}{\lambda-1}\Bigl\{1- -->
+<!-- \exp\bigl[ -->
+<!-- (1-\lambda)\ln\mu -->
+<!-- +(\lambda-1)\ln L -->
+<!-- +\ln\Gamma\bigl(\lambda(L-1)+1\bigr) \\ -->
+<!-- -\lambda\ln\Gamma(L) -->
+<!-- -(\lambda(L-1)+1)\ln\lambda -->
+<!-- \bigr]\Bigr\},  -->
+<!-- \end{multline} -->
+<!-- and -->
+<!-- \begin{multline} -->
+<!-- \label{eq:GI0-Tsallis} -->
+<!--   T_\lambda\bigl(\mathcal{G}^0_{\text{SAR}}(\mu,\alpha,L)\bigr) = T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr) +  -->
+<!--   \frac{1}{\lambda-1}\, -->
+<!--   \exp\Bigl[ -->
+<!--   (1-\lambda)\ln\mu -->
+<!--   +(\lambda-1)\ln L\\ -->
+<!--   +\ln\Gamma\bigl(\lambda(L-1)+1\bigr) -->
+<!--   -\lambda\ln\Gamma(L) -->
+<!--   \Bigr]  -->
+<!--   \Bigl\{1- -->
+<!--   \exp\bigl[ -->
+<!--   (1-\lambda)\ln(-\alpha-1) -->
+<!--   +\lambda\ln\Gamma(L-\alpha)\\ -->
+<!--   -\lambda\ln\Gamma(-\alpha)  -->
+<!--   +\ln\Gamma\bigl(\lambda(1-\alpha)-1\bigr) -->
+<!--   -\ln\Gamma\bigl(\lambda(L-\alpha)\bigr) -->
+<!--   \bigr]\Bigr\}. -->
+<!-- \end{multline} -->
+
+<!-- This means that -->
+<!-- \begin{equation*} -->
+<!--   \color{DarkOrchid}{T_\lambda\bigl(\mathcal{G}^0_{\text{SAR}}(\mu,\alpha,L)\bigr) -->
+<!--   = -->
+<!--   \underbrace{T_\lambda \bigl(\Gamma_{\mathrm{SAR}}(\mu,L)\bigr)}_{\text{baseline entropy}}  -->
+<!--   \hspace{1.8em} + \hspace{-1.8em} -->
+<!--   \underbrace{\Delta(\mu, L, \alpha)}_{\text{entropy excess caused by texture}}.\hspace{-4.0em}} -->
+<!-- \end{equation*} -->
+<!-- where the term $\Delta_\alpha$ measures the increase in entropy induced by the texture level, with the level controlled by the parameter $\alpha$. -->
+
+<!-- ## -->
+
+<!-- The relationship  -->
+<!-- \begin{equation*} -->
+<!--   \color{DarkOrchid}{T_\lambda\bigl(\mathcal{G}^0_{\text{SAR}}(\mu,\alpha,L)\bigr) -->
+<!--   = -->
+<!-- T_\lambda \bigl(\Gamma_{\mathrm{SAR}}(\mu,L)\bigr) + -->
+<!--   \Delta(\mu, L, \alpha)} -->
+<!-- \end{equation*} -->
+<!-- gives a hint to build a test statistic: -->
+
+<!-- ::: {.incremental} -->
+<!-- * Estimate the Tsallis entropy with the random sample $\mathbf Z=(Z_1,Z_2,\dots,Z_n)$. -->
+<!-- * Check if it is close to the theoretical Tsallis entropy under the $\Gamma_{\mathrm{SAR}}$ model or to the Tsallis entropy under the $\mathcal{G}^0_{\text{SAR}}(\mu,L)$. -->
+<!-- ::: -->
+
+<!-- ## But$\dots$ how? -->
+
+<!-- In the following, assume we know $L$, e.g., as the nominal number of looks. -->
+
+<!-- We need -->
+<!-- $$ -->
+<!-- \widehat{T_\lambda} \bigl(\Gamma_{\mathrm{SAR}}(\mu)\bigr) \text { or } -->
+<!-- \widehat{T_\lambda} \bigl(\mathcal G^0_{\mathrm{SAR}}(\mu,\alpha)\bigr), -->
+<!-- $$ -->
+<!-- but we don't trust $\widehat\mu$ and don't want to compute $\widehat\alpha$. -->
+
+<!-- ## -->
+
+<!-- We make a clever transformation: -->
+<!-- \begin{multline}   -->
+<!-- T_\lambda -->
+<!--   = -->
+<!-- \frac{1}{1-\lambda}\biggl(1- -->
+<!-- \int_{-\infty}^{\infty} f^\lambda(x) dx \biggr) =  \\ -->
+<!--   \frac{1}{\lambda-1} -->
+<!--      \left( -->
+<!--        1-\int_{0}^{1}\bigl(Q'(p)\bigr)^{1-\lambda}\,\mathrm{d}p -->
+<!--      \right), -->
+<!-- \end{multline} -->
+<!-- which allows us to -->
+
+<!-- * approximate the quantile function $Q(p)$ by order statistics,  -->
+<!-- * and its derivative $Q'(p)$ by their differences (spacings). -->
+<!-- * Approximate the integral by a sum. -->
+<!-- - [Our main result is ready!]{.alert-warning} -->
+
+<!-- ## {.fullsmall} -->
+
+<!-- Let $\mathbf{Z}=(Z_1,Z_2,\dots,Z_n)$ be an i.i.d.\ sample from $F$, with order statistics $Z_{(1)}\le Z_{(2)} \le \cdots\le Z_{(n)}$. -->
+<!-- Our estimator becomes -->
+<!-- \begin{align} -->
+<!--   \widehat T_{\lambda}(\mathbf{Z}) -->
+<!--   &=\frac{1}{\lambda-1}\left\{ -->
+<!-- 1-\frac{1}{n}\sum_{i=1}^{n}\bigl[\widehat{Q'}(p_i)\bigr]^{1-\lambda} -->
+<!-- \right\} \nonumber\\[4pt] -->
+<!--   &= \frac{1}{\lambda-1} -->
+<!--   \left\{ -->
+<!--     1-\frac{1}{n} -->
+<!--        \sum_{i=1}^{n} -->
+<!--        \left( -->
+<!--          \frac{Z_{(i+k)}-Z_{(i-k)}}{(k/n) \, c_i} -->
+<!--        \right)^{1-\lambda} -->
+<!--   \right\}, -->
+<!--   \label{eq:Tsallis-spacing-estimator} -->
+<!-- \end{align} -->
+<!-- where -->
+<!-- $$ -->
+<!-- c_i= -->
+<!-- \begin{cases} -->
+<!-- \dfrac{k+i-1}{k} & \text{if } \; 1\le i\le k,\\ -->
+<!-- 2 & \text{if } \; k+1\le i\le n-k,\\ -->
+<!-- \dfrac{n+k-i}{k} & \text{if } \; n-k+1\le i\le n. -->
+<!-- \end{cases} -->
+<!-- $$ -->
+<!-- We use the heuristic spacing $k=\lfloor\sqrt{n}+0.5\rfloor$. -->
+
+<!-- ## Noteworthy facts -->
+
+<!-- Our [model-free]{.alert-warning} estimator of $T_\lambda$  -->
+<!-- $$ -->
+<!-- \color{DarkOrchid}{\widehat T_{\lambda}(\mathbf{Z}) -->
+<!--   = \frac{1}{\lambda-1} -->
+<!--   \left\{ -->
+<!--     1-\frac{1}{n} -->
+<!--        \sum_{i=1}^{n} -->
+<!--        \left( -->
+<!--          \frac{Z_{(i+k)}-Z_{(i-k)}}{(k/n) \, c_i} -->
+<!--        \right)^{1-\lambda} -->
+<!--   \right\}}, -->
+<!-- $$ -->
+
+<!-- ::: {.incremental} -->
+<!-- * estimates the Tsallis entropy regardless the model, -->
+<!-- * converges to the Shannon entropy when $\lambda\rightarrow1$, -->
+<!-- * requires sorting the typically small vector $\mathbf Z$ and simple operations, -->
+<!-- * does not suffer from numerical instabilities. -->
+
+<!-- ::: -->
+
+<!-- ## We want [more]{.alert-warning} I -->
+
+<!-- We improve $\widehat T_{\lambda}(\mathbf{Z})$ by simple bootstrap, and use $\widetilde T_{\lambda}(\mathbf{Z})$ that is less biased than $\widehat T_{\lambda}(\mathbf{Z})$. -->
+
+<!-- ## We want [more]{.alert-warning} II -->
+
+<!-- We optimise $\lambda$ with simulated data to achieve maximum discrimination between the models, and obtain  -->
+<!-- $$ -->
+<!-- \lambda_{\text{optimal}} = 0.85. -->
+<!-- $$ -->
+
+<!-- ## We want [more]{.alert-warning} III -->
+
+<!-- We used adaptive windows, i.e., the sample size varies according to a rough initial estimate of homogeneity based on the coefficient of variation [@Park1999]. -->
+
+<!-- # Results -->
+
+<!-- ## San Francisco -->
+
+<!-- ```{r} -->
+<!-- #| echo: false -->
+<!-- #| results: asis -->
+
+<!-- cat(' -->
+<!-- <div style="display: flex; justify-content: center; gap: 1em;"> -->
+<!--   <img src="../Figures/sanFrancisco1400.png" style="width:37%;"> -->
+<!--   <img src="../Figures/p-values_San-fran1400_eta2_B100_lambda_085-5x11_L4_1.png" style="width:46.3%;"> -->
+<!-- </div> -->
+<!-- ') -->
+<!-- ``` -->
+
+<!-- ## Munich -->
+
+<!-- ```{r} -->
+<!-- #| echo: false -->
+<!-- #| results: asis -->
+
+<!-- cat(' -->
+<!-- <div style="display: flex; justify-content: center; gap: 1em;"> -->
+<!--   <img src="../Figures/munich_1024.png" style="width:37%;"> -->
+<!--   <img src="../Figures/p-values_munich1024_eta2.0_lambda085_5x11_b100.png" style="width:46.5%;"> -->
+<!-- </div> -->
+<!-- ') -->
+<!-- ``` -->
+
+<!-- ## Dublin port -->
+
+<!-- ```{r} -->
+<!-- #| echo: false -->
+<!-- #| results: asis -->
+
+<!-- cat(' -->
+<!-- <div style="display: flex; justify-content: center; gap: 1em;"> -->
+<!--   <img src="../Figures/dubli_1600.png" style="width:37%;"> -->
+<!--   <img src="../Figures/p-values_dublin1600_eta2.0_lambda085_5x11_b1005.png" style="width:47%;"> -->
+<!-- </div> -->
+<!-- ') -->
+<!-- ``` -->
+
+<!-- ## Foggia -->
+
+<!-- ```{r} -->
+<!-- #| echo: false -->
+<!-- #| results: asis -->
+
+<!-- cat(' -->
+<!-- <div style="display: flex; justify-content: center; gap: 1em;"> -->
+<!--   <img src="../Figures/foggia-italy_1900.png" style="width:37%;"> -->
+<!--   <img src="../Figures/p-values_FoggiaL24_eta_2.00_5x11_B100_lambda_0852.png" style="width:46.5%;"> -->
+<!-- </div> -->
+<!-- ') -->
+<!-- ``` -->
+
+<!-- # Discussion -->
+
+<!-- ## Conclusions {.orange-slide} -->
+
+<!-- ::: {.incremental} -->
+<!-- * We detect deviations from fully-developed speckle in intensity SAR images estimating the Tsallis entropy.  -->
+
+<!-- * We improve the test with bootstrap correction and adaptive windows. -->
+
+<!-- * We do not need training data or parametric modeling. -->
+
+<!-- * The method is robust for small samples, and effective in delineating heterogeneous regions from homogeneous ones.  -->
+
+<!-- * The results are interpretable. -->
+
+<!-- * [In the same way, you can make your distribution-free test for the problem you are studying]{.alert-warning} -->
+<!-- ::: -->
+
+
+<!-- ## Contact -->
+
+<!-- ::: columns -->
+<!-- ::: {.column width="25%"} -->
+<!-- ![](../Figures/QRCode-WebPageVUW.png){out-width="40%"} -->
+<!-- ![](../Figures/QRCodeACFreryWeChat.jpeg) -->
+<!-- ::: -->
+
+<!-- ::: {.column width="63%"} -->
+<!--   Alejandro C. Frery\ -->
+<!-- School of Mathematics and Statistics\ -->
+<!-- Victoria University of Wellington\ -->
+<!-- New Zealand\ -->
+<!--   \ -->
+<!-- alejandro.frery at vuw.ac.nz\ -->
+<!--  \ -->
+<!-- [Feel free to contact me!]{.alert-warning} -->
+<!-- :::  -->
+<!-- ::: -->
+
+<!-- ## References  {.references-slide} -->
 
