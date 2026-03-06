@@ -73,10 +73,53 @@ The core of the proposed method relies on Tsallis entropy, which introduces an a
 
 \begin{responsebox}{Response}
 
-\assigned{Revision assigned to Prof. Alejandro}
+For simplicity, our reply will focus on discrete probabilities of the form $(p_i)_{I\geq 1}$.
 
-No hay regla. Ver cómo relacional dónde pone más peso q en los datos (chicos o grandes) y ver si lo conectamos con los modelos gamma y g0
+\citet{Tsallis1988} observed that in multifractal analysis, it is customary to scale probabilities raising them to a positive power $\lambda$, termed ``entropic index,'' because using $p_i^\lambda$ renders ``richer and more complex [behavior]'' \citep{FractalMeasuresandTheirSingularitiestheCharacterizationofStrangeSets}.
+Tsallis took that idea and defined the quantity 
+$$
+S_\lambda = k \frac{1-\sum_{i} p_i^\lambda}{\lambda-1}
+$$
+``to generalize the standard expression of the entropy $S$ in information theory''.
+He then proved that $S_\lambda$ has several useful properties that collapse to classical results when $\lambda\to1$.
+This variant of entropy later received his name and has been extensively used.
+In our article, we denote the Tsallis entropy as $T_\lambda$.
 
+The article by \citet{ImageThresholdingUsingTsallisEntropy} is among the first to use the Tsallis entropy for image analysis, specifically for optical image segmentation.
+The authors state that
+\begin{quote}
+The parameter $\lambda$ in Tsallis entropy is usually
+interpreted as a quantity characterizing the degree
+of nonextensivity of a system. An appropriate
+choice of the entropic index $\lambda$ to nonextensive
+physical systems still remains an open field of
+study. In some cases the parameter $\lambda$ has no
+physical meaning, but it gives new possibilities in
+the agreement of theoretical models and experi-
+mental data [\dots]. In
+othercases,q is solely determined by constraints of
+the problem and thereby $\lambda$ may have a physical
+meaning [\dots].
+\end{quote}
+In line with this work, we used grid search to find the optimal value of $\lambda$ for our problem and found that $\lambda=0.85$ yielded the smallest bias and mean squared error in all but one case.
+Interestingly, \citet{TheApplicationofTsallisEntropyBasedSelfAdaptiveAlgorithmforMultiThresholdImageSegmentation} found that $\lambda=0.80$ was the best parameter for optical image segmentation.
+
+There is an interpretation for the optimal value we found ($\lambda=0.85$).
+The summands that define $S_\lambda$ are power transformations of probabilities.
+If $\lambda=1$, $S_\lambda$ reduces to the Shannon entropy.
+If $\lambda>1$, then ``large'' probabilities have more weight in the sum.
+If $\lambda<1$, then the effect of ``small'' probabilities is amplified.
+The difference between the gamma and $\mathcal G^0$ models lies mostly in the tails, i.e., in how these laws describe rare events.
+Then, $\lambda<1$ highlights this difference, serving the purpose of the test we proposed.
+
+In the manuscript, we have added the following clarification in Section~III.A:
+\begin{quote}
+\textcolor{blue}{There is an interpretation for the optimal value of $\lambda$ that we found.
+When considering discrete probabilities, smaller values this entropic index
+amplify the effect of "small" probabilities on the total Tsallis entropy.
+The $\mathcal G^0$ and gamma distributions differentiate mostly on their tails,
+so enhancing the effect of the tails improves our ability to tell one from the other.}
+\end{quote}
 \end{responsebox}
 
 \vspace{1em}
@@ -87,10 +130,27 @@ While the bootstrap correction is intended to improve accuracy for small sample 
 \end{reviewbox}
 
 \begin{responsebox}{Response}
+Regarding the additional computational time that bootstrap imposes on the technique, we have added the following information:
+\begin{quote}
+The total runtime also depends on the number of bootstrap replications, since each replication recomputes the test statistic to obtain a more stable estimate of the Tsallis entropy measure. In our simulations, we used $B=100$, which provides stable and reliable estimates with moderate computational cost \textcolor{blue}{(the running time increases by, at most, a factor of $15$)}. 
+\end{quote}
 
-\assigned{Revision assigned to Prof. Alejandro}
+Heterogeneous regions produce outliers that may have a detrimental effect in resampling techniques.
+\citet{JackknifeAfterBootstrapStandardErrorsandInfluenceFunctions} suggested checking bootstrap samples with a jackknife procedure to identify outliers.
+After that seminal work, many proposals have been studied, e.g., using the influence function \citep{RobustBootstrapwithNonRandomWeightsBasedontheInfluenceFunction}.
+To the best of our knowledge, those approaches consider a fixed sample size.
+Our proposal follows a different path: the adaptive windows are expected to discard samples which are in disagreement with the observations around the center pixel.
+Such trimming may reach almost \SI{80}{\percent} of the observations when reducing from a window of size $11\times11$ pixels to another of size $5\times5$ pixels.
 
-Influencia de outliers en bootstrap: lo resolvemos con las ventanas adaptativas 
+The new version includes this clarification at the end of Section~III.B:
+\begin{quote}
+\textcolor{blue}{Heterogeneous samples occur when the window spans two or more different areas, 
+e.g., across an edge.
+They produce outliers that may have a detrimental effect in resampling techniques.
+In Sec.~III.F we use adaptive windows to discard samples which are in disagreement with the observations around the center pixel.
+Such trimming may reach almost \SI{80}{\percent} of the observations when reducing from a window of size $11\times11$ pixels to another of size $5\times5$ pixels.
+}
+\end{quote}
 
 \end{responsebox}
 
@@ -102,13 +162,17 @@ The manuscript claims that the proposed tool does not require ``scene-specific c
 \end{reviewbox}
 
 \begin{responsebox}{Response}
+The effect of the quantisation has been studied, among others, by \citet{beirlant1997nonparametric} and, as noted by the reviewer, it is not negligible when the number of possible values (bins) is not too big.
+In our case, the SAR images we used are stored in single or double precision.
+The IEEE 754 Standards stipulates that these formats are able to encode $2^{32}$ and $2^{64}$ bit patterns.
+Such amount of possible values has no effect on the estimation.
 
-\assigned{Revision assigned to Prof. Alejandro}
-Aclarar que no filtramos y usamos double (?) Si filtráramos tendríamos que estimar L localmente 
+Moreover, we do not apply any despeckling filter.
 
 \end{responsebox}
 
 \vspace{1em}
+
 
 %-------------------------------------
 \begin{reviewbox}{Comment 4}
@@ -117,19 +181,22 @@ In the Related Work section, the authors focus heavily on classical information 
 
 \begin{responsebox}{Response}
 
-In recent years, deep learning-based methods have demonstrated superior performance in automatic feature extraction for SAR imagery, particularly in ship detection. For instance, \citet{ORPSDOuterRectangularProjectionBasedRepresentationforOrientedShipDetectioninSARImages} propose a methodology that incorporates an outer rectangular projection and a convex quadrilateral rectification scheme to feed a lightweight fully convolutional network. 
-Additionally, the integration of partial differential equations into neural network architectures has yielded promising improvements in vessel identification \citep[cf., for instance, the works by][]{PDEGuidedDiverseFeatureLearningforSARRotatedShipDetection, BurgsVOBurgsAssociatedVertexOffsetEncodingSchemeforDetectingRotatedShipsinSARImages, S4DetBreadthandAccurateSineSingleStageShipDetectionforRemoteSenseSARImagery}.
+We have added the following paragraphs to the introduction.
 
-Techniques such as convolutional neural networks, U-Net architectures, and transformer-based models exploit hierarchical feature representations learned from large annotated datasets, enabling robust detection even under complex clutter conditions.
-Nevertheless, deep learning algorithms present three primary limitations: \emph{(i)}~their applicability is often restricted, as they require large volumes of labeled SAR data, making their training costly and time-consuming; \emph{(ii)}~they lack physical interpretability, complicating the validation of decision processes against known statistical properties of SAR imagery; and, \emph{(iii)}~they are highly sensitive to domain shift, as networks trained on a specific configuration frequently generalize poorly to images acquired under disparate conditions.
+\begin{quote}
+\textcolor{blue}{
+Deep learning has driven significant advances in SAR image analysis.
+In particular, for ship detection, architectures ranging from lightweight fully convolutional networks \citep{ORPSDOuterRectangularProjectionBasedRepresentationforOrientedShipDetectioninSARImages} to partial differential equations-guided and transformer-based models \citep{PDEGuidedDiverseFeatureLearningforSARRotatedShipDetection, BurgsVOBurgsAssociatedVertexOffsetEncodingSchemeforDetectingRotatedShipsinSARImages, S4DetBreadthandAccurateSineSingleStageShipDetectionforRemoteSenseSARImagery}
+lead to successful applications.
+Despite their strong performance, these methods share three fundamental limitations: (i) heavy dependence on large labeled datasets; (ii) limited physical interpretability; and (iii) sensitivity to domain shift.}
 
-In contrast, the proposed method directly exploits the statistical properties of SAR images through the use of Tsallis entropy as a powerful feature. 
-This choice is physically motivated by the fact that SAR images are well characterised by heavy-tailed distributions (such as the $\mathcal{G}^0$ family), while the non-extensive parameter $\lambda$ of the Tsallis entropy provides a flexible mechanism to adapt the measure to different levels of scene heterogeneity. 
-Consequently, the approach is inherently generalizable across sensors, resolutions, and target types, requiring no retraining or hyperparameter tuning beyond the selection of $\lambda$.
-Furthermore, methods based on entropic thresholding and region analysis are fully transparent and interpretable: the segmentation criterion has a closed-form expression and a clear statistical meaning, allowing practitioners to audit and validate results.
-Rather than competing with deep learning approaches, the proposed method offers a suitable alternative for scenarios where labeled data are scarce or unavailable, where physical interpretability is required, or where computational resources are constrained.
-In fact, we envision the use of the Tsallis entropy estimated map as a layer for image analysis pipelines that employ explainable machine learning or deep learning.
-
+\textcolor{blue}{
+In this work, we propose a method that exploits the statistical properties of SAR imagery through Tsallis entropy whose non-extensive parameter $\lambda$ exploits the heavitailednes of the models for SAR imagery. 
+The resulting approach requires no retraining or hyperparameter tuning, does not depend on sensors and resolutions, and yields fully interpretable results. 
+The method offers an alternative when labeled data are scarce, interpretability is required, or computational resources are constrained.
+It can serve as a feature layer within explainable machine learning pipelines.
+}
+\end{quote}
 \end{responsebox}
 
 %-------------------------------------
