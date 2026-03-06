@@ -433,7 +433,9 @@ In this section, we first discuss the optimal value for the parameter $\lambda$ 
 
 We investigate the optimal order $\lambda$ for the Tsallis entropy estimator using simulated samples of size $n = 49$ drawn from the $\Gamma_{\mathrm{SAR}}(1,5)$ model. The bias and mean squared error (MSE) were evaluated for varying values of $\lambda$ through a Monte Carlo experiment.
 
-As shown in Figure \ref{fig-optimal_order-tsallis}, for the case $L=5$, the value $\lambda = 0.85$ yields the lowest MSE while maintaining a nearly zero bias. This behavior is consistent with what we observed for other values of $L>1$ and for larger sample sizes, such as $n=81$ and $n=121$, where $\lambda = 0.85$ also provides a good balance between bias and MSE. For the particular case $L=1$, the optimal value is $\lambda = 1.2$, which offers the best MSE–bias trade-off.
+As shown in Figure \ref{fig-optimal_order-tsallis}, for the case $L=5$, the value $\lambda = 0.85$ yields the lowest MSE while maintaining a nearly zero bias. 
+This behavior is consistent with what we observed for other values of $L>1$ and for larger sample sizes, such as $n=81$ and $n=121$, where $\lambda = 0.85$ also provides a good balance between bias and MSE. 
+For the particular case $L=1$, the optimal value is $\lambda = 1.2$, which offers the best MSE–bias trade-off.
 
 ```{r fig-optimal_order-tsallis,  echo=FALSE, message=FALSE, warning=FALSE,  out.width=".9\\linewidth",  fig.pos="hbt", fig.cap="Bias and MSE as a function of $\\lambda$, for the Tsallis entropy estimator, with $n = 49$, $\\mu = 1$, and $L = 5$."}
 #fig.show="hide", 
@@ -483,6 +485,13 @@ mse_plot <- ggplot(data, aes(x = Lambda, y = MSE)) +
 grid.arrange(bias_plot, mse_plot, nrow = 2)
 
 ```
+
+There is an interpretation for the optimal value of $\lambda$ that we found.
+When considering discrete probabilities, smaller values this entropic index
+amplify the effect of "small" probabilities on the total Tsallis entropy.
+The $\mathcal G^0$ and gamma distributions differentiate mostly on their tails,
+so enhancing the effect of the tails improves our ability to tell one from the other.
+
 
 ## Bootstrap Correction for Entropy Estimator
 
@@ -629,6 +638,12 @@ print(combined_plot_tsallis)
 ```
 
 <!-- From this point forward, all subsequent simulations and comparisons will be based on the improved bootstrap estimator $\widetilde{T}_{\lambda}$. -->
+
+Heterogeneous samples occur when the window spans two or more different areas, 
+e.g., across an edge.
+They produce outliers that may have a detrimental effect in resampling techniques.
+In Sec.&nbsp;\ref{sec:adaptive} we use adaptive windows to discard samples which are in disagreement with the observations around the center pixel.
+Such trimming may reach almost \SI{80}{\percent} of the observations when reducing from a window of size $11\times11$ pixels to another of size $5\times5$ pixels.
 
 ## Hypothesis Testing
 
@@ -1141,7 +1156,7 @@ table_combined_result <- knitr::kable(
 print(table_combined_result)
 ```
 
-## Adaptive Windows
+## Adaptive Windows {#sec:adaptive}
 
 When working on simulated or real images, the spatial context must be taken into consideration, because each sample used to compute the test statistic may overlap areas with different distribution. Intuitively, the use of a different window size to compute the test statistics may be crucial to avoid estimating values by using samples that belong to two, even three or more different distributions.
 
@@ -1756,7 +1771,8 @@ column_spec(6, width = "3cm")
 
 Overall, the fixed-window Tsallis approach is the fastest across all scenes, whereas the adaptive version requires longer processing times due to the per-pixel window-size selection (border-statistics and thresholding) and the frequent use of larger windows.
 
-The total runtime also depends on the number of bootstrap replications, since each replication recomputes the test statistic to obtain a more stable estimate of the Tsallis entropy measure. In our simulations, we used $B=100$, which provides stable and reliable estimates with moderate computational cost. Stable results can already be achieved with $B\geq50$, whereas larger values yield smoother $p$-value distributions at the expense of longer processing times.
+The total runtime also depends on the number of bootstrap replications, since each replication recomputes the test statistic to obtain a more stable estimate of the Tsallis entropy measure. In our simulations, we used $B=100$, which provides stable and reliable estimates with moderate computational cost (the running time increases  by, at most, a factor of $15$). 
+Stable results can already be achieved with $B\geq50$, whereas larger values yield smoother $p$-value distributions at the expense of longer processing times.
 
 ## Quantitative Evaluation
 
