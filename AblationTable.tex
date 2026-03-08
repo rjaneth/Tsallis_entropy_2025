@@ -1,0 +1,36 @@
+\documentclass{article}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsfonts}
+
+\begin{document}
+	
+	
+\begin{table}
+	\caption{Ablation study.}
+	\label{tab:Ablation}
+	\begin{tabular}{lccr}
+		\toprule
+		\multicolumn{1}{c}{\textbf{Entropy}} & \multicolumn{1}{c}{\textbf{Bootstrap}} & \multicolumn{1}{c}{\textbf{Adaptative window}} &
+		\multicolumn{1}{c}{\textbf{AUC}} \\
+		\midrule
+		\multirow{4}{*}{Shannon} & & & \\
+		 & \checkmark & & \\
+		 & & \checkmark & \\
+		 & \checkmark & \checkmark & \\
+		 \midrule
+		 \multirow{4}{*}{Rényi} & & & \\
+		 & \checkmark & & \\
+		 & & \checkmark & \\
+		 & \checkmark & \checkmark & \\
+		 \midrule
+		 \multirow{4}{*}{Tsallis} & & & \\
+		 & \checkmark & & \\
+		 & & \checkmark & \\
+		 & \checkmark & \checkmark & \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+	
+	
+\end{document}
