@@ -166,7 +166,13 @@ $$
 Z=|S|^2 \sim \Gamma_{\text{SAR}}(\mu, L),
 $$
 a Gamma distribution conveniently parametrised by the mean $\mu>0$ and
-the shape $L\geq 1$.
+the shape $L\geq 1$:
+$$
+\color{DarkOrchid}{f_{\Gamma_{\mathrm{SAR}}}\bigl(z;\mu, L\bigr) 
+    = \frac{L^L}{\Gamma(L)\,\mu^L} z^{L-1} 
+    \exp \biggl(-\frac{Lz}{\mu}\biggr)
+    \mathbb I_{\mathbb R_+}(z)}. 
+$$
 * If $L=1$, we fall back to the exponential model.
 
 ## What happens if the speckle is not fully-developed? 
@@ -359,18 +365,31 @@ $$
 ## Goodness-of-fit test 
 
 \begin{align}
-T_{\lambda}\big( \Gamma_{\text{SAR}}(\mu,L) \big) & < 
-T_{\lambda}\big( \mathcal G^0_{\text{SAR}}(\mu,\alpha,L)\big) \\
+\underbrace{T_{\lambda}\big( \Gamma_{\text{SAR}}(\mu,L) \big)}_{\mathcal H_0} & < 
+\underbrace{T_{\lambda}\big( \mathcal G^0_{\text{SAR}}(\mu,\alpha,L)\big)}_{\mathcal H_1} \\
 \underbrace{T_{\lambda}\big( \Gamma_{\text{SAR}}(\mu) \big)}_{\Upsilon(\mu)} & < 
-T_{\lambda}\big( \mathcal G^0_{\text{SAR}}(\mu,\alpha)\big)
+\underbrace{T_{\lambda}\big( \mathcal G^0_{\text{SAR}}(\mu,\alpha)\big)}_{\Phi(\mu,\alpha)},
 \end{align}
-And our test statistic is
+but we don't want to estimate $\alpha$ because
+
+::: {.incremental}
+
+* the likelihood becomes flat [@FreryCribariSouza],
+* moments equations often fail to have solutions [@MejailJacoboFreryBustos:IJRS], 
+* estimators based on log-cumulants are sensitive to small outliers [@AllendeFreryetal:JSCS:05].
+
+::: 
+
+## Goodness-of-fit test 
+
+Our test statistic is
 $$
 S(\mathbf Z)=  \Upsilon(\widehat\mu)  - \widehat T_{\lambda}(\mathbf Z) \approx 0 \text{ under } \mathcal H_0, \text{ and large otherwise}.
 $$
 
 We used the asymptotic distribution of $S(\mathbf Z)$ under $\mathcal H_0$, to 
 build maps of $p$-values.
+
 
 ## Improvement I
 
@@ -380,12 +399,17 @@ Such trimming may reach almost ${80}{\%}$ of the observations when reducing from
 
 With this, we robustify the procedure before mixture of distributions.
 
+![](../Figures/AdaptiveWindows.svg){width="100%"}
+
 ## Improvement II
 
 We optimised $\lambda$ with simulated data to achieve maximum discrimination between the models, and obtained
 $$
 \lambda_{\text{optimal}} = 0.85.
 $$
+
+![](../Figures/fig-optimal_order-tsallis-1.svg)
+
 
 ## Improvement III
 
