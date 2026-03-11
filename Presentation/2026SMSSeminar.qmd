@@ -1,6 +1,6 @@
 ---
 title: "Nonparametric Estimation of Entropy Variants"
-subtitle: "Methodology and Applications"
+subtitle: "Methodology and Application to SAR Image Analysis"
 author: "Janeth Alpala, <u>Alejandro C. Frery</u>, Paolo Gamba, Abraão&nbsp;D.&nbsp;C.&nbsp;Nascimento, Andrea&nbsp;Rey"
 format:
   revealjs:
@@ -17,7 +17,8 @@ nocite: |
 bibliography:
   - ../references.bib
 csl: apa.csl
-highlight-style: github
+highlight-style: espresso
+
 ---
 
 ```{r setup}
@@ -36,13 +37,13 @@ set.seed(123456789, kind="Mersenne-Twister")
 
 :::: {.columns}
 
-::: {.column width="80%"}
+::: {.column width="70%"}
 * Several imaging modalities employ coherent imaging, e.g.,
 
    * Laser (does a laser pointer produce a flat light spot?)
    * Ultrasound-B
    * Sonar
- * Synthetic Aperture Radar (SAR)
+   * Synthetic Aperture Radar (SAR)
    
 * When a surface is illuminated with coherent light, the resulting image 
 is degraded by a high-contrast granular interference pattern: [speckle]{.alert-info}.
@@ -50,7 +51,7 @@ is degraded by a high-contrast granular interference pattern: [speckle]{.alert-i
 * Speckle arises from the interference of scattered wave fronts.
 :::
 
-::: {.column width="20%"}
+::: {.column width="30%"}
 ![](../Figures/SimulatedSpeckle.png){style="height: 60vh; width: auto; object-fit: contain;"}
 
 [*Simulated and actual speckle. FROM: @SimulationSpatiallyCorrelatedClutter2009 *]{.small}
@@ -315,6 +316,7 @@ c_i=
 \dfrac{n+k-i}{k} & \text{if } \; n-k+1\le i\le n.
 \end{cases}
 $$]{.small}
+
 We use the heuristic spacing $k=\lfloor\sqrt{n}+0.5\rfloor$.
 
 ## Noteworthy facts
@@ -374,8 +376,8 @@ but we don't want to estimate $\alpha$ because
 
 ::: {.incremental}
 
-* the likelihood becomes flat [@FreryCribariSouza],
 * moments equations often fail to have solutions [@MejailJacoboFreryBustos:IJRS], 
+* the likelihood becomes flat [@FreryCribariSouza],
 * estimators based on log-cumulants are sensitive to small outliers [@AllendeFreryetal:JSCS:05].
 
 ::: 
@@ -384,7 +386,7 @@ but we don't want to estimate $\alpha$ because
 
 Our test statistic is
 $$
-S(\mathbf Z)=  \Upsilon(\widehat\mu)  - \widehat T_{\lambda}(\mathbf Z) \approx 0 \text{ under } \mathcal H_0, \text{ and large otherwise}.
+S(\mathbf Z)=  \widehat T_{\lambda}(\mathbf Z) - \Upsilon(\widehat\mu)  \approx 0 \text{ under } \mathcal H_0, \text{ and large otherwise}.
 $$
 
 We used the asymptotic distribution of $S(\mathbf Z)$ under $\mathcal H_0$, to 
@@ -423,7 +425,7 @@ for the sample sizes we are interested to work with.
 
 ## San Francisco
 
-```{r}
+```{r SanFran, out.width="100%"}
 #| echo: false
 #| results: asis
 
@@ -483,7 +485,10 @@ cat('
 
 * We detect deviations from fully-developed speckle in intensity SAR images estimating the Tsallis entropy.
 
-* We improved the test with bootstrap correction, adaptive windows, and an optimized $\lambda$.
+* We improved the test with 
+   * bootstrap correction, 
+   * adaptive windows, and 
+   * an optimized $\lambda$.
 
 * We do not need training data or parametric modelling.
 
