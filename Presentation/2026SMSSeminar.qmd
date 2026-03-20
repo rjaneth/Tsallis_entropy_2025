@@ -103,15 +103,15 @@ ggplot(data=DATA) +
 
 The observation in a pixel is
 $$
-S = \sum_{\ell=1}^m S_\ell e^{j \phi_\ell} = \underbrace{\sum_{\ell=1}^m |S_\ell| \cos \phi_\ell}_{\Re(S)} +
-j \underbrace{\sum_{\ell=1}^m |S_\ell| \sin \phi_\ell}_{\Im(S)}.
+S = \sum_{\ell=1}^m S_\ell = \sum_{\ell=1}^m A_\ell e^{j \phi_\ell} = \underbrace{\sum_{\ell=1}^m  A_\ell \cos \phi_\ell}_{\Re(S)} +
+j \underbrace{\sum_{\ell=1}^m A_\ell \sin \phi_\ell}_{\Im(S)}.
 $$
-We model $S_\ell\colon\Omega\rightarrow\mathbb C$ and $\phi_\ell\colon\Omega\rightarrow(0,2\pi]$ as random variables.
+We model $A_\ell\colon\Omega\rightarrow\mathbb R_+$ and $\phi_\ell\colon\Omega\rightarrow(0,2\pi]$ as random variables.
 If
 
 * $m\to\infty$ (infinitely many scatterers in the resolution cell),
-<!-- * $\max\operatorname{Var}(S_\ell)<\infty$ (no scatterer dominates), -->
-* $|S_\ell| \perp |S_k|$ (independent amplitudes) with $\max\operatorname{Var}(S_\ell)<\infty$ (no scatterer dominates)
+<!-- * $\max\operatorname{Var}(A_\ell)<\infty$ (no scatterer dominates), -->
+* $A_\ell \perp A_k$ (independent amplitudes) with $\max\operatorname{Var}(A_\ell)<\infty$ (no scatterer dominates)
 * $\phi_\ell \perp \phi_k\sim\mathcal U(-\pi,\pi]$ (iid uninformative phases),
 * the amplitudes are collectively independent of the phases,
 
