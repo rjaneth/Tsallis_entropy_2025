@@ -1,0 +1,162 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d3561;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="groundGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a5568;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d3748;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Arrow marker for signal -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#fbbf24" />
+    </marker>
+    
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#10b981" />
+    </marker>
+    
+    <!-- Glow effect for signals -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Sky background -->
+  <rect width="800" height="400" fill="url(#skyGradient)"/>
+  
+  <!-- Ground -->
+  <rect y="400" width="800" height="200" fill="url(#groundGradient)"/>
+  <line x1="0" y1="400" x2="800" y2="400" stroke="#718096" stroke-width="2"/>
+  
+  <!-- SAR Satellite/Aircraft on the left side -->
+  <g id="sensor" transform="translate(120, 180)">
+    <!-- Satellite body -->
+    <rect x="-40" y="-25" width="80" height="50" fill="#e2e8f0" stroke="#64748b" stroke-width="2" rx="5"/>
+    
+    <!-- Solar panels -->
+    <rect x="-80" y="-15" width="35" height="30" fill="#3b82f6" stroke="#1e40af" stroke-width="1.5"/>
+    <rect x="45" y="-15" width="35" height="30" fill="#3b82f6" stroke="#1e40af" stroke-width="1.5"/>
+    
+    <!-- Panel details -->
+    <line x1="-80" y1="-5" x2="-45" y2="-5" stroke="#1e40af" stroke-width="0.5"/>
+    <line x1="-80" y1="5" x2="-45" y2="5" stroke="#1e40af" stroke-width="0.5"/>
+    <line x1="45" y1="-5" x2="80" y2="-5" stroke="#1e40af" stroke-width="0.5"/>
+    <line x1="45" y1="5" x2="80" y2="5" stroke="#1e40af" stroke-width="0.5"/>
+    
+    <!-- Antenna pointing right -->
+    <rect x="25" y="-10" width="8" height="20" fill="#ef4444" stroke="#991b1b" stroke-width="1.5" rx="2"/>
+    <circle cx="37" cy="0" r="3" fill="#fbbf24"/>
+    
+    <!-- Label -->
+    <text x="0" y="-45" text-anchor="middle" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="16" font-weight="bold">SAR Sensor</text>
+    <text x="0" y="-28" text-anchor="middle" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="11">(Side-looking)</text>
+  </g>
+  
+  <!-- Flight direction arrow -->
+  <g transform="translate(120, 130)">
+    <line x1="-30" y1="0" x2="30" y2="0" stroke="#60a5fa" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <text x="0" y="-8" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="11">Flight Direction</text>
+  </g>
+  
+  <!-- Emitted signal waves (to the right and downward) -->
+  <g filter="url(#glow)">
+    <!-- Signal beams -->
+    <path d="M 157 180 L 350 420" stroke="#fbbf24" stroke-width="3" opacity="0.8" marker-end="url(#arrowhead)"/>
+    <path d="M 157 180 L 450 420" stroke="#fbbf24" stroke-width="2.5" opacity="0.7" marker-end="url(#arrowhead)"/>
+    <path d="M 157 180 L 550 420" stroke="#fbbf24" stroke-width="2.5" opacity="0.7" marker-end="url(#arrowhead)"/>
+    <path d="M 157 180 L 650 420" stroke="#fbbf24" stroke-width="2" opacity="0.6" marker-end="url(#arrowhead)"/>
+    <path d="M 157 180 L 400 300" stroke="#fbbf24" stroke-width="2" opacity="0.5" marker-end="url(#arrowhead)"/>
+    
+    <!-- Wave representation -->
+    <path d="M 200 220 Q 205 215 210 220 T 220 220 T 230 220 T 240 220" stroke="#fde047" stroke-width="1.5" fill="none" opacity="0.7"/>
+    <path d="M 280 280 Q 290 275 300 280 T 320 280 T 340 280" stroke="#fde047" stroke-width="1.5" fill="none" opacity="0.6"/>
+    <path d="M 360 340 Q 380 335 400 340 T 440 340" stroke="#fde047" stroke-width="1.5" fill="none" opacity="0.5"/>
+  </g>
+  
+  <!-- Ground backscatterers -->
+  <g id="backscatterers">
+    <!-- Backscatterer 1 (tree) -->
+    <g transform="translate(350, 450)">
+      <polygon points="0,-30 -15,0 15,0" fill="#22c55e" stroke="#15803d" stroke-width="1"/>
+      <rect x="-3" y="0" width="6" height="15" fill="#78350f"/>
+      <circle cx="0" cy="-35" r="8" fill="#ef4444" opacity="0.8"/>
+    </g>
+    
+    <!-- Backscatterer 2 (building) -->
+    <g transform="translate(450, 450)">
+      <rect x="-12" y="-35" width="24" height="35" fill="#94a3b8" stroke="#475569" stroke-width="1.5"/>
+      <rect x="-8" y="-28" width="6" height="6" fill="#60a5fa"/>
+      <rect x="2" y="-28" width="6" height="6" fill="#60a5fa"/>
+      <rect x="-8" y="-18" width="6" height="6" fill="#60a5fa"/>
+      <rect x="2" y="-18" width="6" height="6" fill="#60a5fa"/>
+      <circle cx="0" cy="-40" r="8" fill="#ef4444" opacity="0.8"/>
+    </g>
+    
+    <!-- Backscatterer 3 (vehicle) -->
+    <g transform="translate(550, 450)">
+      <rect x="-10" y="-12" width="20" height="12" fill="#3b82f6" stroke="#1e40af" stroke-width="1.5" rx="2"/>
+      <circle cx="-6" cy="0" r="3" fill="#1f2937"/>
+      <circle cx="6" cy="0" r="3" fill="#1f2937"/>
+      <circle cx="0" cy="-17" r="8" fill="#ef4444" opacity="0.8"/>
+    </g>
+    
+    <!-- Backscatterer 4 (rock/terrain) -->
+    <g transform="translate(650, 450)">
+      <ellipse cx="0" cy="-8" rx="15" ry="10" fill="#71717a" stroke="#3f3f46" stroke-width="1.5"/>
+      <circle cx="0" cy="-13" r="8" fill="#ef4444" opacity="0.8"/>
+    </g>
+  </g>
+  
+  <!-- Return signals (back to sensor) -->
+  <g filter="url(#glow)">
+    <path d="M 350 415 L 165 185" stroke="#10b981" stroke-width="2" opacity="0.7" stroke-dasharray="4,3" marker-end="url(#arrowhead-green)"/>
+    <path d="M 450 410 L 168 188" stroke="#10b981" stroke-width="2.5" opacity="0.8" stroke-dasharray="4,3" marker-end="url(#arrowhead-green)"/>
+    <path d="M 550 415 L 171 191" stroke="#10b981" stroke-width="2" opacity="0.7" stroke-dasharray="4,3" marker-end="url(#arrowhead-green)"/>
+    <path d="M 650 437 L 174 194" stroke="#10b981" stroke-width="2" opacity="0.7" stroke-dasharray="4,3" marker-end="url(#arrowhead-green)"/>
+  </g>
+  
+  <!-- Swath width indicator -->
+  <g>
+    <line x1="350" y1="480" x2="650" y2="480" stroke="#60a5fa" stroke-width="2" stroke-dasharray="5,5" opacity="0.8"/>
+    <line x1="350" y1="475" x2="350" y2="485" stroke="#60a5fa" stroke-width="2"/>
+    <line x1="650" y1="475" x2="650" y2="485" stroke="#60a5fa" stroke-width="2"/>
+    <text x="500" y="505" text-anchor="middle" fill="#60a5fa" font-family="Arial, sans-serif" font-size="12">Swath Width</text>
+  </g>
+  
+  <!-- Incidence angle indicator -->
+  <g>
+    <path d="M 157 180 L 157 280" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <path d="M 157 180 L 350 420" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <path d="M 157 230 A 50 50 0 0 1 190 260" stroke="#fbbf24" stroke-width="2" fill="none"/>
+    <text x="205" y="250" fill="#fbbf24" font-family="Arial, sans-serif" font-size="11">θ</text>
+  </g>
+  
+  <!-- Legend -->
+  <g transform="translate(50, 500)">
+    <text x="0" y="0" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Signal Legend:</text>
+    
+    <line x1="0" y1="15" x2="40" y2="15" stroke="#fbbf24" stroke-width="3" opacity="0.8"/>
+    <text x="50" y="20" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="12">Transmitted Signal</text>
+    
+    <line x1="0" y1="35" x2="40" y2="35" stroke="#10b981" stroke-width="2.5" opacity="0.8" stroke-dasharray="4,3"/>
+    <text x="50" y="40" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="12">Backscattered Signal</text>
+    
+    <circle cx="20" cy="55" r="6" fill="#ef4444" opacity="0.8"/>
+    <text x="50" y="60" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="12">Backscatterer</text>
+    
+    <text x="50" y="80" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="11">θ = Incidence Angle</text>
+  </g>
+  
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#fbbf24" font-family="Arial, sans-serif" font-size="20" font-weight="bold">Synthetic Aperture Radar (SAR) Imaging</text>
+  <text x="400" y="55" text-anchor="middle" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="13">Side-Looking Geometry with Electromagnetic Backscattering</text>
+</svg>

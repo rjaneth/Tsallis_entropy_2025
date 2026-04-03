@@ -31,9 +31,72 @@ library(patchwork)
 library(scales)
 
 set.seed(123456789, kind="Mersenne-Twister")
+
+fGammaSAR <- function(z, mu, L){
+  return(
+    (L^L / (gamma(L)*mu^L)) *
+      z^{L-1} *
+      exp(-L*z/mu)
+  )
+}
+
+fGI0SAR <- function(z, mu, alpha, L){
+  return(
+    (L^L*gamma(L-alpha) / 
+       ((-mu*(alpha+1))^alpha *
+          gamma(-alpha) * gamma(L))) *
+      z^(L-1) /
+      (-mu*(alpha+1)+L*z)^(L-alpha)
+  )
+}
 ```
 
 # Introduction 
+
+
+
+## What is SAR?
+
+SAR -- Synthetic Aperture Radar:
+
+   * Radar -- RAdio Detecting And Ranging: a sensor that operates in the microwaves 
+   spectrum (radio) by emitting signals and sensing the return
+   * Synthetic Aperture: a signal processing "trick" that renders fine spatial 
+   resolution
+
+## SAR System Overview
+
+:::: {.columns}
+
+::: {.column width="60%"}
+![SAR sensor with side-looking geometry](../Figures/sar_backscatter_diagram.svg){width="100%"}
+:::
+
+::: {.column width="40%"}
+**Key Components:**
+
+- Side-looking sensor
+- Microwave signals
+- Ground backscatterers
+- Return signals
+:::
+
+::::
+
+## Why SAR?
+
+* Complementary information to optical remote sensing
+* See through clouds, fog, and rain (all-weather)
+* Own source of illumination (day and night)
+* Geometric and dielectric properties
+* Ability to penetrate through canopies and soil
+* Soil moisture retrieval
+
+## 
+
+![From @RemoteSensingImagingSar](../Figures/Infrared-SAR.png){width="60%"}
+
+##
 
 :::: {.columns}
 
@@ -58,6 +121,8 @@ is degraded by a high-contrast granular interference pattern: [speckle]{.alert-i
 :::
 
 ::::
+
+# SAR Image Formation
 
 ## 
 
@@ -219,6 +284,31 @@ where $\mu > 0$ is the mean intensity.
 
 This model can describe data with extreme variability ($\alpha\approx0$) and fully-developed speckle ($\alpha\to-\infty$).
 
+## The two models
+
+```{r Densities, out.width="50%"}
+library(reshape2)
+z <- seq(.01, 30, length.out=500)
+dGamma <- fGammaSAR(z, 5, 2)
+dGI0 <- fGI0SAR(z, 5, -1.5, 2)
+
+dens <- melt(data.frame(z, dGamma, dGI0), measure.vars = 2:3, variable.name = "Model")
+
+ggplot(dens, aes(x=z, y=value, col=Model)) +
+  geom_line(linewidth = 2, alpha=.6) +
+  geom_vline(xintercept = 5) +
+  labs(x="", y="") +
+  theme_tufte()
+
+ggplot(dens, aes(x=z, y=value, col=Model)) +
+  geom_line(linewidth = 2, alpha=.6) +
+  geom_vline(xintercept = 5) +
+  scale_y_log10() +
+  labs(x="", y="") +
+  theme_tufte()
+
+```
+
 ## Recap
 
 We have two models to describe the observations:
@@ -228,7 +318,10 @@ We have two models to describe the observations:
 
 [We want to measure how close (or far) we are from the fully-developed speckle model, but using small samples possibly contaminated by outliers.]{.alert-warning}
 
+
 How can we do it?
+
+# Entropy
 
 ## What is Entropy?
 
