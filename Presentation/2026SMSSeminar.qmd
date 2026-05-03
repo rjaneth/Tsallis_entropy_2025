@@ -168,10 +168,11 @@ ggplot(data=DATA) +
 
 The observation in a pixel is
 $$
-S = \sum_{\ell=1}^m S_\ell = \sum_{\ell=1}^m A_\ell e^{j \phi_\ell} = \underbrace{\sum_{\ell=1}^m  A_\ell \cos \phi_\ell}_{\Re(S)} +
+S = \sum_{\ell=1}^m \underbrace{S_\ell}_{\in\mathbb C} = 
+\underbrace{\sum_{\ell=1}^m A_\ell e^{j \phi_\ell}}_{\in \mathbb C} = \underbrace{\sum_{\ell=1}^m  A_\ell \cos \phi_\ell}_{\Re(S)} +
 j \underbrace{\sum_{\ell=1}^m A_\ell \sin \phi_\ell}_{\Im(S)}.
 $$
-We model $A_\ell\colon\Omega\rightarrow\mathbb R_+$ and $\phi_\ell\colon\Omega\rightarrow(0,2\pi]$ as random variables.
+We model $A_\ell\colon\Omega\rightarrow\mathbb R_+$ and $\phi_\ell\colon\Omega\rightarrow(-\pi,\pi]$ as random variables.
 If
 
 * $m\to\infty$ (infinitely many scatterers in the resolution cell),
@@ -591,29 +592,27 @@ cat('
 
 * [In the same way, one can make distribution-free tests for problems where an entropy is an expressive descriptor.]{.alert-warning}
 
+
+## Contact {.fullpage}
+
+::: columns
+::: {.column width="45%"}
+![](../Figures/QRCode-WebPageVUW.png){out-width="40%"}
+:::
+
+::: {.column width="55%"}
+  Alejandro C. Frery\
+School of Mathematics and Statistics\
+Victoria University of Wellington\
+New Zealand\
+  \
+alejandro.frery at vuw.ac.nz\
+ \
+[Feel free to contact me!]{.alert-warning}
+:::
+:::
+
 ## References  {.references-slide}
 
 
-
-<!-- ## Contact -->
-
-<!-- ::: columns -->
-<!-- ::: {.column width="25%"} -->
-<!-- ![](../Figures/QRCode-WebPageVUW.png){out-width="40%"} -->
-<!-- ![](../Figures/QRCodeACFreryWeChat.jpeg) -->
-<!-- ::: -->
-
-<!-- ::: {.column width="63%"} -->
-<!--   Alejandro C. Frery\ -->
-<!-- School of Mathematics and Statistics\ -->
-<!-- Victoria University of Wellington\ -->
-<!-- New Zealand\ -->
-<!--   \ -->
-<!-- alejandro.frery at vuw.ac.nz\ -->
-<!--  \ -->
-<!-- [Feel free to contact me!]{.alert-warning} -->
-<!-- :::  -->
-<!-- ::: -->
-
-<!-- ## References  {.references-slide} -->
 
