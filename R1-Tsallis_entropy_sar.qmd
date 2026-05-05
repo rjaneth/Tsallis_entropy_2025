@@ -91,7 +91,7 @@ abstract: |
   The test is integrated within an adaptive windowing strategy that locally selects the optimal window size based on regional homogeneity: larger windows in homogeneous regions to stabilize estimation and smaller windows in heterogeneous areas to preserve structural details. 
   This combination yields an unsupervised statistical framework that generates per-pixel $p$-value maps for detecting departures from fully-developed speckle.
   Experimental validation using both simulated data and SAR imagery confirms the method's precision in detecting texture variability and discriminating between homogeneous and heterogeneous regions. 
-  The proposed approach offers a principled, interpretable tool for automated SAR image analysis without requiring training data or scene-specific calibration.
+  The proposed approach offers a principled, interpretable tool for automated SAR image analysis without requiring training data or explicit parametric texture estimation.
 
 keywords: [Tsallis entropy, Gamma distribution, "$\\mathcal{G}_I^0$ distribution", heterogeneity, SAR, hypothesis testing, nonparametric estimation, bootstrap]
 
@@ -126,6 +126,9 @@ header-includes:
    - \usepackage{xcolor}
    - \usepackage{tikz}
    - \usetikzlibrary{shapes, arrows.meta, positioning}
+   - \usepackage{pifont}
+   #- \newcommand{\cmark}{\textcolor{teal}{\ding{51}}}
+   #- \newcommand{\xmark}{\textcolor{orange}{\ding{55}}}
 #bibliography: references.bib
 bibliography: references.bib
 
@@ -188,7 +191,8 @@ source("./Code/functions_sample_bias_mse_1.R")
 #source("./Code/read_ENVI_images.R")
 
 ```
-
+\newcommand{\cmark}{\textcolor{teal}{\ding{51}}}
+\newcommand{\xmark}{\textcolor{orange}{\ding{55}}}
 \renewcommand{\tablename}{TABLE}
 
 # Introduction
@@ -208,7 +212,8 @@ Entropy has long been used to quantify the uncertainty of a random variable, wit
 
 The Tsallis entropy [@Tsallis1988] is a non-additive generalization of the Shannon entropy that introduces a parameter $\lambda$. It allows greater flexibility in capturing deviations from homogeneity and better sensitivity to heavy-tailed data. This makes it especially appealing for SAR analysis, where both homogeneous and highly heterogeneous areas coexist.
 
-In this work, we propose a method that exploits the statistical properties of SAR imagery through Tsallis entropy whose non-extensive parameter $\lambda$ exploits the heavytailedness of the models for SAR imagery. 
+In this work, we propose a method that exploits the statistical properties of SAR imagery through the Tsallis entropy, whose non-extensive parameter $\lambda$ provides additional sensitivity to the heavy-tailed behavior commonly observed in SAR data.
+
 The resulting approach requires no retraining or hyperparameter tuning, does not depend on sensors and resolutions, and yields fully interpretable results. 
 The method offers an alternative when labeled data are scarce, interpretability is required, or computational resources are constrained.
 It can serve as a feature layer within explainable machine learning pipelines.
@@ -1186,9 +1191,9 @@ For SAR intensity images (fully-developed speckle with $L$ looks), the coefficie
 C_{ij} \approx \sigma_n := \frac{1}{\sqrt{L}}.
 \end{equation*}
 
-The homogeneity criterion is defined by comparing $C_{ij}$ with an adaptive threshold $U_{ij}$ given by: \begin{equation}
+The homogeneity criterion is defined by comparing $C_{ij}$ with an adaptive threshold $U_{ij}$ given by: \begin{equation*}
 U_{ij} = \eta\!\left( 1 + \sqrt{\frac{1 + 2\sigma_n^2}{8\,(W_{ij} - 1)}} \right)\sigma_n,
-\end{equation} where $W_{ij} = 2N_{ij} + 1$ is the current window side length, and $\eta$ is a tuning parameter controlling the degree of smoothing. Values near $\eta=1$ provide limited speckle suppression, while larger values increase smoothing and yield stronger noise reduction.
+\end{equation*} where $W_{ij} = 2N_{ij} + 1$ is the current window side length, and $\eta$ is a tuning parameter controlling the degree of smoothing. Values near $\eta=1$ provide limited speckle suppression, while larger values increase smoothing and yield stronger noise reduction.
 
 The window radius $N_{ij}$ is updated dynamically and locally as follows: $$
 N_{ij}^{\text{updated}} =
@@ -1198,11 +1203,147 @@ N_{ij}^{\text{updated}} =
 \end{cases}
 $$ where $N_{\max}$ and $N_{\min}$ denote the maximum and minimum allowed window radius, respectively. Since $W_{ij}=2N_{ij}+1$, these bounds on the radius induce the corresponding minimum and maximum window sides $W_{\min}=2N_{\min}+1$ and $W_{\max}=2N_{\max}+1$.
 
-In homogeneous regions ($C_{ij} \le U_{ij}$), the window radius increases (up to $N_{\max}$), enhancing speckle reduction and stabilizing the estimates; in heterogeneous regions ($C_{ij} > U_{ij}$), the window radius decreases (down to $N_{\min}$), preserving edges and preventing class mixing.
+In homogeneous regions, where $C_{ij}\leq U_{ij}$, the window radius increases up to $N_{\max}$, enhancing speckle reduction and stabilizing the estimates. In heterogeneous regions, where $C_{ij}>U_{ij}$, the window radius decreases down to $N_{\min}$, preserving edges and preventing class mixing.
 
-Once the window radius $N_{ij}$ has been determined for pixel $(i,j)$, the corresponding sample is extracted and the proposed test in \eqref{eq-test-tsallis} is applied to obtain a local test value. This produces a map of test statistics over the image. For inference, each value in this map is standardized using the empirical mean and standard deviation of the image, and the two-sided $p$-value is then computed.
+Once the window radius $N_{ij}$ has been determined for pixel $(i,j)$, the corresponding sample is extracted and the proposed test in \eqref{eq-test-tsallis} is applied to obtain a local test value. This produces a map of statistics over the image.
 
-This adaptive strategy is locally responsive to image texture, using small windows in heterogeneous areas and larger ones in homogeneous zones. This ensures edge preservation and statistical stability, while the parameter $\eta$ controls the balance between smoothness and detail preservation. Moreover, the framework is extensible and can be applied with any entropy estimator.
+Because the final window size $W_{ij}$ is selected from the data, the null distribution of the adaptive statistic need not coincide exactly with that of a fixed-window statistic. For this reason, the adaptive case requires an additional null diagnostic and calibration analysis, described next.
+
+<!-- This adaptive strategy is locally responsive to image texture, using small windows in heterogeneous areas and larger ones in homogeneous zones. This ensures edge preservation and statistical stability, while the parameter $\eta$ controls the balance between smoothness and detail preservation. Moreover, the framework is extensible and can be applied with any entropy estimator. -->
+
+## Null diagnostic and adaptive calibration {#sec:adaptive-null}
+
+The null behavior reported in Table&nbsp;\ref{tab:size-power-tsallis} was obtained for fixed sample sizes. Since, in the adaptive procedure, the final window size $W_{ij}$ is selected from the data, we performed an additional diagnostic experiment to assess whether the null distribution of the adaptive statistic differs from the fixed-window case and how the corresponding adaptive $p$-values should be calibrated.
+
+For this purpose, we generated a fully homogeneous $\Gamma_{\mathrm{SAR}}$ image of size $1000\times1000$ under $H_0$, with mean $\mu=10$, number of looks $L=16$, entropy order $\lambda=0.85$, bootstrap size $B=100$, and adaptive windows ranging from $5\times5$ to $11\times11$, that is, $W\in\{5,7,9,11\}$, with $\eta=3$. The complete adaptive procedure was then applied and compared with the corresponding fixed-window results.
+
+The adaptive procedure produces, together with the statistic field, a window-selection map $W_{\mathrm{map}}$, whose entry at pixel $(i,j)$ records the final selected window size $W_{ij}\in\{5,7,9,11\}$. To analyze its stabilized behavior under $H_0$, we also considered a cropped interior region, defined as the central part of the simulated image obtained after removing a border of width $(W_{\max}-1)/2$ pixels from each side. Since $W_{\max}=11$, this cropped border has width $5$ pixels. This distinction is useful because the outer border is more affected by edge effects and by the transient behavior associated with the sequential initialization of the adaptive procedure.
+
+Figure&nbsp;\ref{fig:interior-schematic1} illustrates the definition of the cropped interior region, while Figure&nbsp;\ref{fig:adaptive-growth-schematic1} schematically shows how the adaptive rule tends to increase the window size under homogeneous conditions. In a homogeneous null image, the adaptive procedure progressively expands the local window whenever the homogeneity criterion is satisfied, so the selected size tends to reach the maximum admissible value.
+
+```{=latex}
+\begin{figure}[hbt]
+\centering
+\begin{tikzpicture}[scale=0.65]
+  % Outer image
+  \draw[thick] (0,0) rectangle (8,8);
+  % Interior region
+  \fill[gray!20] (0,0) rectangle (8,8);
+  \fill[white] (1,1) rectangle (7,7);
+  \draw[thick] (1,1) rectangle (7,7);
+
+  % Labels
+  \node at (4,8.5) {Simulated homogeneous image ($1000\times1000$)};
+  \node at (4,4) {Cropped interior region};
+  \node[rotate=90] at (-0.6,4) {cropped border ($5$ px)};
+  \node[rotate=90] at (8.6,4) {cropped border ($5$ px)};
+  \node at (4,-0.5) {cropped border ($5$ px)};
+  \node at (4,8.9) {};
+\end{tikzpicture}
+\caption{Schematic definition of the cropped interior region used in the adaptive null diagnostic.}
+\label{fig:interior-schematic1}
+\end{figure}
+```
+
+```{=latex}
+\begin{figure}[hbt]
+\centering
+\begin{tikzpicture}[
+  >=latex,
+  font=\footnotesize,
+  box/.style={draw, rectangle, rounded corners=1pt, minimum width=1.0cm, minimum height=0.58cm, inner sep=2pt}
+]
+
+\node[box] (w5) at (0,0) {$5\times5$};
+\node[box] (w7) at (1.5,0) {$7\times7$};
+\node[box] (w9) at (3.0,0) {$9\times9$};
+\node[box] (w11) at (4.7,0) {$11\times11$};
+
+\draw[->] (w5) -- (w7);
+\draw[->] (w7) -- (w9);
+\draw[->] (w9) -- (w11);
+
+\node at (2.35,0.65) {\scriptsize $C_{ij}\leq U_{ij}$};
+\node at (2.35,-0.65) {\scriptsize $C_{ij}>U_{ij}$};
+
+\draw[->] (2.35,-0.45) -- (1.15,-0.45);
+\draw[->] (3.85,-0.45) -- (2.65,-0.45);
+
+\end{tikzpicture}
+\caption{Admissible window sizes in the adaptive procedure. If the local homogeneity criterion is satisfied, the window moves to the next larger admissible size; otherwise, it moves to the previous one. Under a homogeneous null image, repeated updates tend to drive the procedure toward $W_{\max}=11$.}
+\label{fig:adaptive-growth-schematic1}
+\end{figure}
+```
+
+
+In addition, we estimated null summaries separately for each admissible window size $W$. Denoting by $\mu_0(W)$ and $\sigma_0(W)$ the null mean and null standard deviation of the statistic associated with window size $W$, the resulting calibration values are reported in 
+@tbl-null-calibration-adaptive. 
+
+```{=latex}
+\begin{table}[H]
+\centering
+\caption{Window-specific null calibration summaries estimated under $H_0$ for the adaptive-window diagnostic.}
+\label{tbl-null-calibration-adaptive}
+\begin{tabular}{ccc}
+\toprule
+$W$ & $\mu_0(W)$ & $\sigma_0(W)$ \\
+\midrule
+$5$  & $-0.06345303$ & $0.2348613$ \\
+$7$  & $-0.01231120$ & $0.1665428$ \\
+$9$  & $0.01039501$  & $0.1292914$ \\
+$11$ & $0.02177826$  & $0.1058000$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+```
+
+@tbl-null-adaptive-wfreq reports the empirical frequencies of the selected window sizes in the adaptive null diagnostic.
+```{=latex}
+\begin{table}[!t]
+\centering
+\caption{Empirical frequency of selected window sizes in the adaptive null diagnostic under $H_0$.}
+\label{tbl-null-adaptive-wfreq}
+\begin{tabular}{cccc}
+\toprule
+Region & $W$ & Count & Proportion \\
+\midrule
+Whole image      & $7$  & $1000$   & $0.001$ \\
+Whole image      & $9$  & $1000$   & $0.001$ \\
+Whole image      & $11$ & $998000$ & $0.998$ \\
+Cropped interior & $11$ & $980100$ & $1.000$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+```
+Figure \ref{fig:null-diagnostic-adaptive} summarizes the main results. Panel (a) shows the empirical frequencies of $W_{ij}$ for the whole image and for the cropped interior region. In the whole image, a very small proportion of pixels is assigned to $W=7$ and $W=9$, whereas the dominant selected size is $W=11$. In the cropped interior region, the selected size is $W=11$ for essentially all pixels. This indicates that, under a homogeneous null model, the adaptive rule increases the window size until reaching the maximum admissible value in the stabilized interior of the image.
+
+```{=latex}
+\begin{figure}[hbt]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{Figures-R1/null_diagnostic_adaptive_3panels_en_v2.png}
+ \caption{Null diagnostic for the adaptive-window procedure under $H_0$. The adaptive rule selects $W=11$ almost everywhere in the cropped interior, yielding a null distribution nearly identical to the fixed-window case with $W=11$.}
+  \label{fig:null-diagnostic-adaptive}
+\end{figure}
+```
+
+Panel (b) compares the empirical null densities of the statistic for fixed windows with $W\in\{5,7,9,11\}$ against the density produced by the adaptive procedure in the cropped interior region. The adaptive density is practically indistinguishable from the fixed-window density with $W=11$, whereas the densities for $W=5$, $W=7$, and $W=9$ are visibly broader. This shows that, in a homogeneous null setting, the adaptive procedure adopts the null behavior of the fixed-window statistic with the maximum admissible window size.
+
+Panel (c) displays the adaptive null density conditioned on the final selected window size in the cropped interior region. Only the component associated with $W=11$ appears, confirming that the adaptive procedure collapses to the largest admissible window in the homogeneous interior region. Taken together, these results show that, although $W_{ij}$ is data-dependent, the resulting null distribution in the homogeneous interior is effectively the same as that of the fixed-window statistic with $W=11$.
+
+After establishing the null behavior of the adaptive statistic, the next step is to convert the statistic field into pixelwise $p$-values. For this purpose, the adaptive centering is retained through the window-dependent null mean $\mu_0(W_{ij})$, while the scale is taken from the observed dispersion of the statistic field. This choice is motivated by the fact that $\sigma_0(W_{ij})$ is estimated under a purely homogeneous null model and may therefore be substantially smaller than the empirical spread of the statistic in actual SAR scenes, where residual heterogeneity and local transitions are still present. Using $\sigma_0(W_{ij})$ directly may thus produce overly aggressive standardization and excessive rejections. Accordingly, we used
+\begin{equation}
+z_{ij}=\frac{S_{ij}-\mu_0(W_{ij})}{sd_{\mathrm{obs}}},
+\label{eq:standar}
+\end{equation}
+with adaptive $p$-values computed as
+$$
+p_{ij}=2\Phi\bigl(-|z_{ij}|\bigr),
+$$
+where $sd_{\mathrm{obs}}$ denotes the empirical standard deviation of the adaptive statistic values $\{S_{ij}\}$ computed over all pixels in the analyzed scene.  In this way, the procedure preserves the window-dependent null centering while adopting a scale better matched to the variability of the observed SAR data.
+
+The same adaptive calibration strategy was subsequently used in the comparative benchmark of the adaptive Shannon, Rényi, and Tsallis configurations, as discussed in Subsection \ref{sec:entropy-benchmark}.
+
+
 
 # RESULTS {#sec:app}
 
@@ -1972,15 +2113,129 @@ Across all scenes, the configuration $\eta = 4$ presents lower performance. This
 
 Regarding the decision threshold, a significance level of $0.05$ was adopted for the binary classification of the $p$-value maps. This choice provides a practical balance between false-alarm control and sensitivity to weak texture variations. Experiments with alternative levels confirmed the expected trade-offs: a stricter threshold ($0.01$) reduces false alarms but may miss subtle features, whereas a more relaxed one ($0.10$) increases sensitivity at the cost of more false positives, particularly in highly speckled regions.
 
+
+## Comparative Benchmark Between Entropy-Based Tests {#sec:entropy-benchmark}
+
+To compare the proposed Tsallis-based test with earlier entropy-based methods for SAR imagery, we carried out a benchmark against the Shannon  and Rényi-based tests.
+In particular, the Shannon-based test in&nbsp;[@Frery2024] and the Rényi-based test in&nbsp;[@Alpala2025] follow the same general approach to hypothesis testing, i.e.,  comparing a nonparametric entropy estimate with its theoretical value under the $\Gamma_{\mathrm{SAR}}$ model. 
+
+The present proposal extends that line by using the Tsallis entropy, whose parameter $\lambda$ provides additional flexibility to capture departures from homogeneity in heavy-tailed and highly textured SAR data.
+
+This comparison is relevant because the gain of the proposed method may come from three components: the entropy functional, the bootstrap correction, and the adaptive window-selection strategy. To separate these effects, we compared Shannon, Rényi, and Tsallis under the same protocol, considering fixed and adaptive windows, with and without bootstrap correction. The fixed window size was $7\times7$, and the adaptive range was $5\times5$ to $11\times11$.
+
+For the adaptive configurations in this benchmark, we used the refined calibration introduced in&nbsp;\eqref{eq:standar}, which preserves the window-dependent null centering while avoiding distortions that may arise when a purely null-based scale is used in real scenes. In the Dublin scene, this refinement produced only minor quantitative changes and left the substantive conclusions unchanged.
+
+For the single-threshold summaries, we report $F_1$, $\kappa$, and OA at the nominal decision level $p=0.05$, since the binary decision maps in the paper are obtained from the rule $p_{ij}<0.05$. 
+To verify that the conclusions are not driven by this single choice, we also performed a threshold sweep over $p$-thresholds from $0.01$ to $0.20$. 
+In contrast, the ROC curve and its area under the curve (AUC) are threshold-free, as they are computed from the continuous score map rather than from a single decision threshold.
+
+@tbl-dublin-main-benchmark reports the benchmark results. Two consistent trends are observed. 
+First, for all three entropies, the adaptive strategy improves the corresponding fixed-window configuration. Second, within both the fixed and adaptive settings, the Tsallis-based test provides the strongest overall performance. 
+The best configuration is the bootstrap-corrected adaptive Tsallis method, which achieved the highest AUC, $F_1(p=0.05)$, $\kappa(p=0.05)$, and OA$(p=0.05)$. 
+These results indicate that the improvement  is not explained only by adaptive windowing, since the Tsallis entropy itself also provides additional discriminatory power when combined with bootstrap correction and adaptive window selection.
+
+```{=latex}
+\begin{table*}
+\footnotesize
+\centering
+\caption{Entropy-based benchmark on the Dublin SAR scene under fixed and adaptive window settings}
+\label{tbl-dublin-main-benchmark}
+%\resizebox{0.94\textwidth}{!}{%
+\begin{tabular}{ccccccc}
+\toprule
+\textbf{Entropy} & \textbf{Bootstrap} & \textbf{Window setting} & \textbf{AUC} & $\boldsymbol{F_1\,(p=0.05)}$ & \textbf{$\kappa(p=0.05)$} & \textbf{OA$(p=0.05)$} \\
+\midrule
+\multirow{4}{*}{Shannon}
+& \xmark & Fixed $7\times7$   & 0.9509 & 0.4944 & 0.3660 & 0.7250 \\
+& \xmark & Adaptive  & 0.9826 & 0.8218 & 0.7314 & 0.8761 \\
+& \cmark & Fixed $7\times7$   & 0.9680 & 0.6598 & 0.5339 & 0.7921 \\
+& \cmark & Adaptive  & 0.9887 & 0.8730 & 0.8023 & 0.9077 \\
+\midrule
+\multirow{4}{*}{Rényi}
+& \xmark & Fixed $7\times7$   & 0.9625 & 0.6786 & 0.5549 & 0.8008 \\
+& \xmark & Adaptive  & 0.9854 & 0.8554 & 0.7773 & 0.8965 \\
+& \cmark & Fixed $7\times7$   & 0.9844 & 0.8752 & 0.8055 & 0.9091 \\
+& \cmark & Adaptive & 0.9931 & 0.8941 & 0.8329 & 0.9216 \\
+\midrule
+\multirow{4}{*}{Tsallis}
+& \xmark & Fixed $7\times7$   & 0.9727 & 0.7332 & 0.6188 & 0.8275 \\
+& \xmark & Adaptive  & 0.9894 & 0.8748 & 0.8049 & 0.9089 \\
+& \cmark & Fixed $7\times7$   & 0.9937 & 0.8812 & 0.8141 & 0.9130 \\
+& \cmark & Adaptive  & \textbf{0.9990} & \textbf{0.9143} & \textbf{0.8630} & \textbf{0.9353} \\
+\bottomrule
+\end{tabular}%
+%}
+\end{table*}
+```
+
+
+Figure&nbsp;\ref{fig:roc_entropy_benchmark} provides a threshold-free comparison through ROC curves. In both the fixed and adaptive settings, the Tsallis-based method outperforms the Shannon and Rényi-based alternatives, with the largest separation observed in the adaptive bootstrap-corrected case.
+```{=latex}
+\begin{figure}[hbt]
+  \centering
+  \includegraphics[width=0.99\columnwidth]{Figures-R1/dublin_entropy_benchmark_roc_2panels.pdf}
+  \caption{ROC comparison on the Dublin SAR scene for Shannon, Rényi, and Tsallis under bootstrap-corrected fixed and adaptive settings.}
+  \label{fig:roc_entropy_benchmark}
+\end{figure}
+```
+Figure&nbsp;\ref{fig:threshold_entropy_benchmark} shows the corresponding $F_1$ threshold sweep for $p$-thresholds from $0.01$ to $0.20$. The same ranking is observed across thresholds, with Tsallis performing best, followed by Rényi and Shannon.
+
+```{=latex}
+\begin{figure}[hbt]
+  \centering
+  \includegraphics[width=0.99\columnwidth]{Figures-R1/dublin_benchmark_f1_threshold_two_panels.pdf}
+  \caption{$F_1$ threshold sweep on the Dublin SAR scene for Shannon, Rényi, and Tsallis under bootstrap-corrected fixed and adaptive settings, using $p$-thresholds from $0.01$ to $0.20$.}
+  \label{fig:threshold_entropy_benchmark}
+\end{figure}
+```
+
+To complement the quantitative benchmark, we also performed a qualitative comparison on the Dublin SAR scene using the bootstrap-corrected adaptive configurations of the Shannon, Rényi, and Tsallis entropy-based tests. Figure&nbsp;\ref{fig:dublin_qualitative_comparison} shows the corresponding full-scene $p$-value maps. 
+The three methods consistently identify the main heterogeneous urban and harbor structures. However, the Tsallis-based map exhibits sharper local contrast and a more coherent delineation of heterogeneous areas, while Shannon appears comparatively less selective and Rényi provides an intermediate behavior. 
+These visual findings are consistent with the quantitative results in @tbl-dublin-main-benchmark, where the adaptive bootstrap Tsallis configuration attained the best overall performance.
+
+```{=latex}
+\begin{figure*}[hbt]
+\centering
+
+\begin{minipage}[t]{0.30\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figures-R1/dublin_shannon_adaptive.png}
+
+    \vspace{2pt}
+    \textbf{(a)}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.30\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figures-R1/dublin_renyi_adaptive.png}
+
+    \vspace{2pt}
+    \textbf{(b)}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.30\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figures-R1/dublin_tsallis_adaptive.png}
+
+    \vspace{2pt}
+    \textbf{(c)}
+\end{minipage}
+
+\caption{(a) Shannon (bootstrap + adaptive), (b) R\'enyi (bootstrap + adaptive), and (c) Tsallis (bootstrap + adaptive) on the Dublin SAR scene.}
+\label{fig:dublin_qualitative_comparison}
+\end{figure*}
+```
+
 # Conclusions {#sec:conclusion}
 
-This work presented a statistical approach based on the Tsallis entropy to detect deviations from fully-developed speckle in SAR images. The proposed test integrates a bootstrap correction and an adaptive windowing scheme to balance speckle suppression and texture preservation, without requiring training data or parametric modeling.
+This work presented a statistical approach based on the Tsallis entropy to detect departures from fully-developed speckle in SAR images. The proposed framework combines a nonparametric entropy-based test, bootstrap bias correction, and adaptive window selection, yielding interpretable pixelwise $p$-value maps without requiring training data or explicit estimation of heterogeneous parametric models.
 
-Experiments with simulated and real SAR data showed that the method is well calibrated, robust to small samples sizes, and effective in delineating heterogeneous regions from homogeneous ones. A Monte Carlo validation confirmed that the test maintains proper control of the Type I error while improving detection power with increasing sample size.
+Experiments with simulated and real SAR data showed that the method is effective in separating homogeneous and heterogeneous regions while preserving relevant spatial structures. The adaptive strategy improved the local balance between statistical stability and detail preservation, and the null diagnostic confirmed that the adaptive statistic remains well behaved under homogeneous conditions. The refined adaptive calibration based on window-dependent centering and observed-scale standardization provided a practical and stable formulation for real-scene inference.
 
-Comparative analysis using $p$-value maps, binary decisions, and quantitative metrics, such as F1-score, Kappa coefficient, and overall accuracy, showed that the adaptive Tsallis-based configuration outperforms the fixed sliding window in all evaluated scenes. The method thus provides a reliable and interpretable tool for heterogeneity detection in SAR imagery.
+The comparative benchmark on a representative real SAR scene further clarified the contribution of the proposed method with respect to previous entropy-based approaches. Under a common evaluation protocol, adaptive windowing improved all three entropy-based detectors, while the bootstrap-corrected adaptive Tsallis configuration achieved the strongest overall performance among Shannon, Rényi, and Tsallis.
 
 Although machine learning-based SAR classifiers are widely used, this framework offers a statistically grounded alternative that provides interpretable significance measures and requires no labeled data, making it suitable for rapid detection, screening, and scenarios with limited data availability.
+
 
 []{.appendix options="Derivation of the Tsallis Entropy of $\mathcal{G}^0_I$"}
 
