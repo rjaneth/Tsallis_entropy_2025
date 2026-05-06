@@ -210,7 +210,8 @@ Among the statistical laws used for SAR intensities, the $\mathcal{G}_I^0$ distr
 
 Entropy has long been used to quantify the uncertainty of a random variable, with Shannon entropy [@Shannon1948] as the classical form. Recent studies have shown the value of entropy-based methods in tasks such as edge detection [@Nascimento2014], segmentation [@Nobre2016], and despeckling [@Chan2022], motivating their extension to hypothesis testing in SAR imagery. In this domain, Frery et al. [@Frery2024] and Alpala et al. [@Alpala2025] quantified departures from the fully-developed speckle hypothesis with the Shannon and Rényi entropy, respectively.
 
-The Tsallis entropy [@Tsallis1988] is a non-additive generalization of the Shannon entropy that introduces a parameter $\lambda$. It allows greater flexibility in capturing deviations from homogeneity and better sensitivity to heavy-tailed data. This makes it especially appealing for SAR analysis, where both homogeneous and highly heterogeneous areas coexist.
+The Tsallis entropy [@Tsallis1988] is a non-additive generalization of the Shannon entropy that introduces a parameter $\lambda$, called entropic index. 
+It allows greater flexibility in capturing deviations from homogeneity and better sensitivity to heavy-tailed data. This makes it especially appealing for SAR analysis, where both homogeneous and highly heterogeneous areas coexist.
 
 In this work, we propose a method that exploits the statistical properties of SAR imagery through the Tsallis entropy, whose non-extensive parameter $\lambda$ provides additional sensitivity to the heavy-tailed behavior commonly observed in SAR data.
 
@@ -269,10 +270,11 @@ $$
 
 The Tsallis entropy was originally proposed by Havrda and Charvát [-@Havrda1967] in the context of information theory, and later extended by Tsallis [-@Tsallis1988] to emphasize its non-extensive features in statistical physics.
 
-For a continuous random variable $Z$ with distribution $\mathcal D$ characterized by the pdf $f(z)$, the Tsallis entropy of order $\lambda \in \mathbbm R_+ \setminus \{1\}$ is defined as: \begin{equation}
+For a continuous random variable $Z$ with distribution $\mathcal D$ characterized by the pdf $f(z)$, the Tsallis entropy with entropic index $\lambda \in \mathbbm R_+ \setminus \{1\}$ is defined as: \begin{equation}
 \label{eq:tsallis}
 T_\lambda(\mathcal D) = \frac{1}{\lambda - 1} \Bigl( 1 - \int_{\mathcal{B}} f(z)^{\lambda} \,\mathrm{d}z \Bigr),
-\end{equation} where $\mathcal{B} \subseteq \mathbb{R}$ denotes the support of $f(z)$. When $\lambda \to 1$, $T_\lambda(\mathcal D)$ converges to the Shannon entropy, making the Tsallis measure a one-parameter generalization of Shannon entropy.
+\end{equation} where $\mathcal{B} \subseteq \mathbb{R}$ denotes the support of $f(z)$. 
+When $\lambda \to 1$, $T_\lambda(\mathcal D)$ converges to the Shannon entropy, making the Tsallis measure a one-parameter generalization of Shannon entropy.
 
 Using \eqref{eq:tsallis}, we derive closed-form expressions for the Tsallis entropy of the $\Gamma_{\mathrm{SAR}}$ and $\mathcal{G}^0_I$ distributions: \begin{multline}
 \label{eq:gammasar-Tsallis}
@@ -315,7 +317,11 @@ Equation \eqref{eq:GI0-Tsallis} can be interpreted as: \begin{equation*}
 \lim_{\alpha \to -\infty} T_{\lambda}\bigl(\mathcal{G}^0_I(\alpha, \mu, L)\bigr) =  T_{\lambda}\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr).
 $$
 
-@fig-tsallis-convergence_L18 illustrates the convergence of the Tsallis entropy for different values of $\alpha$, $L \in \{5,18\}$, and $\lambda=0.85$ (the reason for this selection is explained in @sec-lambda). In both selected cases, the dashed curves of $T_\lambda\bigl(\mathcal{G}^0_I(\alpha, \mu, L)\bigr)$ approach the solid black curve of $T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr)$, confirming the limiting behavior.
+@fig-tsallis-convergence_L18 illustrates the convergence of the Tsallis entropy for different values of 
+$\alpha$, 
+$L \in \{5,18\}$, 
+and $\lambda=0.85$ (the reason for this selection is explained in @sec-lambda). 
+In both selected cases, the dashed curves of $T_\lambda\bigl(\mathcal{G}^0_I(\alpha, \mu, L)\bigr)$ approach the solid black curve of $T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr)$, confirming the limiting behavior.
 
 ```{r fig-tsallis-convergence_L18, echo=FALSE, message=FALSE, warning=FALSE, fig.pos="hbt",  fig.cap="Tsallis entropy $T_{\\lambda}(\\mathcal{G}^0_I(\\alpha, \\mu, L))$ converges to $T_{\\lambda}(\\Gamma_{\\mathrm{SAR}}(\\mu, L))$ as $\\alpha$ decreases.", out.width="\\linewidth"}
 
@@ -1211,13 +1217,21 @@ Because the final window size $W_{ij}$ is selected from the data, the null distr
 
 <!-- This adaptive strategy is locally responsive to image texture, using small windows in heterogeneous areas and larger ones in homogeneous zones. This ensures edge preservation and statistical stability, while the parameter $\eta$ controls the balance between smoothness and detail preservation. Moreover, the framework is extensible and can be applied with any entropy estimator. -->
 
-## Null diagnostic and adaptive calibration {#sec:adaptive-null}
+## Null hypothesis diagnostic and adaptive calibration {#sec:adaptive-null}
 
-The null behavior reported in Table&nbsp;\ref{tab:size-power-tsallis} was obtained for fixed sample sizes. Since, in the adaptive procedure, the final window size $W_{ij}$ is selected from the data, we performed an additional diagnostic experiment to assess whether the null distribution of the adaptive statistic differs from the fixed-window case and how the corresponding adaptive $p$-values should be calibrated.
+The null hypothesis behavior reported in Table&nbsp;\ref{tab:size-power-tsallis} was obtained for fixed sample sizes. 
+Since, in the adaptive procedure, the final window size $W_{ij}$ is selected from the data, we performed an additional diagnostic experiment to assess whether the null distribution of the adaptive statistic differs from the fixed-window case and how the corresponding adaptive $p$-values should be calibrated.
 
-For this purpose, we generated a fully homogeneous $\Gamma_{\mathrm{SAR}}$ image of size $1000\times1000$ under $H_0$, with mean $\mu=10$, number of looks $L=16$, entropy order $\lambda=0.85$, bootstrap size $B=100$, and adaptive windows ranging from $5\times5$ to $11\times11$, that is, $W\in\{5,7,9,11\}$, with $\eta=3$. The complete adaptive procedure was then applied and compared with the corresponding fixed-window results.
+For this purpose, we generated images of size $1000\times1000$ under $H_0$, i.e., with observations from iid $\Gamma_{\mathrm{SAR}}(10,16)$ random variables. 
+We used $\lambda=0.85$, 
+bootstrap size $B=100$, 
+and adaptive windows ranging from $5\times5$ to $11\times11$, that is, $W\in\{5,7,9,11\}$, with $\eta=3$. 
+The complete adaptive procedure was then applied and compared with the corresponding fixed-window results.
+Notice that, as illustrated in Figure&nbsp;\ref{fig:interior-schematic1}, we left a guard region of five pixels and only applied the procedure to the interior region.
+This guard region allows every pixel in the interior region to use the largest possible window ($11\times11$ pixels), if needed.
 
-The adaptive procedure produces, together with the statistic field, a window-selection map $W_{\mathrm{map}}$, whose entry at pixel $(i,j)$ records the final selected window size $W_{ij}\in\{5,7,9,11\}$. To analyze its stabilized behavior under $H_0$, we also considered a cropped interior region, defined as the central part of the simulated image obtained after removing a border of width $(W_{\max}-1)/2$ pixels from each side. Since $W_{\max}=11$, this cropped border has width $5$ pixels. This distinction is useful because the outer border is more affected by edge effects and by the transient behavior associated with the sequential initialization of the adaptive procedure.
+The adaptive procedure produces, together with the statistic field, a window-selection map $W_{\mathrm{map}}$, whose entry at pixel $(i,j)$ records the final selected window size $W_{ij}\in\{5,7,9,11\}$.
+To analyze its stability under $H_0$, we applied the procedure to its interior region, discarding $(W_{\max}-1)/2=5$ pixels from each side. 
 
 Figure&nbsp;\ref{fig:interior-schematic1} illustrates the interior and guard regions, while Figure&nbsp;\ref{fig:adaptive-growth-schematic1} schematically shows how the adaptive rule tends to increase the window size under homogeneous conditions. 
 In a homogeneous image under the null hypothesis, the adaptive procedure progressively expands the local window whenever the homogeneity criterion is satisfied, so the selected size tends to reach the maximum admissible value.
@@ -1241,8 +1255,8 @@ In a homogeneous image under the null hypothesis, the adaptive procedure progres
     % Labels
     \node at (\N/2,\N/2) {Interior Region};
 
-%    \node at (\N/2,-6) {Guard Region};
-    \node at (\N/2,\N+6) {Guard Region};
+    \node at (\N/2,-6) {Guard Region};
+%    \node at (\N/2,\N+6) {Guard Region};
 \end{tikzpicture}
 \caption{Schematic representation of the interior and guard regions used in the adaptive null hypothesis diagnostic.}
 \label{fig:interior-schematic1}
@@ -1280,22 +1294,24 @@ In a homogeneous image under the null hypothesis, the adaptive procedure progres
 ```
 
 
-In addition, we estimated null summaries separately for each admissible window size $W$. Denoting by $\mu_0(W)$ and $\sigma_0(W)$ the null mean and null standard deviation of the statistic associated with window size $W$, the resulting calibration values are reported in 
-@tbl-null-calibration-adaptive. 
+In addition, we estimated summaries under the null hypothesis separately for each admissible window size $W$. 
+Denoting by $\mu_0(W)$ and $\sigma_0(W)$ the mean and standard deviation of the statistic associated with window size $W$, the resulting calibration values are reported in @tbl-null-calibration-adaptive. 
 
 ```{=latex}
-\begin{table}[H]
+\begin{table}[hbt]
 \centering
 \caption{Window-specific null calibration summaries estimated under $H_0$ for the adaptive-window diagnostic.}
 \label{tbl-null-calibration-adaptive}
-\begin{tabular}{ccc}
+\begin{tabular}{c
+                S[table-format=1.4]
+                S[table-format=1.3]}
 \toprule
-$W$ & $\mu_0(W)$ & $\sigma_0(W)$ \\
+{$W$} & {$\mu_0(W)$} & {$\sigma_0(W)$} \\
 \midrule
-$5$  & $-0.06345303$ & $0.2348613$ \\
-$7$  & $-0.01231120$ & $0.1665428$ \\
-$9$  & $0.01039501$  & $0.1292914$ \\
-$11$ & $0.02177826$  & $0.1058000$ \\
+5  & -0.063  & 0.235 \\
+7  & -0.012  & 0.167 \\
+9  &  0.0104 & 0.129 \\
+11 &  0.0218 & 0.106 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1303,7 +1319,7 @@ $11$ & $0.02177826$  & $0.1058000$ \\
 
 @tbl-null-adaptive-wfreq reports the empirical frequencies of the selected window sizes in the adaptive null diagnostic.
 ```{=latex}
-\begin{table}[!t]
+\begin{table}[hbt]
 \centering
 \caption{Empirical frequency of selected window sizes in the adaptive null diagnostic under $H_0$.}
 \label{tbl-null-adaptive-wfreq}
