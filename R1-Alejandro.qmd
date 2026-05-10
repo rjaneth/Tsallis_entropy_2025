@@ -661,7 +661,7 @@ print(combined_plot_tsallis)
 
 ```
 
-<!-- From this point forward, all subsequent simulations and comparisons will be based on the improved bootstrap estimator $\widetilde{T}_{\lambda}$. -->
+<!-- From this point forward, all sub sequent simulations and comparisons will be based on the improved bootstrap estimator $\widetilde{T}_{\lambda}$. -->
 
 Heterogeneous samples occur when the window spans two or more different areas, 
 e.g., across an edge.
@@ -1222,10 +1222,10 @@ Because the final window size $W_{ij}$ is selected from the data, the null distr
 The null hypothesis behavior reported in Table&nbsp;\ref{tab:size-power-tsallis} was obtained for fixed sample sizes. 
 Since, in the adaptive procedure, the final window size $W_{ij}$ is selected from the data, we performed an additional diagnostic experiment to assess whether the null distribution of the adaptive statistic differs from the fixed-window case and how the corresponding adaptive $p$-values should be calibrated.
 
-For this purpose, we generated images of size $1000\times1000$ under $H_0$, i.e., with observations from iid $\Gamma_{\mathrm{SAR}}(10,16)$ random variables. 
+For this purpose, we generated an image of size $1000\times1000$ under $H_0$, i.e., with observations from iid $\Gamma_{\mathrm{SAR}}(10,16)$ random variables. 
 We used $\lambda=0.85$, 
 bootstrap size $B=100$, 
-and adaptive windows ranging from $5\times5$ to $11\times11$, that is, $W\in\{5,7,9,11\}$, with $\eta=3$. 
+and adaptive windows of size $W\in\{5,7,9,11\}$, with $\eta=3$. 
 The complete adaptive procedure was then applied and compared with the corresponding fixed-window results.
 Notice that, as illustrated in Figure&nbsp;\ref{fig:interior-schematic1}, we left a guard region of five pixels and only applied the procedure to the interior region.
 This guard region allows every pixel in the interior region to use the largest possible window ($11\times11$ pixels), if needed.

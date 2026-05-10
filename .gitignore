@@ -1,18 +1,14 @@
-
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
 /.luarc.json
 quarto-ieee.Rproj
-
-
 README.html
 #template_files/
 #template.tex
 #template.html
 #template.pdf
-
 ### LaTeX ###
 ## Core latex/pdflatex auxiliary files:
 *.aux
@@ -27,7 +23,6 @@ README.html
 *.cb
 *.cb2
 .*.lb
-
 ## Intermediate documents:
 *.dvi
 *.xdv
@@ -36,10 +31,8 @@ README.html
 # *.ps
 # *.eps
 # *.pdf
-
 ## Generated if empty string is given at "Please type another file name for output:"
 .pdf
-
 ## Bibliography auxiliary files (bibtex/biblatex/biber):
 *.bbl
 *.bcf
@@ -47,7 +40,6 @@ README.html
 *-blx.aux
 *-blx.bib
 *.run.xml
-
 ## Build tool auxiliary files:
 *.fdb_latexmk
 *.synctex
@@ -55,12 +47,9 @@ README.html
 *.synctex.gz
 *.synctex.gz(busy)
 *.pdfsync
-
 ## Build tool directories for auxiliary files
 # latexrun
 latex.out/
-
-
 *.log
 *.aux
 *.synctex.gz
@@ -73,7 +62,6 @@ Figures/fig-tsallis-convergence_L18-1.pdf
 Figures/fig-bias_mse_Tsallis-1.pdf
 Figures/fig-tsallis-convergence_L18-1.pdf
 R0-Tsallis_entropy_sar.tex
-
 /.quarto/
 _freeze/
 /R0-Tsallis_entropy_sar_cache
@@ -89,11 +77,9 @@ R0-Tsallis_entropy_sar.tex
 R1-Tsallis_entropy_sar.tex
 R1-Tsallis_entropy_sar.pdf
 Presentation/SHORT-TsallisEntropyMeasureHeteroteneity.html
-
 *.log
 *.aux
 *.synctex.gz
-
 **/*.quarto_ipynb
 Presentation/2026SMSSeminar.html
 Submissions/R1/Responses/Responses-Reviewer1.pdf
@@ -109,3 +95,5 @@ Figures-R1/fig-tsallis-convergence_L18-1.pdf
 Submissions/R1/Responses/FRERYResponses-Reviewer1.tex
 *.bkp
 .positai
+R1-Alejandro.qmd
+R1-Alejandro.qmd
