@@ -87,11 +87,11 @@ author:
 abstract: |
   Detecting departures from the fully-developed speckle hypothesis in Synthetic Aperture Radar (SAR) imagery is essential for reliable interpretation in remote sensing applications. 
   To address this challenge, this paper proposes a statistical test based on a nonparametric estimator of Tsallis entropy, a non-additive generalization of Shannon entropy that provides enhanced sensitivity to heavy-tailed distributions characteristic of textured SAR data. 
-  The estimator incorporates bootstrap correction to improve accuracy with small sample sizes. 
+  The estimator incorporates bootstrap correction to improve accuracy with small sample sizes.
   The test is integrated within an adaptive windowing strategy that locally selects the optimal window size based on regional homogeneity: larger windows in homogeneous regions to stabilize estimation and smaller windows in heterogeneous areas to preserve structural details. 
-  This combination yields an unsupervised statistical framework that generates per-pixel $p$-value maps for detecting departures from fully-developed speckle.
+  This combination yields an unsupervised statistical framework that generates per-pixel $\\bm p$-value maps for detecting departures from fully-developed speckle.
   Experimental validation using both simulated data and SAR imagery confirms the method's precision in detecting texture variability and discriminating between homogeneous and heterogeneous regions. 
-  The proposed approach offers a principled, interpretable tool for automated SAR image analysis without requiring training data or explicit parametric texture estimation.
+  The proposed approach offers an interpretable tool for automated SAR image analysis without requiring training data or explicit parametric texture estimation.
 
 keywords: [Tsallis entropy, Gamma distribution, "$\\mathcal{G}_I^0$ distribution", heterogeneity, SAR, hypothesis testing, nonparametric estimation, bootstrap]
 
@@ -1215,146 +1215,81 @@ Because the final window size $W_{ij}$ is selected from the data, the null distr
 
 Table&nbsp;\ref{tab:size-power-tsallis} relates the behavior of the test statistic 
 under the null hypothesis for windows of fixed size.
-Since the procedure is adaptive, the final window size $W_{ij}$ is selected from the data and the test
+Since the procedure is adaptive, the final window size $W_{ij}$ at position $(i,j)$ is selected from the data, and the test
 statistic behavior may be different.
 We verified that these distributions differ, and obtained the $p$-values under this realistic configuration.
 
 For this purpose, we generated an image of size $1000\times1000$ under $H_0$, i.e., with observations from iid $\Gamma_{\mathrm{SAR}}(10,16)$ random variables. 
 We used $\lambda=0.85$, 
 bootstrap size $B=100$, 
-and adaptive windows of size $W\in\{5,7,9,11\}$, with $\eta=3$. 
+and windows of size $W\in\{5,7,9,11\}$, with $\eta=3$. 
 We left a guard region of five pixels and only applied the procedure to the interior region.
 This guard region allows every pixel in the interior region to use the largest possible window ($11\times11$ pixels), if needed.
-The adaptive procedure was then applied and compared with the corresponding fixed-window results.
-The adaptive procedure produces, together with the statistic field, a window-selection map $W_{\mathrm{map}}$, whose entry at pixel $(i,j)$ records the final selected window size $W_{ij}\in\{5,7,9,11\}$.
+<!-- The adaptive procedure was then applied and compared with the corresponding fixed-window results. -->
+<!-- The adaptive procedure produces, together with the statistic field, a window-selection map $W_{\mathrm{map}}$, whose entry at pixel $(i,j)$ records the final selected window size $W_{ij}\in\{5,7,9,11\}$. -->
 
-<!-- Figure&nbsp;\ref{fig:interior-schematic1} illustrates the interior and guard regions, while Figure&nbsp;\ref{fig:adaptive-growth-schematic1} schematically shows how the adaptive rule tends to increase the window size under homogeneous conditions.  -->
-<!-- In a homogeneous image under the null hypothesis, the adaptive procedure progressively expands the local window whenever the homogeneity criterion is satisfied, so the selected size tends to reach the maximum admissible value. -->
-
-<!-- ```{=latex} -->
-<!-- \begin{figure}[hbt] -->
-<!-- \centering -->
-<!-- \begin{tikzpicture}[scale=0.08] -->
-<!--     \def\N{75} -->
-<!--     \def\g{5} -->
-
-<!--     % Full grid -->
-<!--     \draw[step=1, thin] (0,0) grid (\N,\N); -->
-
-<!--     % Mask the interior (no grid inside) -->
-<!--     \fill[white] (\g,\g) rectangle (\N-\g,\N-\g); -->
-
-<!--     % Boundary between guard and interior -->
-<!--     \draw[thick] (\g,\g) rectangle (\N-\g,\N-\g); -->
-
-<!--     % Labels -->
-<!--     \node at (\N/2,\N/2) {Interior Region}; -->
-
-<!-- %    \node at (\N/2,-6) {Guard Region}; -->
-<!--     \node at (\N/2,\N+6) {Guard Region}; -->
-<!-- \end{tikzpicture} -->
-<!-- \caption{Schematic representation of the interior and guard regions used in the adaptive null hypothesis diagnostic.} -->
-<!-- \label{fig:interior-schematic1} -->
-<!-- \end{figure} -->
-<!-- ``` -->
-
-<!-- ```{=latex} -->
-<!-- \begin{figure}[hbt] -->
-<!-- \centering -->
-<!-- \begin{tikzpicture}[ -->
-<!--   >=latex, -->
-<!--   font=\footnotesize, -->
-<!--   box/.style={draw, rectangle, rounded corners=1pt, minimum width=1.0cm, minimum height=0.58cm, inner sep=2pt} -->
-<!-- ] -->
-
-<!-- \node[box] (w5) at (0,0) {$5\times5$}; -->
-<!-- \node[box] (w7) at (1.5,0) {$7\times7$}; -->
-<!-- \node[box] (w9) at (3.0,0) {$9\times9$}; -->
-<!-- \node[box] (w11) at (4.7,0) {$11\times11$}; -->
-
-<!-- \draw[->] (w5) -- (w7); -->
-<!-- \draw[->] (w7) -- (w9); -->
-<!-- \draw[->] (w9) -- (w11); -->
-
-<!-- \node at (2.35,0.65) {\scriptsize $C_{ij}\leq U_{ij}$}; -->
-<!-- \node at (2.35,-0.65) {\scriptsize $C_{ij}>U_{ij}$}; -->
-
-<!-- \draw[->] (2.35,-0.45) -- (1.15,-0.45); -->
-<!-- \draw[->] (3.85,-0.45) -- (2.65,-0.45); -->
-
-<!-- \end{tikzpicture} -->
-<!-- \caption{Admissible window sizes in the adaptive procedure. If the local homogeneity criterion is satisfied, the window moves to the next larger admissible size; otherwise, it moves to the previous one. Under a homogeneous null image, repeated updates tend to drive the procedure toward $W_{\max}=11$.} -->
-<!-- \label{fig:adaptive-growth-schematic1} -->
-<!-- \end{figure} -->
-<!-- ``` -->
 
 @tbl-null-calibration-adaptive reports summary statistics separately for each admissible window size $W$: the mean $\mu_{\mathcal H_0}(W)$ and standard deviation $\sigma_{\mathcal H_0}(W)$.
+With these values, we correct the empirical distribution of the test statistic,
+cf.&nbsp;\eqref{eq:standar}, and obtain $p$-values adjusted for the adaptive window scheme.
 
-<!-- ACF Two decimal places, and align by the decimal point -->
 ```{=latex}
 \begin{table}[hbt]
 \centering
-\caption{Window-specific null calibration summaries estimated under $\mathcal H_0$ for the adaptive-window diagnostic.}
+\caption{Empirical mean and standard deviation of the test statistic under the null 
+hypothesis for each fixed window size.}
 \label{tbl-null-calibration-adaptive}
-\begin{tabular}{ccc}
+\begin{tabular}{crr}
 \toprule
-$W$ & $\mu_0(W)$ & $\sigma_0(W)$ \\
+$W$ & $\mu_{\mathcal H_0}(W)$ & $\sigma_{\mathcal H_0}(W)$ \\
 \midrule
-$5$  & $-0.06345303$ & $0.2348613$ \\
-$7$  & $-0.01231120$ & $0.1665428$ \\
-$9$  & $0.01039501$  & $0.1292914$ \\
-$11$ & $0.02177826$  & $0.1058000$ \\
+5  & $-0.063$  & $0.235$ \\
+7  & $-0.012$  & $0.167$ \\
+9  &  $0.010$ & $0.129$ \\
+11 &  $0.022$ & $0.106$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 ```
 
-@tbl-null-adaptive-wfreq reports the empirical frequencies of the selected window sizes in the adaptive null diagnostic.
+Figure&nbsp;\ref{fig:null-diagnostic-adaptive} shows the empirical densities of
+the test statistic under the null hypothesis and in five fixed window sizes:
+$W\in\{5,7,9,11\}$.
+Except for the $W=5$ case, the empirical densities look symmetric around zero.
+The least spread case is $W=11$, as expected because this is the largest sample size.
+The distribution of the test statistic using the adaptive procedure under $\mathcal H_0$ 
+is indistinguishable from the $W=11$ case, 
+confirming that this adaptive approach behaves well under the null hypothesis.
+Moreover, the adaptive method in this experiment never selected windows of size $W=5$.
 
-```{=latex}
-\begin{table}[hbt]
-\centering
-\caption{Empirical frequency of selected window sizes in the adaptive null diagnostic under $\mathcal H_0$.}
-\label{tbl-null-adaptive-wfreq}
-\begin{tabular}{cccc}
-\toprule
-Region & $W$ & Count & Proportion \\
-\midrule
-Whole image      & $7$  & $1000$   & $0.001$ \\
-Whole image      & $9$  & $1000$   & $0.001$ \\
-Whole image      & $11$ & $998000$ & $0.998$ \\
-Cropped interior & $11$ & $980100$ & $1.000$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-```
-Figure \ref{fig:null-diagnostic-adaptive} summarizes the main results. Panel (a) shows the empirical frequencies of $W_{ij}$ for the whole image and for the cropped interior region. In the whole image, a very small proportion of pixels is assigned to $W=7$ and $W=9$, whereas the dominant selected size is $W=11$. In the cropped interior region, the selected size is $W=11$ for essentially all pixels. This indicates that, under a homogeneous null model, the adaptive rule increases the window size until reaching the maximum admissible value in the stabilized interior of the image.
-
+<!-- ACF Only panel (b) and in PDF -->
 ```{=latex}
 \begin{figure}[hbt]
   \centering
   \includegraphics[width=0.9\columnwidth]{Figures-R1/null_diagnostic_adaptive_3panels_en_v2.png}
- \caption{Null diagnostic for the adaptive-window procedure under $H_0$. The adaptive rule selects $W=11$ almost everywhere in the cropped interior, yielding a null distribution nearly identical to the fixed-window case with $W=11$.}
+ \caption{Empirical densities of the test statistic under the null hypothesis and fixed and adaptive window sizes.}
   \label{fig:null-diagnostic-adaptive}
 \end{figure}
 ```
 
-Panel (b) compares the empirical null densities of the statistic for fixed windows with $W\in\{5,7,9,11\}$ against the density produced by the adaptive procedure in the cropped interior region. The adaptive density is practically indistinguishable from the fixed-window density with $W=11$, whereas the densities for $W=5$, $W=7$, and $W=9$ are visibly broader. This shows that, in a homogeneous null setting, the adaptive procedure adopts the null behavior of the fixed-window statistic with the maximum admissible window size.
-
-Panel (c) displays the adaptive null density conditioned on the final selected window size in the cropped interior region. Only the component associated with $W=11$ appears, confirming that the adaptive procedure collapses to the largest admissible window in the homogeneous interior region. Taken together, these results show that, although $W_{ij}$ is data-dependent, the resulting null distribution in the homogeneous interior is effectively the same as that of the fixed-window statistic with $W=11$.
-
-After establishing the null behavior of the adaptive statistic, the next step is to convert the statistic field into pixelwise $p$-values. For this purpose, the adaptive centering is retained through the window-dependent null mean $\mu_0(W_{ij})$, while the scale is taken from the observed dispersion of the statistic field. This choice is motivated by the fact that $\sigma_0(W_{ij})$ is estimated under a purely homogeneous null model and may therefore be substantially smaller than the empirical spread of the statistic in actual SAR scenes, where residual heterogeneity and local transitions are still present. Using $\sigma_0(W_{ij})$ directly may thus produce overly aggressive standardization and excessive rejections. Accordingly, we used
+After establishing the mean and standard deviation of the test statistic under the null hypothesis and adaptive windows, 
+the next step is to convert the statistic field into $p$-values. 
+<!-- For this purpose, the adaptive centering is retained through the window-dependent mean $\mu_0(W_{ij})$, while the scale is taken from the observed dispersion of the statistic field. This choice is motivated by the fact that $\sigma_0(W_{ij})$ is estimated under a purely homogeneous null model and may therefore be substantially smaller than the empirical spread of the statistic in actual SAR scenes, where residual heterogeneity and local transitions are still present.  -->
+Since $\sigma_{\mathcal H_0}(W)$ produces overly aggressive standardization and excessive rejections, we used
 \begin{equation}
-z_{ij}=\frac{S_{ij}-\mu_0(W_{ij})}{sd_{\mathrm{obs}}},
+z_{ij}=\frac{S_{ij}-\mu_{\mathcal H_0}(W_{ij})}{\sigma_{\mathrm{obs}}},
 \label{eq:standar}
 \end{equation}
-with adaptive $p$-values computed as
+where $\sigma_{\mathrm{obs}}$ is the empirical standard deviation of the test statistic computed over all the pixels under $\mathcal H_0$ using adaptive windows.
+In this way, the procedure uses window-dependent means and a scale better matched to the variability of the observed SAR data.
+Finally, the adaptive $p$-values are computed as
 $$
-p_{ij}=2\Phi\bigl(-|z_{ij}|\bigr),
+p_{ij}=2\Phi\bigl(-|z_{ij}|\bigr).
 $$
-where $sd_{\mathrm{obs}}$ denotes the empirical standard deviation of the adaptive statistic values $\{S_{ij}\}$ computed over all pixels in the analyzed scene.  In this way, the procedure preserves the window-dependent null centering while adopting a scale better matched to the variability of the observed SAR data.
 
-The same adaptive calibration strategy was subsequently used in the comparative benchmark of the adaptive Shannon, Rényi, and Tsallis configurations, as discussed in Subsection \ref{sec:entropy-benchmark}.
+
+The same strategy was subsequently used in the comparative benchmark of the adaptive Shannon, and Rényi entropies, as discussed in 
+Subsection&nbsp;\ref{sec:entropy-benchmark}.
 
 
 
@@ -2297,3 +2232,19 @@ All simulations and SAR image processing were run on a workstation equipped with
 <!-- [IEEEXplore<sup>®</sup>]: <https://ieeexplore.ieee.org/> -->
 
 <!-- Biographies: check the IEEE style in https://journals.ieeeauthorcenter.ieee.org/wp-content/uploads/sites/7/IEEE-Editorial-Style-Manual-for-Authors.pdf page 15 -->
+
+
+\begin{IEEEbiography}
+	[{\includegraphics[width=1.05in,clip]{Figures/ACF-IEEE-Face.png}}]{Alejandro C. Frery} 
+	(S'91--M'94--SM'14--LF'25) was born in Mendoza, Argentina, in 1960. In 1983, he received a B.Sc. in Electronic and Electrical Engineering from the Universidad de Mendoza. His M.Sc. degree was in Applied Mathematics (Statistics) from the Instituto de Matemática Pura e Aplicada (IMPA, Rio de Janeiro, 1990), and his Ph.D. degree was in Applied Computing from the Instituto Nacional de Pesquisas Espaciais (INPE, São José dos Campos, Brazil, 1993). His research interests are data visualisation, statistical computing, and stochastic modelling, with signal and image processing and networks applications.
+	Since May 2020, he has been a Statistics and Data Science Professor at the School of Mathematics and Statistics, Victoria University of Wellington, New Zealand.
+	Prof.\ Frery is also a member of the International Society for Photogrammetry and Remote Sensing (ISPRS), the New Zealand Statistical Association, and the Statistical Society of Australia. In 2018, he received the IEEE GRSS Regional Leader Award. After serving as Associate Editor for over five years, Prof. Frery was the Editor-in-Chief of the IEEE Geoscience and Remote Sensing Letters from 2014 to 2018. He was an IEEE Geoscience and Remote Sensing Society (GRSS) Distinguished Lecturer from 2015 to 2019. He served as this Society's AdCom (Advisory Committee) member, in charge of Future Publications, Plagiarism and Regional Symposia from 2019 to 2022, and as vice president of Publications from 2023 to 2025.
+	Since 2026, he is the vice president for Meetings \& Symposia.
+\end{IEEEbiography}
+
+\begin{IEEEbiography}
+	[{\includegraphics[width=1.05in,clip]{Figures/AARey.png}}]{Andrea A. Rey} 
+was born in Mar del Plata, Argentina, in 1978. In 2002, she received a B.Sc. in Mathematics from the Universidad Nacional de Mar del Plata. Her Ph.D. degree was in Mathematics from the Universidad de Buenos Aires (UBA,  Argentina, 2009). Her research interests are data science, statistical computing, and machine learning, with signal and image analysis and applications.
+Since July 2023, she has been a Full Professor at the Universidad Nacional de Hurlingham (UNAHUR), Argentina.
+Prof.\ Rey is also a member of the Laboratorio de Investigación y Desarrollo Experimental en Computación (LIDEC) at the UNAHUR. She has been serving as Associate Editor of the  IEEE Geoscience and Remote Sensing Society (GRSS)  since 2024.
+\end{IEEEbiography}
