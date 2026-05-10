@@ -661,7 +661,7 @@ print(combined_plot_tsallis)
 
 ```
 
-<!-- From this point forward, all sub sequent simulations and comparisons will be based on the improved bootstrap estimator $\widetilde{T}_{\lambda}$. -->
+<!-- From this point forward, all sub    sequent simulations and comparisons will be based on the improved bootstrap estimator $\widetilde{T}_{\lambda}$. -->
 
 Heterogeneous samples occur when the window spans two or more different areas, 
 e.g., across an edge.
