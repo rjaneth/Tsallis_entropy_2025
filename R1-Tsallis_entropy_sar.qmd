@@ -1211,82 +1211,90 @@ Because the final window size $W_{ij}$ is selected from the data, the null distr
 
 <!-- This adaptive strategy is locally responsive to image texture, using small windows in heterogeneous areas and larger ones in homogeneous zones. This ensures edge preservation and statistical stability, while the parameter $\eta$ controls the balance between smoothness and detail preservation. Moreover, the framework is extensible and can be applied with any entropy estimator. -->
 
-## Null diagnostic and adaptive calibration {#sec:adaptive-null}
+## Test statistic behavior under the null hypothesis and adaptive windows {#sec:adaptive-null}
 
-The null behavior reported in Table&nbsp;\ref{tab:size-power-tsallis} was obtained for fixed sample sizes. Since, in the adaptive procedure, the final window size $W_{ij}$ is selected from the data, we performed an additional diagnostic experiment to assess whether the null distribution of the adaptive statistic differs from the fixed-window case and how the corresponding adaptive $p$-values should be calibrated.
+Table&nbsp;\ref{tab:size-power-tsallis} relates the behavior of the test statistic 
+under the null hypothesis for windows of fixed size.
+Since the procedure is adaptive, the final window size $W_{ij}$ is selected from the data and the test
+statistic behavior may be different.
+We verified that these distributions differ, and obtained the $p$-values under this realistic configuration.
 
-For this purpose, we generated a fully homogeneous $\Gamma_{\mathrm{SAR}}$ image of size $1000\times1000$ under $H_0$, with mean $\mu=10$, number of looks $L=16$, entropy order $\lambda=0.85$, bootstrap size $B=100$, and adaptive windows ranging from $5\times5$ to $11\times11$, that is, $W\in\{5,7,9,11\}$, with $\eta=3$. The complete adaptive procedure was then applied and compared with the corresponding fixed-window results.
+For this purpose, we generated an image of size $1000\times1000$ under $H_0$, i.e., with observations from iid $\Gamma_{\mathrm{SAR}}(10,16)$ random variables. 
+We used $\lambda=0.85$, 
+bootstrap size $B=100$, 
+and adaptive windows of size $W\in\{5,7,9,11\}$, with $\eta=3$. 
+We left a guard region of five pixels and only applied the procedure to the interior region.
+This guard region allows every pixel in the interior region to use the largest possible window ($11\times11$ pixels), if needed.
+The adaptive procedure was then applied and compared with the corresponding fixed-window results.
+The adaptive procedure produces, together with the statistic field, a window-selection map $W_{\mathrm{map}}$, whose entry at pixel $(i,j)$ records the final selected window size $W_{ij}\in\{5,7,9,11\}$.
 
-The adaptive procedure produces, together with the statistic field, a window-selection map $W_{\mathrm{map}}$, whose entry at pixel $(i,j)$ records the final selected window size $W_{ij}\in\{5,7,9,11\}$. To analyze its stabilized behavior under $H_0$, we also considered a cropped interior region, defined as the central part of the simulated image obtained after removing a border of width $(W_{\max}-1)/2$ pixels from each side. Since $W_{\max}=11$, this cropped border has width $5$ pixels. This distinction is useful because the outer border is more affected by edge effects and by the transient behavior associated with the sequential initialization of the adaptive procedure.
+<!-- Figure&nbsp;\ref{fig:interior-schematic1} illustrates the interior and guard regions, while Figure&nbsp;\ref{fig:adaptive-growth-schematic1} schematically shows how the adaptive rule tends to increase the window size under homogeneous conditions.  -->
+<!-- In a homogeneous image under the null hypothesis, the adaptive procedure progressively expands the local window whenever the homogeneity criterion is satisfied, so the selected size tends to reach the maximum admissible value. -->
 
-Figure&nbsp;\ref{fig:interior-schematic1} illustrates the interior and guard regions, while Figure&nbsp;\ref{fig:adaptive-growth-schematic1} schematically shows how the adaptive rule tends to increase the window size under homogeneous conditions. 
-In a homogeneous image under the null hypothesis, the adaptive procedure progressively expands the local window whenever the homogeneity criterion is satisfied, so the selected size tends to reach the maximum admissible value.
+<!-- ```{=latex} -->
+<!-- \begin{figure}[hbt] -->
+<!-- \centering -->
+<!-- \begin{tikzpicture}[scale=0.08] -->
+<!--     \def\N{75} -->
+<!--     \def\g{5} -->
 
+<!--     % Full grid -->
+<!--     \draw[step=1, thin] (0,0) grid (\N,\N); -->
+
+<!--     % Mask the interior (no grid inside) -->
+<!--     \fill[white] (\g,\g) rectangle (\N-\g,\N-\g); -->
+
+<!--     % Boundary between guard and interior -->
+<!--     \draw[thick] (\g,\g) rectangle (\N-\g,\N-\g); -->
+
+<!--     % Labels -->
+<!--     \node at (\N/2,\N/2) {Interior Region}; -->
+
+<!-- %    \node at (\N/2,-6) {Guard Region}; -->
+<!--     \node at (\N/2,\N+6) {Guard Region}; -->
+<!-- \end{tikzpicture} -->
+<!-- \caption{Schematic representation of the interior and guard regions used in the adaptive null hypothesis diagnostic.} -->
+<!-- \label{fig:interior-schematic1} -->
+<!-- \end{figure} -->
+<!-- ``` -->
+
+<!-- ```{=latex} -->
+<!-- \begin{figure}[hbt] -->
+<!-- \centering -->
+<!-- \begin{tikzpicture}[ -->
+<!--   >=latex, -->
+<!--   font=\footnotesize, -->
+<!--   box/.style={draw, rectangle, rounded corners=1pt, minimum width=1.0cm, minimum height=0.58cm, inner sep=2pt} -->
+<!-- ] -->
+
+<!-- \node[box] (w5) at (0,0) {$5\times5$}; -->
+<!-- \node[box] (w7) at (1.5,0) {$7\times7$}; -->
+<!-- \node[box] (w9) at (3.0,0) {$9\times9$}; -->
+<!-- \node[box] (w11) at (4.7,0) {$11\times11$}; -->
+
+<!-- \draw[->] (w5) -- (w7); -->
+<!-- \draw[->] (w7) -- (w9); -->
+<!-- \draw[->] (w9) -- (w11); -->
+
+<!-- \node at (2.35,0.65) {\scriptsize $C_{ij}\leq U_{ij}$}; -->
+<!-- \node at (2.35,-0.65) {\scriptsize $C_{ij}>U_{ij}$}; -->
+
+<!-- \draw[->] (2.35,-0.45) -- (1.15,-0.45); -->
+<!-- \draw[->] (3.85,-0.45) -- (2.65,-0.45); -->
+
+<!-- \end{tikzpicture} -->
+<!-- \caption{Admissible window sizes in the adaptive procedure. If the local homogeneity criterion is satisfied, the window moves to the next larger admissible size; otherwise, it moves to the previous one. Under a homogeneous null image, repeated updates tend to drive the procedure toward $W_{\max}=11$.} -->
+<!-- \label{fig:adaptive-growth-schematic1} -->
+<!-- \end{figure} -->
+<!-- ``` -->
+
+@tbl-null-calibration-adaptive reports summary statistics separately for each admissible window size $W$: the mean $\mu_{\mathcal H_0}(W)$ and standard deviation $\sigma_{\mathcal H_0}(W)$.
+
+<!-- ACF Two decimal places, and align by the decimal point -->
 ```{=latex}
-\begin{figure}[hbt]
+\begin{table}[hbt]
 \centering
-\begin{tikzpicture}[scale=0.08]
-    \def\N{75}
-    \def\g{5}
-
-    % Full grid
-    \draw[step=1, thin] (0,0) grid (\N,\N);
-
-    % Mask the interior (no grid inside)
-    \fill[white] (\g,\g) rectangle (\N-\g,\N-\g);
-
-    % Boundary between guard and interior
-    \draw[thick] (\g,\g) rectangle (\N-\g,\N-\g);
-
-    % Labels
-    \node at (\N/2,\N/2) {Interior Region};
-
-%    \node at (\N/2,-6) {Guard Region};
-    \node at (\N/2,\N+6) {Guard Region};
-\end{tikzpicture}
-\caption{Schematic representation of the interior and guard regions used in the adaptive null hypothesis diagnostic.}
-\label{fig:interior-schematic1}
-\end{figure}
-```
-
-```{=latex}
-\begin{figure}[hbt]
-\centering
-\begin{tikzpicture}[
-  >=latex,
-  font=\footnotesize,
-  box/.style={draw, rectangle, rounded corners=1pt, minimum width=1.0cm, minimum height=0.58cm, inner sep=2pt}
-]
-
-\node[box] (w5) at (0,0) {$5\times5$};
-\node[box] (w7) at (1.5,0) {$7\times7$};
-\node[box] (w9) at (3.0,0) {$9\times9$};
-\node[box] (w11) at (4.7,0) {$11\times11$};
-
-\draw[->] (w5) -- (w7);
-\draw[->] (w7) -- (w9);
-\draw[->] (w9) -- (w11);
-
-\node at (2.35,0.65) {\scriptsize $C_{ij}\leq U_{ij}$};
-\node at (2.35,-0.65) {\scriptsize $C_{ij}>U_{ij}$};
-
-\draw[->] (2.35,-0.45) -- (1.15,-0.45);
-\draw[->] (3.85,-0.45) -- (2.65,-0.45);
-
-\end{tikzpicture}
-\caption{Admissible window sizes in the adaptive procedure. If the local homogeneity criterion is satisfied, the window moves to the next larger admissible size; otherwise, it moves to the previous one. Under a homogeneous null image, repeated updates tend to drive the procedure toward $W_{\max}=11$.}
-\label{fig:adaptive-growth-schematic1}
-\end{figure}
-```
-
-
-In addition, we estimated null summaries separately for each admissible window size $W$. Denoting by $\mu_0(W)$ and $\sigma_0(W)$ the null mean and null standard deviation of the statistic associated with window size $W$, the resulting calibration values are reported in 
-@tbl-null-calibration-adaptive. 
-
-```{=latex}
-\begin{table}[H]
-\centering
-\caption{Window-specific null calibration summaries estimated under $H_0$ for the adaptive-window diagnostic.}
+\caption{Window-specific null calibration summaries estimated under $\mathcal H_0$ for the adaptive-window diagnostic.}
 \label{tbl-null-calibration-adaptive}
 \begin{tabular}{ccc}
 \toprule
@@ -1302,10 +1310,11 @@ $11$ & $0.02177826$  & $0.1058000$ \\
 ```
 
 @tbl-null-adaptive-wfreq reports the empirical frequencies of the selected window sizes in the adaptive null diagnostic.
+
 ```{=latex}
-\begin{table}[!t]
+\begin{table}[hbt]
 \centering
-\caption{Empirical frequency of selected window sizes in the adaptive null diagnostic under $H_0$.}
+\caption{Empirical frequency of selected window sizes in the adaptive null diagnostic under $\mathcal H_0$.}
 \label{tbl-null-adaptive-wfreq}
 \begin{tabular}{cccc}
 \toprule
@@ -2286,3 +2295,5 @@ All simulations and SAR image processing were run on a workstation equipped with
 <!-- [^issues-2275]: See the issue here <https://github.com/quarto-dev/quarto-cli/issues/2275> -->
 
 <!-- [IEEEXplore<sup>®</sup>]: <https://ieeexplore.ieee.org/> -->
+
+<!-- Biographies: check the IEEE style in https://journals.ieeeauthorcenter.ieee.org/wp-content/uploads/sites/7/IEEE-Editorial-Style-Manual-for-Authors.pdf page 15 -->
