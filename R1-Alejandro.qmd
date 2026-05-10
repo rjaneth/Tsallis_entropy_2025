@@ -1330,25 +1330,27 @@ Region & $W$ & Count & Proportion \\
 Whole image      & $7$  & $1000$   & $0.001$ \\
 Whole image      & $9$  & $1000$   & $0.001$ \\
 Whole image      & $11$ & $998000$ & $0.998$ \\
-Cropped interior & $11$ & $980100$ & $1.000$ \\
+Interior region & $11$ & $980100$ & $1.000$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 ```
-Figure \ref{fig:null-diagnostic-adaptive} summarizes the main results. Panel (a) shows the empirical frequencies of $W_{ij}$ for the whole image and for the cropped interior region. In the whole image, a very small proportion of pixels is assigned to $W=7$ and $W=9$, whereas the dominant selected size is $W=11$. In the cropped interior region, the selected size is $W=11$ for essentially all pixels. This indicates that, under a homogeneous null model, the adaptive rule increases the window size until reaching the maximum admissible value in the stabilized interior of the image.
+Figure \ref{fig:null-diagnostic-adaptive} summarizes the main results. Panel (a) shows the empirical frequencies of $W_{ij}$ for the whole image and for the interior region. In the whole image, a very small proportion of pixels is assigned to $W=7$ and $W=9$, whereas the dominant selected size is $W=11$. 
+In the interior region, the selected size is $W=11$ for essentially all pixels. This indicates that, under a homogeneous null model, the adaptive rule increases the window size until reaching the maximum admissible value in the stabilized interior of the image.
+
 
 ```{=latex}
 \begin{figure}[hbt]
   \centering
-  \includegraphics[width=0.9\columnwidth]{Figures-R1/null_diagnostic_adaptive_3panels_en_v2.png}
- \caption{Null diagnostic for the adaptive-window procedure under $H_0$. The adaptive rule selects $W=11$ almost everywhere in the cropped interior, yielding a null distribution nearly identical to the fixed-window case with $W=11$.}
+  \includegraphics[width=0.98\columnwidth]{Figures-R1/null_diagnostic_adaptive_3panels_en_v2.png}
+ \caption{Null diagnostic for the adaptive-window procedure under $H_0$. The adaptive rule selects $W=11$ almost everywhere in the interior region, yielding a null distribution nearly identical to the fixed-window case with $W=11$.}
   \label{fig:null-diagnostic-adaptive}
 \end{figure}
 ```
 
-Panel (b) compares the empirical null densities of the statistic for fixed windows with $W\in\{5,7,9,11\}$ against the density produced by the adaptive procedure in the cropped interior region. The adaptive density is practically indistinguishable from the fixed-window density with $W=11$, whereas the densities for $W=5$, $W=7$, and $W=9$ are visibly broader. This shows that, in a homogeneous null setting, the adaptive procedure adopts the null behavior of the fixed-window statistic with the maximum admissible window size.
+Panel (b) compares the empirical null densities of the statistic for fixed windows with $W\in\{5,7,9,11\}$ against the density produced by the adaptive procedure in the interior region. The adaptive density is practically indistinguishable from the fixed-window density with $W=11$, whereas the densities for $W=5$, $W=7$, and $W=9$ are visibly broader. This shows that, in a homogeneous null setting, the adaptive procedure adopts the null behavior of the fixed-window statistic with the maximum admissible window size.
 
-Panel (c) displays the adaptive null density conditioned on the final selected window size in the cropped interior region. Only the component associated with $W=11$ appears, confirming that the adaptive procedure collapses to the largest admissible window in the homogeneous interior region. Taken together, these results show that, although $W_{ij}$ is data-dependent, the resulting null distribution in the homogeneous interior is effectively the same as that of the fixed-window statistic with $W=11$.
+Panel (c) displays the adaptive null density conditioned on the final selected window size in the interior region. Only the component associated with $W=11$ appears, confirming that the adaptive procedure collapses to the largest admissible window in the homogeneous interior region. Taken together, these results show that, although $W_{ij}$ is data-dependent, the resulting null distribution in the homogeneous interior is effectively the same as that of the fixed-window statistic with $W=11$.
 
 After establishing the null behavior of the adaptive statistic, the next step is to convert the statistic field into pixelwise $p$-values. For this purpose, the adaptive centering is retained through the window-dependent null mean $\mu_0(W_{ij})$, while the scale is taken from the observed dispersion of the statistic field. This choice is motivated by the fact that $\sigma_0(W_{ij})$ is estimated under a purely homogeneous null model and may therefore be substantially smaller than the empirical spread of the statistic in actual SAR scenes, where residual heterogeneity and local transitions are still present. Using $\sigma_0(W_{ij})$ directly may thus produce overly aggressive standardization and excessive rejections. Accordingly, we used
 \begin{equation}
