@@ -1234,8 +1234,8 @@ We left a guard region of five pixels and only applied the procedure to the inte
 This guard region allows every pixel in the interior region to use the largest possible window ($11\times11$ pixels), if needed.
 
 @tbl-null-calibration-adaptive reports summary statistics separately for each admissible window size $W$: the mean $\mu_{\mathcal H_0}(W)$ and standard deviation $\sigma_{\mathcal H_0}(W)$.
-With these values, we correct the empirical distribution of the test statistic,
-cf.&nbsp;\eqref{eq:standar}, and obtain $p$-values adjusted for the adaptive window scheme.
+With these values, we corrected the empirical distribution of the test statistic,
+cf.&nbsp;\eqref{eq:standar}, and obtained $p$-values adjusted for the adaptive window scheme.
 
 ```{=latex}
 \begin{table}[hbt]
