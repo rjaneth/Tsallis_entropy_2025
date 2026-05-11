@@ -26,6 +26,11 @@ author:
         city: Recife
         country: Brazil
         postal-code: 50670-901
+      - name: Universidad de Nariño
+        department: Departamento de Matemáticas y Estadística 
+        postal-code: 520002
+        city: Pasto
+        country: Colombia
     email: janeth.alpala@ufpe.br
     orcid: 0000-0002-0265-6236
   - name: Alejandro C. Frery
@@ -71,11 +76,13 @@ author:
     membership: Member, IEEE
     
     note: |
-      Janeth Alpala and  Abraão D. C. Nascimento are with the Departamento de Estatística, Universidade Federal de Pernambuco, Recife, 50670-901 PE, Brazil (e-mail: janeth.alpala@ufpe.br, abraao@de.ufpe.br ).
+      Janeth Alpala is with the Departamento de Estatística, Universidade Federal de Pernambuco, Recife, 50670-901 PE, Brazil, and also with the Departamento de Matemáticas y Estadística, Universidad de Nariño, Pasto, Colombia (e-mail: janeth.alpala@ufpe.br; rjalpala@udenar.edu.co).
       
       Alejandro C. Frery is with the School of Mathematics and Statistics, Victoria University of Wellington, Wellington, 6140, New Zealand (e-mail: alejandro.frery@vuw.ac.nz). \emph{Corresponding author: Alejandro C. Frery.}
       
-      Paolo Gamba is with the Department of Electrical, Computer and Biomedical Engineering, University of Pavia, 27100 Pavia, Italy (e-mail: paolo.gamba@unipv.it)
+      Paolo Gamba is with the Department of Electrical, Computer and Biomedical Engineering, University of Pavia, 27100 Pavia, Italy (e-mail: paolo.gamba@unipv.it).
+      
+      Abraão D. C. Nascimento is with the Departamento de Estatística, Universidade Federal de Pernambuco, Recife, 50670-901 PE, Brazil (e-mail: abraao@de.ufpe.br).
 
       Andrea A. Rey is with the Laboratorio de Investigación y Desarrollo Experimental en Computación, Universidad Nacional de Hurlingham (UNAHUR), Villa Tesei, 1688, Argentina (e-mail: andrea.rey@unahur.edu.ar).
       
@@ -89,7 +96,7 @@ abstract: |
   To address this challenge, this paper proposes a statistical test based on a nonparametric estimator of Tsallis entropy, a non-additive generalization of Shannon entropy that provides enhanced sensitivity to heavy-tailed distributions characteristic of textured SAR data. 
   The estimator incorporates bootstrap correction to improve accuracy with small sample sizes.
   The test is integrated within an adaptive windowing strategy that locally selects the optimal window size based on regional homogeneity: larger windows in homogeneous regions to stabilize estimation and smaller windows in heterogeneous areas to preserve structural details. 
-  This combination yields an unsupervised statistical framework that generates per-pixel $\\bm p$-value maps for detecting departures from fully-developed speckle.
+  This combination yields an unsupervised statistical framework that generates per-pixel $\bm p$-value maps for detecting departures from fully-developed speckle.
   Experimental validation using both simulated data and SAR imagery confirms the method's precision in detecting texture variability and discriminating between homogeneous and heterogeneous regions. 
   The proposed approach offers an interpretable tool for automated SAR image analysis without requiring training data or explicit parametric texture estimation.
 
@@ -196,8 +203,8 @@ source("./Code/functions_sample_bias_mse_1.R")
 \renewcommand{\tablename}{TABLE}
 
 # Introduction
-
-[S]{.IEEEPARstart}ynthetic Aperture Radar (SAR) technology is a key tool in remote sensing, offering high-resolution imaging capabilities independent of solar illumination and weather conditions, which enables continuous and reliable Earth observation [@Mondini2021]. SAR images are widely applied in environmental monitoring [@Amitrano2021], disaster assessment [@Ge2020], agriculture [@Changan2019], urban planning [@Esch2010; @NovelTechniquesforBuiltupAreaExtractionfromPolarimetricSARImages2019], and maritime surveillance [@Cao2024; @OntheDetectionandLongTermPathVisualisationofa68Iceberg], among other fields [@Moreira2013]. However, the effective use of SAR data is hindered by speckle, a noise-like granular interference inherent to coherent imaging systems [@Argenti2013]. Speckle can be described as multiplicative, non-Gaussian noise, making statistical modeling and image interpretation particularly challenging [@Baraha2023].
+[S]{.IEEEPARstart}[ynthetic]{}
+Aperture Radar (SAR) technology is a key tool in remote sensing, offering high-resolution imaging capabilities independent of solar illumination and weather conditions, which enables continuous and reliable Earth observation [@Mondini2021]. SAR images are widely applied in environmental monitoring [@Amitrano2021], disaster assessment [@Ge2020], agriculture [@Changan2019], urban planning [@Esch2010; @NovelTechniquesforBuiltupAreaExtractionfromPolarimetricSARImages2019], and maritime surveillance [@Cao2024; @OntheDetectionandLongTermPathVisualisationofa68Iceberg], among other fields [@Moreira2013]. However, the effective use of SAR data is hindered by speckle, a noise-like granular interference inherent to coherent imaging systems [@Argenti2013]. Speckle can be described as multiplicative, non-Gaussian noise, making statistical modeling and image interpretation particularly challenging [@Baraha2023].
 
 Deep learning has driven significant advances in SAR image analysis.
 In particular, for ship detection, architectures ranging from lightweight fully convolutional networks [@ORPSDOuterRectangularProjectionBasedRepresentationforOrientedShipDetectioninSARImages] to partial differential equations-guided and transformer-based models [@PDEGuidedDiverseFeatureLearningforSARRotatedShipDetection, @BurgsVOBurgsAssociatedVertexOffsetEncodingSchemeforDetectingRotatedShipsinSARImages, @S4DetBreadthandAccurateSineSingleStageShipDetectionforRemoteSenseSARImagery] lead to successful applications. 
@@ -1153,7 +1160,7 @@ suppressMessages({
 
 table_combined_result <- knitr::kable(
   combined_results,
-  caption = "Size and Power of the $S_{\\widetilde{T}_{\\lambda}}(\\bm{Z})$ test statistic",
+  caption = "Size and Power of the $S_{\\widetilde{T}_{\\lambda}}(\\bm{Z})$ test statistic.",
   format = "latex",
   booktabs = TRUE,
   align = "rrcccccc",
@@ -1176,7 +1183,7 @@ print(table_combined_result)
 
 ## Adaptive Windows {#sec:adaptive}
 
-When working on simulated or real images, the spatial context must be taken into consideration, because each sample used to compute the test statistic may overlap areas with different distribution. Intuitively, the use of a different window size to compute the test statistics may be crucial to avoid estimating values by using samples that belong to two, even three or more different distributions.
+When working on simulated or real images, the spatial context must be taken into consideration, because each sample used to compute the test statistic may overlap areas with different distributions. Intuitively, the use of a different window size to compute the test statistics may be crucial to avoid estimating values by using samples that belong to two, even three or more different distributions.
 
 Our approach builds on the adaptive windowing algorithm for SAR images proposed by Park et al. [@Park1999], which adjusts the analysis window size according to an estimate of the local homogeneity of the scene. To this end, for each pixel $(i,j)$, let $w_{ij}$ be the window centered at $(i,j)$ with radius $N_{ij} \ge 1$, defined as: \begin{equation*}
 w_{ij} = \{(i',j'),\, i-N_{ij} \le i' \le i+N_{ij} \,\wedge\, j-N_{ij} \le j' \le j+N_{ij}\}.
@@ -1209,7 +1216,7 @@ Once the window radius $N_{ij}$ has been determined for pixel $(i,j)$, the corre
 
 Because the final window size $W_{ij}$ is selected from the data, the null distribution of the adaptive statistic need not coincide exactly with that of a fixed-window statistic. For this reason, the adaptive case requires an additional null diagnostic and calibration analysis, described next.
 
-<!-- This adaptive strategy is locally responsive to image texture, using small windows in heterogeneous areas and larger ones in homogeneous zones. This ensures edge preservation and statistical stability, while the parameter $\eta$ controls the balance between smoothness and detail preservation. Moreover, the framework is extensible and can be applied with any entropy estimator. -->
+
 
 ## Test statistic behavior under the null hypothesis and adaptive windows {#sec:adaptive-null}
 
@@ -1219,15 +1226,12 @@ Since the procedure is adaptive, the final window size $W_{ij}$ at position $(i,
 statistic behavior may be different.
 We verified that these distributions differ, and obtained the $p$-values under this realistic configuration.
 
-For this purpose, we generated an image of size $1000\times1000$ under $H_0$, i.e., with observations from iid $\Gamma_{\mathrm{SAR}}(10,16)$ random variables. 
+For this purpose, we generated an image of size $1000\times1000$ under $\mathcal H_0$, i.e., with observations from iid $\Gamma_{\mathrm{SAR}}(10,16)$ random variables. 
 We used $\lambda=0.85$, 
 bootstrap size $B=100$, 
 and windows of size $W\in\{5,7,9,11\}$, with $\eta=3$. 
 We left a guard region of five pixels and only applied the procedure to the interior region.
 This guard region allows every pixel in the interior region to use the largest possible window ($11\times11$ pixels), if needed.
-<!-- The adaptive procedure was then applied and compared with the corresponding fixed-window results. -->
-<!-- The adaptive procedure produces, together with the statistic field, a window-selection map $W_{\mathrm{map}}$, whose entry at pixel $(i,j)$ records the final selected window size $W_{ij}\in\{5,7,9,11\}$. -->
-
 
 @tbl-null-calibration-adaptive reports summary statistics separately for each admissible window size $W$: the mean $\mu_{\mathcal H_0}(W)$ and standard deviation $\sigma_{\mathcal H_0}(W)$.
 With these values, we correct the empirical distribution of the test statistic,
@@ -1252,9 +1256,7 @@ $W$ & $\mu_{\mathcal H_0}(W)$ & $\sigma_{\mathcal H_0}(W)$ \\
 \end{table}
 ```
 
-Figure&nbsp;\ref{fig:null-diagnostic-adaptive} shows the empirical densities of
-the test statistic under the null hypothesis and in five fixed window sizes:
-$W\in\{5,7,9,11\}$.
+Figure&nbsp;\ref{fig:null-diagnostic-adaptive} shows the empirical densities of the test statistic under the null hypothesis for the four fixed window sizes $W\in\{5,7,9,11\}$ and for the adaptive procedure.
 Except for the $W=5$ case, the empirical densities look symmetric around zero.
 The least spread case is $W=11$, as expected because this is the largest sample size.
 The distribution of the test statistic using the adaptive procedure under $\mathcal H_0$ 
@@ -1266,7 +1268,7 @@ Moreover, the adaptive method in this experiment never selected windows of size 
 ```{=latex}
 \begin{figure}[hbt]
   \centering
-  \includegraphics[width=0.9\columnwidth]{Figures-R1/null_diagnostic_adaptive_3panels_en_v2.png}
+  \includegraphics[width=0.98\columnwidth]{Figures-R1/distributions_statistic_density_1.pdf}
  \caption{Empirical densities of the test statistic under the null hypothesis and fixed and adaptive window sizes.}
   \label{fig:null-diagnostic-adaptive}
 \end{figure}
@@ -1274,7 +1276,7 @@ Moreover, the adaptive method in this experiment never selected windows of size 
 
 After establishing the mean and standard deviation of the test statistic under the null hypothesis and adaptive windows, 
 the next step is to convert the statistic field into $p$-values. 
-<!-- For this purpose, the adaptive centering is retained through the window-dependent mean $\mu_0(W_{ij})$, while the scale is taken from the observed dispersion of the statistic field. This choice is motivated by the fact that $\sigma_0(W_{ij})$ is estimated under a purely homogeneous null model and may therefore be substantially smaller than the empirical spread of the statistic in actual SAR scenes, where residual heterogeneity and local transitions are still present.  -->
+
 Since $\sigma_{\mathcal H_0}(W)$ produces overly aggressive standardization and excessive rejections, we used
 \begin{equation}
 z_{ij}=\frac{S_{ij}-\mu_{\mathcal H_0}(W_{ij})}{\sigma_{\mathrm{obs}}},
@@ -1288,14 +1290,14 @@ p_{ij}=2\Phi\bigl(-|z_{ij}|\bigr).
 $$
 
 
-The same strategy was subsequently used in the comparative benchmark of the adaptive Shannon, and Rényi entropies, as discussed in 
+The same strategy was subsequently used in the comparative benchmark for the adaptive Shannon and Rényi entropy-based tests, as discussed in 
 Subsection&nbsp;\ref{sec:entropy-benchmark}.
 
 
 
 # RESULTS {#sec:app}
 
-In this section, we present the obtained results of applying our proposal to simulated data and to actual SAR images.
+In this section, we present the results obtained by applying the proposed method to simulated data and actual SAR images.
 
 ## Analysis with Simulated Data {#sec-sim2}
 
@@ -1511,7 +1513,7 @@ kable(SAR_data,
       digits = 2,
       label = "table_param",
       centering = TRUE,
-      caption = "Parameters of selected SAR images",
+      caption = "Parameters of selected SAR images.",
       table.envir = "table", position = "hbt") %>%
   row_spec(0, align = "c") %>%
   kable_styling(latex_options = "scale_down", font_size = 24) %>% 
@@ -1571,7 +1573,7 @@ Figures \ref{fig:sanfrancisco}–\ref{fig:foggia} present the outcomes, organiz
 \end{subfigure}\hfill
 \begin{subfigure}[t]{0.19\textwidth}
 \includegraphics[width=\linewidth]{./Figures/p-values_San-fran1400-eta4.png} % (o deja esta vacía si solo tienes 4)
-\caption{$p$-value ($\eta=4$)}
+\caption{$p$-value map ($\eta=4$)}
 \label{fig:SFc5}
 \end{subfigure}
 
@@ -1825,7 +1827,7 @@ In addition to the visual analysis presented, we measured execution times to ass
 #| message: false
 #| warning: false
 #| results: 'asis'
-#| tbl-cap: 'Execution times for heterogeneity detection using fixed and adaptive windows'
+#| tbl-cap: 'Execution times for heterogeneity detection using fixed and adaptive windows.'
 #| tbl-pos: 'hbt'
 #library(kableExtra)
 Times_data <- data.frame(
@@ -1923,7 +1925,7 @@ We thresholded the $p$-value maps at $0.05$, labeling each pixel as heterogeneou
 \renewcommand{\arraystretch}{1.1}
 
 ```{r}
-#| tbl-cap: "Quantitative measures of heterogeneity detection"
+#| tbl-cap: "Quantitative measures of heterogeneity detection."
 #| label: tbl-metrics-tsallis2
 #| results: 'asis'
 #| echo: false
@@ -2061,7 +2063,6 @@ Across all scenes, the configuration $\eta = 4$ presents lower performance. This
 
 Regarding the decision threshold, a significance level of $0.05$ was adopted for the binary classification of the $p$-value maps. This choice provides a practical balance between false-alarm control and sensitivity to weak texture variations. Experiments with alternative levels confirmed the expected trade-offs: a stricter threshold ($0.01$) reduces false alarms but may miss subtle features, whereas a more relaxed one ($0.10$) increases sensitivity at the cost of more false positives, particularly in highly speckled regions.
 
-
 ## Comparative Benchmark Between Entropy-Based Tests {#sec:entropy-benchmark}
 
 To compare the proposed Tsallis-based test with earlier entropy-based methods for SAR imagery, we carried out a benchmark against the Shannon  and Rényi-based tests.
@@ -2079,14 +2080,11 @@ In contrast, the ROC curve and its area under the curve (AUC) are threshold-free
 
 @tbl-dublin-main-benchmark reports the benchmark results. Two consistent trends are observed. 
 First, for all three entropies, the adaptive strategy improves the corresponding fixed-window configuration. Second, within both the fixed and adaptive settings, the Tsallis-based test provides the strongest overall performance. 
-The best configuration is the bootstrap-corrected adaptive Tsallis method, which achieved the highest AUC, $F_1(p=0.05)$, $\kappa(p=0.05)$, and OA$(p=0.05)$. 
-These results indicate that the improvement  is not explained only by adaptive windowing, since the Tsallis entropy itself also provides additional discriminatory power when combined with bootstrap correction and adaptive window selection.
-
 ```{=latex}
-\begin{table*}
+\begin{table*}[hbt]
 \footnotesize
 \centering
-\caption{Entropy-based benchmark on the Dublin SAR scene under fixed and adaptive window settings}
+\caption{Entropy-based benchmark on the Dublin SAR scene under fixed and adaptive window settings.}
 \label{tbl-dublin-main-benchmark}
 %\resizebox{0.94\textwidth}{!}{%
 \begin{tabular}{ccccccc}
@@ -2115,7 +2113,8 @@ These results indicate that the improvement  is not explained only by adaptive w
 %}
 \end{table*}
 ```
-
+The best configuration is the bootstrap-corrected adaptive Tsallis method, which achieved the highest AUC, $F_1(p=0.05)$, $\kappa(p=0.05)$, and OA$(p=0.05)$. 
+These results indicate that the improvement  is not explained only by adaptive windowing, since the Tsallis entropy itself also provides additional discriminatory power when combined with bootstrap correction and adaptive window selection.
 
 Figure&nbsp;\ref{fig:roc_entropy_benchmark} provides a threshold-free comparison through ROC curves. In both the fixed and adaptive settings, the Tsallis-based method outperforms the Shannon and Rényi-based alternatives, with the largest separation observed in the adaptive bootstrap-corrected case.
 ```{=latex}
@@ -2127,7 +2126,6 @@ Figure&nbsp;\ref{fig:roc_entropy_benchmark} provides a threshold-free comparison
 \end{figure}
 ```
 Figure&nbsp;\ref{fig:threshold_entropy_benchmark} shows the corresponding $F_1$ threshold sweep for $p$-thresholds from $0.01$ to $0.20$. The same ranking is observed across thresholds, with Tsallis performing best, followed by Rényi and Shannon.
-
 ```{=latex}
 \begin{figure}[hbt]
   \centering
@@ -2136,11 +2134,8 @@ Figure&nbsp;\ref{fig:threshold_entropy_benchmark} shows the corresponding $F_1$ 
   \label{fig:threshold_entropy_benchmark}
 \end{figure}
 ```
-
 To complement the quantitative benchmark, we also performed a qualitative comparison on the Dublin SAR scene using the bootstrap-corrected adaptive configurations of the Shannon, Rényi, and Tsallis entropy-based tests. Figure&nbsp;\ref{fig:dublin_qualitative_comparison} shows the corresponding full-scene $p$-value maps. 
-The three methods consistently identify the main heterogeneous urban and harbor structures. However, the Tsallis-based map exhibits sharper local contrast and a more coherent delineation of heterogeneous areas, while Shannon appears comparatively less selective and Rényi provides an intermediate behavior. 
-These visual findings are consistent with the quantitative results in @tbl-dublin-main-benchmark, where the adaptive bootstrap Tsallis configuration attained the best overall performance.
-
+The three methods consistently identify the main heterogeneous urban and harbor structures. However, the Tsallis-based map exhibits sharper local contrast and a more coherent delineation of heterogeneous areas, while Shannon appears comparatively less selective and Rényi provides an intermediate behavior.
 ```{=latex}
 \begin{figure*}[hbt]
 \centering
@@ -2173,6 +2168,7 @@ These visual findings are consistent with the quantitative results in @tbl-dubli
 \label{fig:dublin_qualitative_comparison}
 \end{figure*}
 ```
+These visual findings are consistent with the quantitative results in @tbl-dublin-main-benchmark, where the adaptive bootstrap Tsallis configuration attained the best overall performance.
 
 # Conclusions {#sec:conclusion}
 
@@ -2183,7 +2179,6 @@ Experiments with simulated and real SAR data showed that the method is effective
 The comparative benchmark on a representative real SAR scene further clarified the contribution of the proposed method with respect to previous entropy-based approaches. Under a common evaluation protocol, adaptive windowing improved all three entropy-based detectors, while the bootstrap-corrected adaptive Tsallis configuration achieved the strongest overall performance among Shannon, Rényi, and Tsallis.
 
 Although machine learning-based SAR classifiers are widely used, this framework offers a statistically grounded alternative that provides interpretable significance measures and requires no labeled data, making it suitable for rapid detection, screening, and scenarios with limited data availability.
-
 
 []{.appendix options="Derivation of the Tsallis Entropy of $\mathcal{G}^0_I$"}
 
@@ -2225,14 +2220,19 @@ All simulations and SAR image processing were run on a workstation equipped with
 # References {.unnumbered}
 :::
 
+::: {#refs}
+:::
+
 <!-- [^issues-1023]: ["_[longtable not compatible with 2-column LaTeX documents](https://github.com/jgm/pandoc/issues/1023>)_",  -->
-
-<!-- [^issues-2275]: See the issue here <https://github.com/quarto-dev/quarto-cli/issues/2275> -->
-
-<!-- [IEEEXplore<sup>®</sup>]: <https://ieeexplore.ieee.org/> -->
 
 <!-- Biographies: check the IEEE style in https://journals.ieeeauthorcenter.ieee.org/wp-content/uploads/sites/7/IEEE-Editorial-Style-Manual-for-Authors.pdf page 15 -->
 
+\begin{IEEEbiography}
+	[{\includegraphics[width=1.05in,clip]{Figures/Janeth.png}}]{Janeth Alpala}
+received the B.Sc. degree in Mathematics from the Universidad de Nariño, Colombia, in 2017, the M.Sc. degree in Physics and Mathematics from the Universidad de Granada, Spain, in 2019, and the Ph.D. degree in Statistics from the Universidade Federal de Pernambuco (UFPE), Recife, Brazil, in 2025.
+Since August 2025, she has been a Lecturer in Statistics with the Department of Mathematics and Statistics, Universidad de Nariño, Colombia.
+Her research interests include statistical computing, statistical information theory, nonparametric entropy estimation, image processing, and synthetic aperture radar data analysis.
+\end{IEEEbiography}
 
 \begin{IEEEbiography}
 	[{\includegraphics[width=1.05in,clip]{Figures/ACF-IEEE-Face.png}}]{Alejandro C. Frery} 
@@ -2240,6 +2240,19 @@ All simulations and SAR image processing were run on a workstation equipped with
 	Since May 2020, he has been a Statistics and Data Science Professor at the School of Mathematics and Statistics, Victoria University of Wellington, New Zealand.
 	Prof.\ Frery is also a member of the International Society for Photogrammetry and Remote Sensing (ISPRS), the New Zealand Statistical Association, and the Statistical Society of Australia. In 2018, he received the IEEE GRSS Regional Leader Award. After serving as Associate Editor for over five years, Prof. Frery was the Editor-in-Chief of the IEEE Geoscience and Remote Sensing Letters from 2014 to 2018. He was an IEEE Geoscience and Remote Sensing Society (GRSS) Distinguished Lecturer from 2015 to 2019. He served as this Society's AdCom (Advisory Committee) member, in charge of Future Publications, Plagiarism and Regional Symposia from 2019 to 2022, and as vice president of Publications from 2023 to 2025.
 	Since 2026, he is the vice president for Meetings \& Symposia.
+\end{IEEEbiography}
+
+\begin{IEEEbiography}
+	[{\includegraphics[width=1.05in,clip]{Figures/PG.jpg}}]{Paolo Gamba}
+(Fellow, IEEE) is a Professor at the University of Pavia, Italy, in the Telecommunications and Remote Sensing Laboratory. He received the Laurea degree in Electronic Engineering, \textit{cum laude}, from the University of Pavia, Italy, in 1989, and the Ph.D. degree in Electronic Engineering from the same University in 1993.
+Prof.\ Gamba served as Editor-in-Chief of the \textit{IEEE Geoscience and Remote Sensing Letters} from 2009 to 2013, as Editor-in-Chief of the \textit{IEEE Geoscience and Remote Sensing Magazine} from 2023 to 2024, and as Chair of the Data Fusion Committee of the IEEE Geoscience and Remote Sensing Society (GRSS) from October 2005 to May 2009. He has been elected in the GRSS AdCom from 2014 to 2022 and served as GRSS President from 2019 to 2020. He also served as Technical Co-Chair of the 2010, 2015, and 2020 IGARSS conferences, in Honolulu, HI, USA, Milan, Italy, and online, respectively.
+He is a Fellow of IEEE, IAPR, AAIA, and the Academia Europaea. He has been invited to give keynote lectures and tutorials on several occasions about urban remote sensing, data fusion, EO data for physical exposure, and risk management. He has published more than 240 papers in international peer-reviewed journals.
+\end{IEEEbiography}
+
+\begin{IEEEbiography}
+	[{\includegraphics[width=1.05in,clip]{Figures/AbraaoID.jpg}}]{Abraão D. C. Nascimento}
+received the B.Sc., M.Sc., and D.Sc. degrees in Statistics from the Universidade Federal de Pernambuco (UFPE), Brazil, in 2005, 2007, and 2012, respectively. Since 2014, he has been an Associate Professor with the Department of Statistics, UFPE. He currently serves as Director of the Graduate Program in Statistics at UFPE and is a researcher in Mathematics, Probability, and Statistics supported by the National Council for Scientific and Technological Development (CNPq), Brazil.
+His research interests include statistical information theory, inference for random matrices with emphasis on applications to PolSAR imagery, statistical shape theory, spatio-temporal processes, survival analysis, and asymptotic theory.
 \end{IEEEbiography}
 
 \begin{IEEEbiography}
