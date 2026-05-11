@@ -67,11 +67,9 @@ Below we detail the changes and updates incorporated into the manuscript in this
 
 \vspace{0.5cm}
 
-%-------------------------------------
 \begin{reviewbox}{Comment 1}
 
-\textbf{Concerns Regarding Novelty and Incremental Contribution
-}
+\textbf{Concerns Regarding Novelty and Incremental Contribution}
 
 The manuscript is closely related to the authors' recent works, specifically the Shannon-entropy test ([18], [30]) and the Rényi-entropy test ([19]). In this submission, the main changes appear to be: (a) replacing Shannon/Rényi with Tsallis entropy and (b) adding an adaptive window selection step.
 
@@ -81,26 +79,33 @@ Moving from Shannon $\rightarrow$ Rényi $\rightarrow$ Tsallis is mathematically
 
 - Recommendations
 
-Please clearly state—and quantitatively demonstrate—why Tsallis entropy is preferable here. In particular, does the extra parameter $\lambda$ lead to a meaningful gain (e.g., better separation of texture levels, improved detection in certain heterogeneity regimes, or stronger robustness) compared with Rényi and Shannon approaches?
+Please clearly state and quantitatively demonstrate why Tsallis entropy is preferable here. In particular, does the extra parameter $\lambda$ lead to a meaningful gain (e.g., better separation of texture levels, improved detection in certain heterogeneity regimes, or stronger robustness) compared with Rényi and Shannon approaches?
+
 \end{reviewbox}
 
 \begin{responsebox}{Response}
 
-We revised the manuscript to better position the proposed Tsallis based test with respect to the previous Shannon and Rényi based formulations. In particular, we now clarify that the three methods share the same testing principle under the $\Gamma_{\mathrm{SAR}}$ model, while Tsallis introduces the additional parameter $\lambda$, which provides extra flexibility for capturing departures from homogeneity in heavy tailed SAR data.
+We thank the reviewer for this important observation. We revised the manuscript to clarify that the advantage of the proposed method is not merely the presence of an additional parameter, since the Rényi entropy also depends on an order parameter. Rather, the contribution lies in the way the Tsallis entropy uses the entropic index $\lambda$ to modify the sensitivity of the statistic to low-probability and tail events.
 
-To support this point quantitatively, we added a direct comparison against the Shannon and Rényi baselines in Section IV. The new results show that the Tsallis based formulation provides the strongest overall performance, with the Tsallis configuration using adaptive windows and bootstrap correction achieving the best AUC, $F_1$, $\kappa$, and OA among the compared methods.
+In SAR intensity data, the main differences between the fully developed speckle model and heterogeneous models appear in the tails of the distribution. For $\lambda<1$, the Tsallis entropy increases the influence of small-probability events, which helps emphasize departures from the Gamma model. This provides a practical statistical motivation for the selected value $\lambda=0.85$, which was also supported by the bias--MSE analysis reported in Section III-A.
 
-These changes were incorporated in the new subsection \emph{Comparative Benchmark Between Entropy Based Tests} in Section IV.
+\end{responsebox}
+
+\begin{responsebox}{}
+
+
+
+To demonstrate that this effect leads to a meaningful gain over Shannon and Rényi, we added a direct comparison in Section IV-E, entitled \emph{Comparative Benchmark Between Entropy-Based Tests}. The comparison uses the same Dublin SAR scene, ROIs, window settings, bootstrap configuration, and decision protocol for Shannon, Rényi, and Tsallis. The results in Table VI show that the bootstrap-corrected adaptive Tsallis test achieved the best overall performance, with the highest AUC, $F_1$, $\kappa$, and OA.
+
+All three methods identify the main heterogeneous structures, but the Tsallis map provides a clearer separation of homogeneous water regions, with $p$-values closer to one, while preserving finer details in the urban and harbor areas.
 
 \end{responsebox}
 
 \vspace{1em}
 
-%-------------------------------------
 \begin{reviewbox}{Comment 2}
-\textbf{Missing benchmarking against entropy-based baselines
-}
 
+\textbf{Missing benchmarking against entropy-based baselines}
 
 In Section IV, the experiments mainly compare adaptive windows versus fixed windows. This is not sufficient to support the central claim about the Tsallis-based statistic.
 
@@ -115,23 +120,29 @@ Without a comparison such as ``Adaptive Tsallis vs.\ Adaptive Rényi vs.\ Adapti
 - Recommendations
 
 At minimum, please provide a threshold sweep (e.g., $p$-threshold from $0.01$ to $0.20$) for Tsallis, Rényi, and Shannon under the same windowing protocol and on the same ROIs (ideally for both fixed and adaptive windows). If space permits, ROC curves and/or precision--recall curves would provide a complementary, threshold-free view.
+
 \end{reviewbox}
-\vspace{2em}
+
 \begin{responsebox}{Response}
 
-We agree that comparing only fixed and adaptive windows within the Tsallis formulation was not sufficient to isolate the role of the entropy functional. To address this concern, we added a benchmark on the Dublin scene where Shannon, Rényi, and Tsallis were compared under the same ROIs, decision protocol, and fixed and adaptive window settings, with and without bootstrap correction.
+We agree with the reviewer. In the previous version, the experimental section mainly emphasized the effect of the adaptive windowing strategy within the Tsallis-based formulation. This did not fully isolate the contribution of the entropy functional itself.
 
-We selected Dublin because it provides a representative mix of homogeneous and heterogeneous structures, making it suitable for isolating the role of the entropy functional under a common protocol. To keep the revised manuscript focused, we used this scene for the new entropy level benchmark while preserving the original multi scene evaluation of the Tsallis based method.
+To address this concern, we added a new entropy-level benchmark in Section IV-E. In this benchmark, Shannon, Rényi, and Tsallis were compared under the same protocol, using the Dublin SAR scene, the same ROIs, the same fixed $7\times7$ window, the same adaptive window range from $5\times5$ to $11\times11$, and the same decision rule based on $p_{ij}<0.05$. Configurations with and without bootstrap correction were also considered.
 
-We also included a threshold sweep over $p$ thresholds from $0.01$ to $0.20$ and complementary ROC based comparisons. The new results show that adaptive windowing improves all three entropy based methods, while the Tsallis configuration using adaptive windows and bootstrap correction remains the best performing one overall.
+The revised manuscript now reports AUC, $F_1$, $\kappa$, and overall accuracy for all entropy-based tests. In addition, we added ROC curves as a threshold-free comparison and an $F_1$ threshold sweep using $p$-thresholds from $0.01$ to $0.20$.
 
-These additions were incorporated in Section IV through the new subsection \emph{Comparative Benchmark Between Entropy Based Tests}, a new benchmark table, a two panel ROC comparison, and a two panel $F_1$ threshold sweep figure.
+The results show two consistent trends. First, the adaptive windowing strategy improves all three entropy-based tests. Second, within both fixed and adaptive settings, the Tsallis-based test provides the strongest overall performance. Therefore, the improvement cannot be attributed only to adaptive windowing; the Tsallis statistic itself contributes additional discriminatory power when combined with bootstrap correction and adaptive window selection.
+
+These additions appear in the new subsection \emph{Comparative Benchmark Between Entropy-Based Tests}, together with Table~VI, Figure~15, Figure~16, and Figure~17.
 
 \end{responsebox}
+
+
 \vspace{1em}
 
-%-------------------------------------
+
 \begin{reviewbox}{Comment 3}
+
 \textbf{Calibration with adaptive window selection}
 
 I am concerned about whether the reported $p$-values remain well calibrated when the window size is chosen adaptively (see the adaptive-windowing part around Eq.~(15)).
@@ -143,28 +154,31 @@ The manuscript reports null behavior (Table I) based on Monte Carlo simulations 
 - Recommendations
 
 Please discuss whether a fixed-window null distribution is an appropriate approximation for the adaptive-window statistic. Ideally, the calibration procedure should incorporate the adaptive selection mechanism (e.g., by simulating the full adaptive procedure under $H_0$ and estimating the null distribution of the final standardized statistic). If a full simulation is too expensive, a practical alternative is to calibrate separately for each admissible window size and to standardize per pixel using its final window size.
+
 \end{reviewbox}
 
 \begin{responsebox}{Response}
 
-We thank the reviewer for this important observation. We agree that the null behavior originally reported in Table I was obtained for fixed sample sizes, whereas in the adaptive procedure the final window size $W_{ij}$ is selected from the data. Therefore, the null distribution of the adaptive statistic does not necessarily coincide with that of a fixed window statistic.
+We agree that the behavior reported in Table I was obtained for fixed sample sizes, whereas in the adaptive procedure the final window size $W_{ij}$ is selected from the data. Therefore, the sampling behavior of the adaptive statistic does not necessarily coincide with that of a fixed-window statistic.
 
-To address this issue, we added a new subsection entitled \emph{Null diagnostic and adaptive calibration} in Section III. We performed an additional null diagnostic under $H_0$ using a fully homogeneous $\Gamma_{\mathrm{SAR}}$ simulated image and applied the complete adaptive procedure. To evaluate the stabilized null behavior, we considered a cropped interior region obtained after removing a border of width $(W_{\max}-1)/2$ pixels from each side, thereby reducing edge effects and the transient behavior associated with the sequential initialization of the adaptive sweep. This experiment showed that, in the cropped interior region, the adaptive rule selected the largest admissible window essentially everywhere, and the resulting null distribution was practically indistinguishable from that of the fixed window statistic with $W=11$.
+To address this point, we added a new subsection in Section III entitled \emph{Test statistic behavior under the null hypothesis and adaptive windows}. In this subsection, we discuss the effect of data-dependent window selection and evaluate the statistic under the complete adaptive procedure.
 
-We also estimated window specific null summaries under $H_0$, namely $\mu_0(W)$ and $\sigma_0(W)$ for each admissible window size, and reported them in a new calibration table. In addition, we included a frequency table for the selected adaptive window sizes and a new figure summarizing the empirical frequencies and the corresponding null densities.
+For this purpose, we generated a homogeneous $1000\times1000$ image under $\mathcal H_0$, with independent and identically distributed observations from $\Gamma_{\mathrm{SAR}}(10,16)$. We used $\lambda=0.85$, bootstrap size $B=100$, admissible window sizes $W\in\{5,7,9,11\}$, and $\eta=3$. To avoid edge effects, we analyzed an interior region obtained after removing a five-pixel guard region from each side. This guarantees that every pixel in the analyzed region can support the largest admissible window, namely $11\times11$, when required by the adaptive rule.
 
-For practical inference, we then considered the refined adaptive calibration
+The experiment showed that, under $\mathcal H_0$, the adaptive procedure behaves very similarly to the fixed $W=11$ case in the interior region. This occurs because the adaptive procedure progressively expands the local window whenever the homogeneity criterion is satisfied, so the selected size tends to reach the maximum admissible value. We therefore added Figure~6 and Table~II, which respectively show the empirical densities and report the empirical mean and standard deviation of the statistic for each admissible window size.
+
+For the computation of the adaptive $p$-value maps, we used the following standardization rule:
 \[
-z_{ij}=\frac{S_{ij}-\mu_0(W_{ij})}{sd_{\mathrm{obs}}},
+z_{ij}=
+\frac{S_{ij}-\mu_{\mathcal H_0}(W_{ij})}{\sigma_{\mathrm{obs}}},
 \qquad
-p_{ij}=2\Phi\bigl(-|z_{ij}|\bigr),
+p_{ij}=2\Phi\bigl(-|z_{ij}|\bigr).
 \]
-which preserves the window dependent null centering while using a scale matched to the observed variability of the statistic field.
+This rule preserves the window-dependent centering through $\mu_{\mathcal H_0}(W_{ij})$, while using an observed-scale denominator better matched to the variability of the statistic field in SAR scenes.
 
-In the Dublin scene, this refinement produced only minor quantitative changes and left the substantive conclusions of the manuscript unchanged.
-
-These changes were incorporated in Section III through the new subsection \emph{Null diagnostic and adaptive calibration}, together with two new schematic figures, a window specific calibration table, a frequency table, and a new diagnostic figure.
+We also applied the same standardization strategy in the comparative benchmark for the adaptive Shannon- and Rényi-based tests, so that all adaptive entropy-based methods were compared under the same protocol in Section IV-E.
 
 \end{responsebox}
+
 \end{document}
 
