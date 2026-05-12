@@ -511,7 +511,7 @@ grid.arrange(bias_plot, mse_plot, nrow = 2)
 
 ```
 
-There is an interpretation for the optimal value of $\lambda$ that we found.
+There is an interpretation for this optimal value of $\lambda$.
 When considering discrete probabilities, smaller values this entropic index
 amplify the effect of "small" probabilities on the total Tsallis entropy.
 The $\mathcal G^0$ and gamma distributions differentiate mostly on their tails,
@@ -2238,7 +2238,7 @@ Her research interests include statistical computing, statistical information th
 	[{\includegraphics[width=1.05in,clip]{Figures/ACF-IEEE-Face.png}}]{Alejandro C. Frery} 
 	(S'91--M'94--SM'14--LF'25) was born in Mendoza, Argentina, in 1960. In 1983, he received a B.Sc. in Electronic and Electrical Engineering from the Universidad de Mendoza. His M.Sc. degree was in Applied Mathematics (Statistics) from the Instituto de Matemática Pura e Aplicada (IMPA, Rio de Janeiro, 1990), and his Ph.D. degree was in Applied Computing from the Instituto Nacional de Pesquisas Espaciais (INPE, São José dos Campos, Brazil, 1993). His research interests are data visualisation, statistical computing, and stochastic modelling, with signal and image processing and networks applications.
 	Since May 2020, he has been a Statistics and Data Science Professor at the School of Mathematics and Statistics, Victoria University of Wellington, New Zealand.
-	Prof.\ Frery is also a member of the International Society for Photogrammetry and Remote Sensing (ISPRS), the New Zealand Statistical Association, and the Statistical Society of Australia. In 2018, he received the IEEE GRSS Regional Leader Award. After serving as Associate Editor for over five years, Prof. Frery was the Editor-in-Chief of the IEEE Geoscience and Remote Sensing Letters from 2014 to 2018. He was an IEEE Geoscience and Remote Sensing Society (GRSS) Distinguished Lecturer from 2015 to 2019. He served as this Society's AdCom (Advisory Committee) member, in charge of Future Publications, Plagiarism and Regional Symposia from 2019 to 2022, and as vice president of Publications from 2023 to 2025.
+	Prof.\ Frery is also a member of the International Society for Photogrammetry and Remote Sensing (ISPRS), the New Zealand Statistical Association, and the Statistical Society of Australia. In 2018, he received the IEEE GRSS Regional Leader Award. After serving as Associate Editor for over five years, Prof. Frery was the Editor-in-Chief of the \textit{IEEE Geoscience and Remote Sensing Letters} from 2014 to 2018. He was an IEEE Geoscience and Remote Sensing Society (GRSS) Distinguished Lecturer from 2015 to 2019. He served as this Society's AdCom (Advisory Committee) member, in charge of Future Publications, Plagiarism and Regional Symposia from 2019 to 2022, and as vice president of Publications from 2023 to 2025.
 	Since 2026, he is the vice president for Meetings \& Symposia.
 \end{IEEEbiography}
 

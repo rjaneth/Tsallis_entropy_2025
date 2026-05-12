@@ -1,7 +1,7 @@
 \documentclass[11pt]{report}
 
 \usepackage[pdftex]{geometry}
-\geometry{a4paper,left=2.5cm,right=2.5cm,top=1.5cm,bottom=1.0cm,twoside}
+\geometry{a4paper,left=2.5cm,right=2.5cm,top=1.5cm,bottom=2.0cm,twoside}
 
 \usepackage{amssymb}
 \usepackage{enumerate}
@@ -97,7 +97,7 @@ study. In some cases the parameter $\lambda$ has no
 physical meaning, but it gives new possibilities in
 the agreement of theoretical models and experi-
 mental data [\dots]. In
-othercases,q is solely determined by constraints of
+othercases, $\lambda$ is solely determined by constraints of
 the problem and thereby $\lambda$ may have a physical
 meaning [\dots].
 \end{quote}
@@ -117,9 +117,9 @@ Then, $\lambda<1$ highlights this difference, serving the purpose of the test we
 
 In the manuscript, we have added the following clarification in Section~III.A:
 \begin{quote}
-\textcolor{blue}{There is an interpretation for the optimal value of $\lambda$ that we found.
+\textcolor{blue}{There is an interpretation for this optimal value of $\lambda$.
 When considering discrete probabilities, smaller values this entropic index
-amplify the effect of "small" probabilities on the total Tsallis entropy.
+amplify the effect of ``small'' probabilities on the total Tsallis entropy.
 The $\mathcal G^0$ and gamma distributions differentiate mostly on their tails,
 so enhancing the effect of the tails improves our ability to tell one from the other.}
 \end{quote}
@@ -138,7 +138,9 @@ Regarding the additional computational time that bootstrap imposes on the techni
 The total runtime also depends on the number of bootstrap replications, since each replication recomputes the test statistic to obtain a more stable estimate of the Tsallis entropy measure. In our simulations, we used $B=100$, which provides stable and reliable estimates with moderate computational cost \textcolor{blue}{(the running time increases by, at most, a factor of $15$)}. 
 \end{quote}
 
-Heterogeneous regions produce outliers that may have a detrimental effect in resampling techniques.
+Heterogeneous regions produce outliers
+with respect to the iid model 
+that may have a detrimental effect in resampling techniques.
 \citet{JackknifeAfterBootstrapStandardErrorsandInfluenceFunctions} suggested checking bootstrap samples with a jackknife procedure to identify outliers.
 After that seminal work, many proposals have been studied, e.g., using the influence function \citep{RobustBootstrapwithNonRandomWeightsBasedontheInfluenceFunction}.
 To the best of our knowledge, those approaches consider a fixed sample size.

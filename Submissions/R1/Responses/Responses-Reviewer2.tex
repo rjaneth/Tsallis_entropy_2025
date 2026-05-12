@@ -1,7 +1,7 @@
 \documentclass[11pt]{report}
 
 \usepackage[pdftex]{geometry}
-\geometry{a4paper,left=2.5cm,right=2.5cm,top=1.5cm,bottom=1.0cm,twoside}
+\geometry{a4paper,left=2.5cm,right=2.5cm,top=1.5cm,bottom=2.0cm,twoside}
 
 \usepackage{amssymb}
 \usepackage{enumerate}
@@ -161,6 +161,8 @@ We agree that the behavior reported in Table I was obtained for fixed sample siz
 
 To address this point, we added a new subsection in Section III entitled \emph{Test statistic behavior under the null hypothesis and adaptive windows}. In this subsection, we discuss the effect of data-dependent window selection and evaluate the statistic under the complete adaptive procedure.
 
+\begin{quote}
+{\color{blue}
 For this purpose, we generated a homogeneous $1000\times1000$ image under $\mathcal H_0$, with independent and identically distributed observations from $\Gamma_{\mathrm{SAR}}(10,16)$. We used $\lambda=0.85$, bootstrap size $B=100$, admissible window sizes $W\in\{5,7,9,11\}$, and $\eta=3$. To avoid edge effects, we analyzed an interior region obtained after removing a five-pixel guard region from each side. This guarantees that every pixel in the analyzed region can support the largest admissible window, namely $11\times11$, when required by the adaptive rule.
 
 The experiment showed that, under $\mathcal H_0$, the adaptive procedure behaves very similarly to the fixed $W=11$ case in the interior region. This occurs because the adaptive procedure progressively expands the local window whenever the homogeneity criterion is satisfied, so the selected size tends to reach the maximum admissible value. We therefore added Figure~6 and Table~II, which respectively show the empirical densities and report the empirical mean and standard deviation of the statistic for each admissible window size.
@@ -175,6 +177,8 @@ p_{ij}=2\Phi\bigl(-|z_{ij}|\bigr).
 This rule preserves the window-dependent centering through $\mu_{\mathcal H_0}(W_{ij})$, while using an observed-scale denominator better matched to the variability of the statistic field in SAR scenes.
 
 We also applied the same standardization strategy in the comparative benchmark for the adaptive Shannon- and Rényi-based tests, so that all adaptive entropy-based methods were compared under the same protocol in Section IV-E.
+}
+\end{quote}
 
 \end{responsebox}
 
