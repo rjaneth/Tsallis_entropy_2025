@@ -1,0 +1,306 @@
+---
+title: "Além do *Deep Learning*"
+subtitle: "Como Modelos Estatísticos Elevam a IA em Imagens Complexas"
+author: "Alejandro C. Frery"
+
+format:
+  revealjs:
+    transition: slide
+    background-transition: fade
+    slideNumber: "c/t"
+    progress: true
+    self-contained: true
+    theme: vuw 
+    logo: /Users/acfrery/Library/CloudStorage/OneDrive-VictoriaUniversityofWellington-STAFF/Documents/VUW/Brand/Logo-1.png
+    
+editor: source
+
+nocite: |
+  @Frery2024, @Alpala2025, @beirlant1997nonparametric, @Cassetti2022
+bibliography:
+  - ../references.bib
+
+csl: apa.csl
+highlight-style: espresso
+
+---
+
+```{r setup}
+library(ggplot2)
+library(ggthemes)
+  theme_set(theme_tufte() +
+  theme(text=element_text(size=20, family="serif")))
+library(caret)
+library(patchwork)
+library(scales)
+
+set.seed(123456789, kind="Mersenne-Twister")
+
+fGammaSAR <- function(z, mu, L){
+  return(
+    (L^L / (gamma(L)*mu^L)) *
+      z^{L-1} *
+      exp(-L*z/mu)
+  )
+}
+
+fGI0SAR <- function(z, mu, alpha, L){
+  return(
+    (L^L*gamma(L-alpha) / 
+       ((-mu*(alpha+1))^alpha *
+          gamma(-alpha) * gamma(L))) *
+      z^(L-1) /
+      (-mu*(alpha+1)+L*z)^(L-alpha)
+  )
+}
+```
+
+# Introdução
+
+## Do que falamos quando falamos de "imagens complexas"?
+
+Estamos acostumados a enxergar a realidade na porção **visível** do **espectro eletromagnético**.
+
+![Espectro eletromagnético](EspectroEletromagnetico.svg)
+
+A informação contida nessas frequências não atravessa nuvens, bruma, chuva, as copas das árvores, paredes... 
+
+## Do que falamos quando falamos de "imagens complexas"?
+
+::: columns
+
+::: column
+
+![](SupermanVision.jpg)
+
+:::
+
+::: column
+Podemos fazer melhor, bem melhor. O nosso superpoder se chama
+Radar de Abertura Sintética (SAR -- *Synthetic Aperture Radar*).
+
+* São sensores montados em satélites, aviões, e qualquer plataforma móvil
+* Emitem e captam radiação no espectro das microondas.
+* Operam dia e noite, não são afetados por condições atmosféricas adversas.
+* Podem **atravessar**
+   * nuvens, bruma, chuva,
+   * copas das árvores,
+   * cobertura do solo.
+:::
+
+:::
+
+# Aplicações de Imagens SAR
+
+## 
+
+![From @RemoteSensingImagingSar](../Figures/Infrared-SAR.png){width="60%"}
+
+##
+
+![Tomografia de florestas](../../../../../../Slides/Figuras/SARForestTomography.png){width="100%"}
+
+##
+
+![Três olhares sobre Tapajós](../../../../../../Slides/Figuras/TapajosMosaico.png){width="100%"}
+
+Vemos, neste exemplo, o preço que se paga por usar imagens SAR (de laser, ultrassom-B, sonar): o ruído *speckle*:
+
+* é un fenômeno inerente ao imageamento com radiação coerente,
+* dificulta a interpretação humana e o processamento automático das imagens,
+* as técnicas clássicas (filtro da média, etc.) não são eficazes.
+
+# Limitações do Superpoder
+
+## Speckle
+
+::: columns
+
+::: {.column .fragment}
+Sem ajuda, o nosso superpoder é pouco útil.
+
+![Quem é o nosso Batman?](BatmanSaysNo.jpeg){width="70%"}
+::: 
+
+::: column
+![](SupermanKryptonite.jpg){width="80%"}
+:::
+
+:::
+
+## A estatística vem para nos salvar
+
+::: columns
+
+::: {.column width="60%"}
+O speckle pode ser modelado estatisticamente. 
+
+Uma formulação **física** cuidadosa leva a 
+
+* distribuições de probabilidade que não são a normal, 
+* contaminação que não é aditiva.
+
+Esses são desafios enfrentados com sucesso pela comunidade, resultando em
+
+* técnicas de classificação,
+* filtros redutores de speckle,
+* *pipelines* de interpretação.
+:::
+
+::: {.column width="40%"}
+![](BatmanClooney.jpg)
+:::
+
+:::
+
+## Será que precisamos desse trabalho todo?
+
+::: columns
+
+::: {.column width="60%"}
+
+Por que não jogar as imagens no ChatGPT?
+
+![](PreguicaPensar.jpg)
+
+:::
+
+::: {.column width="40%"}
+
+* LLMs não *aguentam* o speckle.
+* Filtros e classificadores baseados em LLMs são muito ruins para imagens SAR.
+* LLMs não sabem interpretar imagens SAR.
+* Mas nós vamos ensiná-los!
+
+:::
+
+::: 
+
+# Primeira solução: treinamento com dados "brutos"
+
+## Ensinar a Modelos baseados em *Deep Learning*
+
+* "Ensinar" redes neurais consiste em mostrar **muitos** exemplos rotulados
+* Rotular imagens SAR é muito caro porque
+   * o speckle torna tudo complicado;
+   * as imagens podem ser muito grandes (alta resolução espacial);
+   * são capturadas com muita frequência (alta resolução temporal);
+   * não há **um** algoritmo definitivo para rotular imagens SAR.
+   
+## ... mas temos excelentes modelos estatísticos
+
+::: {.columns}
+
+::: {.column width="60%"}
+Podemos fazer simulações rápidas e tão realistas quanto necessário.
+
+O custo computacional para gerar essas simulações é baixíssimo.
+
+O controle que temos sobre o resultado é total.
+
+À direita vemos amostras de areia, pasto e floresta.
+
+:::
+
+::: {.column width="40%"}
+![](../Figures/SimulatedSpeckle.png){style="height: 60vh; width: auto; object-fit: contain;"}
+
+[*FONTE: @SimulationSpatiallyCorrelatedClutter2009 *]{.small}
+:::
+
+::: 
+
+## Filtros de redução de speckle
+
+@SARDespecklingUsingMultiObjectiveNeuralNetworkTrainedwithGenericStatisticalSamples treinaram
+uma rede neural para reduzir speckle usando amostras simuladas.
+
+![](GMonet.png){style="height: 60vh; width: auto; object-fit: contain;"}
+
+# Segunda solução: "digerir" os dados brutos para a rede
+
+## San Francisco
+
+```{r SanFrancisco, out.width="100%"}
+#| echo: false
+#| results: asis
+
+cat('
+<div style="display: flex; justify-content: center; gap: 1em;">
+  <img src="../Figures/sanFrancisco1400.png" style="width:37%;">
+  <img src="../Figures/p-values_San-fran1400_eta2_B100_lambda_085-5x11_L4_1.png" style="width:46.3%;">
+</div>
+')
+```
+
+## Munique
+
+```{r}
+#| echo: false
+#| results: asis
+
+cat('
+<div style="display: flex; justify-content: center; gap: 1em;">
+  <img src="../Figures/munich_1024.png" style="width:37%;">
+  <img src="../Figures/p-values_munich1024_eta2.0_lambda085_5x11_b100.png" style="width:46.5%;">
+</div>
+')
+```
+
+## Porto de Dublin
+
+```{r}
+#| echo: false
+#| results: asis
+
+cat('
+<div style="display: flex; justify-content: center; gap: 1em;">
+  <img src="../Figures/dubli_1600.png" style="width:37%;">
+  <img src="../Figures/p-values_dublin1600_eta2.0_lambda085_5x11_b1005.png" style="width:47%;">
+</div>
+')
+```
+
+## Foggia
+
+```{r}
+#| echo: false
+#| results: asis
+
+cat('
+<div style="display: flex; justify-content: center; gap: 1em;">
+  <img src="../Figures/foggia-italy_1900.png" style="width:37%;">
+  <img src="../Figures/p-values_FoggiaL24_eta_2.00_5x11_B100_lambda_0852.png" style="width:46.5%;">
+</div>
+')
+```
+
+# *The End*
+
+## Para lembrar
+
+::: {.incremental}
+* Embora tenhamos falado de imagens SAR, o speckle aparece em outras modalidades, por exemplo, em inspecção de frutas, legumes, ovos, e carnes por laser.
+* A metodologia (entender, modelar, treinar, extrair) pode (*deve?*) ser aplicada para adaptar LLMs ao problema específico.
+* É necessária uma abordagem interdisciplinar.
+* Investimentos nessa frente têm retornos imediatos.
+:::
+
+## Contact {.fullpage}
+
+::: columns
+::: {.column width="45%"}
+![](../Figures/QRCode-WebPageVUW.png){out-width="40%"}
+:::
+
+::: {.column width="55%"}
+  Alejandro C. Frery\
+School of Mathematics and Statistics\
+Victoria University of Wellington\
+New Zealand\
+  \
+alejandro.frery at vuw.ac.nz\
+:::
+:::
+
+## References  {.references-slide}
