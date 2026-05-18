@@ -219,6 +219,16 @@ uma rede neural para reduzir speckle usando amostras simuladas.
 
 # Segunda solução: "digerir" os dados brutos para a rede
 
+## De números para explicações
+
+::: {.incremental}
+* Formulamos um modelo estatístico em que as observações (números) são eventos de uma variável aleatória $Z$.
+* A distribuição de $Z$ tem três parâmetros, e um deles "conta" quantos objetos há em cada pixel, em média.
+* Coletamos umas poucas observações, e estimamos esse parâmetro com um método próprio eficiente e resistente a contaminações.
+* Mapeamos essas estimativas, pixel a pixel, em um mapa de cores.
+* Esse mapa pode ser usado como uma camada de informações **explicáveis** (interpretáveis) para sistemas baseados em Aprendizagem de Máquina.
+:::
+
 ## San Francisco
 
 ```{r SanFrancisco, out.width="100%"}
