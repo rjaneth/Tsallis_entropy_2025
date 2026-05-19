@@ -61,11 +61,11 @@ fGI0SAR <- function(z, mu, alpha, L){
 
 We are used to seeing reality through the **visible** portion of the **electromagnetic spectrum**.
 
-![Electromagnetic spectrum](EspectroEletromagnetico.svg){alt="Electromagnetic spectrum"}
+![Electromagnetic spectrum](Electromagnetic_spectrum.svg){alt="Electromagnetic spectrum"}
 
 The information contained in these frequencies cannot penetrate clouds, haze, rain, tree canopies, walls...
 
-## What do we mean when we talk about “complex images”?
+## What do we mean when we talk about “active microwave imaging”?
 
 ::: columns
 
@@ -79,7 +79,7 @@ The information contained in these frequencies cannot penetrate clouds, haze, ra
 We can do better, much better. Our superpower is called
 Synthetic Aperture Radar (SAR).
 
-- Sensors mounted on satellites, aircraft, and any mobile platform
+- Sensors mounted on satellites, aircrafts, and mobile platforms
 
 - They emit and capture radiation in the microwave spectrum.
 
@@ -109,7 +109,7 @@ Synthetic Aperture Radar (SAR).
 
 ## 
 
-![Three views of Tapajós](../../../../../../Slides/Figuras/TapajosMosaico.png){width="100%"}
+![Three views of Tapajós, Amazon Forest, Brazil](../../../../../../Slides/Figuras/TapajosMosaico.png){width="100%"}
 
 In this example, we see the price paid for using SAR images (as well as laser, ultrasound-B, and sonar imagery): *speckle* noise.
 
@@ -167,29 +167,12 @@ These challenges have been successfully addressed by the community, resulting in
 
 ## Do we really need all this work?
 
-::: columns
-
-::: {.column width="60%"}
-
 Why not just feed the images into DeepSeek?
 
-![](PreguicaPensar.jpg)
-
-:::
-
-::: {.column width="40%"}
-
-- LLMs cannot handle speckle.
-
+- LLMs cannot handle speckle *per se*.
 - LLM-based filters and classifiers perform very poorly on SAR images.
-
 - LLMs do not know how to interpret SAR images.
-
 - But we are going to teach them!
-
-:::
-
-:::
 
 # First solution: training with “raw” data
 
@@ -223,7 +206,7 @@ On the right we see samples of sand, pasture, and forest.
 :::
 
 ::: {.column width="40%"}
-![SOURCE: \@SimulationSpatiallyCorrelatedClutter2009](../Figures/SimulatedSpeckle.png){style="height: 60vh; width: auto; object-fit: contain;"}
+![SOURCE: @SimulationSpatiallyCorrelatedClutter2009](../Figures/SimulatedSpeckle.png){style="height: 50vh; width: auto; object-fit: contain;"}
 
 :::
 
