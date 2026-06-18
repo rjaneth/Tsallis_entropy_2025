@@ -165,11 +165,11 @@ Por que não jogar as imagens no ChatGPT?
 
 :::
 
-::: {.column width="40%"}
+::: {.column .fragment width="40%"}
 
-* LLMs não *aguentam* o speckle.
-* Filtros e classificadores baseados em LLMs são muito ruins para imagens SAR.
-* LLMs não sabem interpretar imagens SAR.
+* Sistema basados em *deep learning* (DL) não aguentam o speckle.
+* Filtros e classificadores baseados em DL são muito ruins para imagens SAR.
+* Analisadores baseados em DL não sabem interpretar imagens SAR.
 * Mas nós vamos ensiná-los!
 
 :::
@@ -223,9 +223,11 @@ uma rede neural para reduzir speckle usando amostras simuladas.
 
 ::: {.incremental}
 * Formulamos um modelo estatístico em que as observações (números) são eventos de uma variável aleatória $Z$.
-* A distribuição de $Z$ tem três parâmetros, e um deles "conta" quantos objetos há em cada pixel, em média.
+* A distribuição de $Z$ tem três parâmetros, e um deles "conta" quantos objetos há em cada pixel, em média:
+   * As imagens SAR mais comumente usadas têm aprox. $10\times10\text{ m}^2$ de resolução espacial.
+   * As frequências usadas enxergam objetos de aprox. $10\text{ cm}$.
 * Coletamos umas poucas observações, e estimamos esse parâmetro com um método próprio eficiente e resistente a contaminações.
-* Mapeamos essas estimativas, pixel a pixel, em um mapa de cores.
+* Mostramos essas estimativas, pixel a pixel, como um mapa de cores.
 * Esse mapa pode ser usado como uma camada de informações **explicáveis** (interpretáveis) para sistemas baseados em Aprendizagem de Máquina.
 :::
 
@@ -291,7 +293,7 @@ cat('
 
 ::: {.incremental}
 * Embora tenhamos falado de imagens SAR, o speckle aparece em outras modalidades, por exemplo, em inspecção de frutas, legumes, ovos, e carnes por laser.
-* A metodologia (entender, modelar, treinar, extrair) pode (*deve?*) ser aplicada para adaptar LLMs ao problema específico.
+* A metodologia (entender, modelar, treinar, extrair) pode (*deve?*) ser aplicada para adaptar técnicas baseadas em *deep learning* ao problema específico.
 * É necessária uma abordagem interdisciplinar.
 * Investimentos nessa frente têm retornos imediatos.
 :::
