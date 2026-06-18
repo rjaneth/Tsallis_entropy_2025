@@ -1292,7 +1292,7 @@ p_{ij}=2\Phi\bigl(-|z_{ij}|\bigr).
 $$
 
 This calibration is configuration-dependent because the adaptive window rule depends on $L$ and $\eta$. 
-In the Dublin benchmark, the same configuration was used for Shannon, R\'enyi, and Tsallis, with $L=16$, $\eta=3$, and admissible windows from $5\times5$ to $11\times11$. 
+In the Dublin benchmark, the same configuration was used for Shannon, Renyi, and Tsallis, with $L=16$, $\eta=3$, and admissible windows from $5\times5$ to $11\times11$. 
 For another scene or another pair $(L,\eta)$, the null diagnostic and the window-dependent means should be recomputed.
 
 
