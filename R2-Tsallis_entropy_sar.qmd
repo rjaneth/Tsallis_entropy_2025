@@ -1274,24 +1274,26 @@ Moreover, the adaptive method in this experiment never selected windows of size 
 \end{figure}
 ```
 
-After establishing the mean and standard deviation of the test statistic under the null hypothesis and adaptive windows, 
-the next step is to convert the statistic field into $p$-values. 
 
-Since $\sigma_{\mathcal H_0}(W)$ produces overly aggressive standardization and excessive rejections, we used
+After estimating the null behavior of the statistic under adaptive windows, the statistic field was converted into $p$-values. 
+The null simulation was used to obtain the window-dependent mean $\mu_{\mathcal H_0}(W)$ for each admissible window size. 
+However, using the window-dependent standard deviation $\sigma_{\mathcal H_0}(W)$ directly produced overly aggressive standardization and excessive rejections in the SAR images. 
+Therefore, we used the following standardization:
 \begin{equation}
-z_{ij}=\frac{S_{ij}-\mu_{\mathcal H_0}(W_{ij})}{\sigma_{\mathrm{obs}}},
+z_{ij}=
+\frac{S_{ij}-\mu_{\mathcal H_0}(W_{ij})}{s_{\mathrm{obs}}},
 \label{eq:standar}
 \end{equation}
-where $\sigma_{\mathrm{obs}}$ is the empirical standard deviation of the test statistic computed over all the pixels under $\mathcal H_0$ using adaptive windows.
-In this way, the procedure uses window-dependent means and a scale better matched to the variability of the observed SAR data.
-Finally, the adaptive $p$-values are computed as
+where $S_{ij}$ is the statistic at pixel $(i,j)$, $W_{ij}$ is the final adaptive window selected at that pixel, and $s_{\mathrm{obs}}$ is the empirical standard deviation of the finite values of the observed statistic map. 
+Thus, the procedure keeps the null centering according to the selected window size, while using a common empirical scale for the processed scene. 
+The adaptive $p$-values are then computed as
 $$
 p_{ij}=2\Phi\bigl(-|z_{ij}|\bigr).
 $$
 
-
-The same strategy was subsequently used in the comparative benchmark for the adaptive Shannon and Rényi entropy-based tests, as discussed in 
-Subsection&nbsp;\ref{sec:entropy-benchmark}.
+This calibration is configuration-dependent because the adaptive window rule depends on $L$ and $\eta$. 
+In the Dublin benchmark, the same configuration was used for Shannon, R\'enyi, and Tsallis, with $L=16$, $\eta=3$, and admissible windows from $5\times5$ to $11\times11$. 
+For another scene or another pair $(L,\eta)$, the null diagnostic and the window-dependent means should be recomputed.
 
 
 

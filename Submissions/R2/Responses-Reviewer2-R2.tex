@@ -1,0 +1,241 @@
+\documentclass[11pt]{report}
+
+% -------------------------------------------------------
+% Page layout
+% -------------------------------------------------------
+\usepackage[pdftex]{geometry}
+\geometry{
+  a4paper,
+  left=2.5cm,
+  right=2.5cm,
+  top=1.5cm,
+  bottom=2.0cm,
+  twoside
+}
+
+% -------------------------------------------------------
+% Encoding, fonts, and language support
+% -------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[main=english,spanish,brazilian]{babel}
+\usepackage{textcomp}
+
+% -------------------------------------------------------
+% Math and symbols
+% -------------------------------------------------------
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{siunitx}
+
+% -------------------------------------------------------
+% Figures and tables
+% -------------------------------------------------------
+\usepackage{graphicx}
+\graphicspath{{./Comments/}}
+\usepackage{subfigure}
+\usepackage{float}
+
+% -------------------------------------------------------
+% Colors and boxes
+% -------------------------------------------------------
+\usepackage{xcolor}
+\usepackage[many]{tcolorbox}
+
+% -------------------------------------------------------
+% References and links
+% -------------------------------------------------------
+\usepackage{natbib}
+\usepackage{hyperref}
+
+% -------------------------------------------------------
+% Unicode fallback declarations for pdfLaTeX
+% -------------------------------------------------------
+\DeclareUnicodeCharacter{00E1}{\'a} % á
+\DeclareUnicodeCharacter{00E9}{\'e} % é
+\DeclareUnicodeCharacter{00ED}{\'i} % í
+\DeclareUnicodeCharacter{00F3}{\'o} % ó
+\DeclareUnicodeCharacter{00FA}{\'u} % ú
+\DeclareUnicodeCharacter{00C1}{\'A} % Á
+\DeclareUnicodeCharacter{00C9}{\'E} % É
+\DeclareUnicodeCharacter{00CD}{\'I} % Í
+\DeclareUnicodeCharacter{00D3}{\'O} % Ó
+\DeclareUnicodeCharacter{00DA}{\'U} % Ú
+\DeclareUnicodeCharacter{00F1}{\~n} % ñ
+\DeclareUnicodeCharacter{00D1}{\~N} % Ñ
+\DeclareUnicodeCharacter{00E3}{\~a} % ã
+\DeclareUnicodeCharacter{00C3}{\~A} % Ã
+\DeclareUnicodeCharacter{00E2}{\^a} % â
+\DeclareUnicodeCharacter{00EA}{\^e} % ê
+\DeclareUnicodeCharacter{00F4}{\^o} % ô
+\DeclareUnicodeCharacter{00E7}{\c{c}} % ç
+\DeclareUnicodeCharacter{00C7}{\c{C}} % Ç
+\DeclareUnicodeCharacter{00A0}{~} % non-breaking space
+\DeclareUnicodeCharacter{2013}{--} % en dash
+\DeclareUnicodeCharacter{2014}{---} % em dash
+\DeclareUnicodeCharacter{2018}{`} % left single quote
+\DeclareUnicodeCharacter{2019}{'} % right single quote
+\DeclareUnicodeCharacter{201C}{``} % left double quote
+\DeclareUnicodeCharacter{201D}{''} % right double quote
+
+% -------------------------------------------------------
+% Box styles
+% -------------------------------------------------------
+\newtcolorbox{reviewbox}[1]{
+  colback = white!5!white,
+  colframe = purple!75!black,
+  fonttitle=\bfseries,
+  title=#1
+}
+
+\newtcolorbox{responsebox}[1]{
+  colback = white!5!white,
+  colframe = white!75!black,
+  fonttitle=\bfseries,
+  title=#1
+}
+
+\newcommand{\assigned}[1]{\textcolor{blue}{\textbf{#1}}}
+
+% -------------------------------------------------------
+% Document
+% -------------------------------------------------------
+\begin{document}
+
+\begin{center}
+\large{\textbf{Response Letter to Reviewers}}
+
+\vglue 0.3cm
+
+\huge{
+Adaptive Model-Free Tsallis Entropy Estimation for Detecting Non-Fully-Developed Speckle\\
+(TGRS-2025-10064.R1)
+}
+\end{center}
+
+\begin{center}
+\textbf{
+Janeth Alpala, Alejandro C.\ Frery, Paolo Gamba, Abra\~ao D. C. Nascimento, Andrea A. Rey
+}
+\end{center}
+
+\date{ }
+
+
+\noindent Dear Editor,
+
+\bigskip
+
+\noindent We are grateful for the careful evaluation of our revised manuscript and for the valuable comments provided in this round of review. We have addressed the remaining comments raised by Reviewer~2 and revised the manuscript accordingly. The corresponding changes have been highlighted in the revised version. 
+
+
+\medskip
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Reviewer 1}
+
+\begin{reviewbox}{Comment}
+
+Accept.
+
+\end{reviewbox}
+
+\begin{responsebox}{Response}
+
+We sincerely thank Reviewer~1 for the positive evaluation and acceptance of the revised manuscript.
+
+\end{responsebox}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Reviewer 2}
+
+\begin{reviewbox}{Comment 1}
+
+\textbf{Calibration and interpretation of the adaptive p-values}
+
+Equation~(15) defines the adaptive z-score using $\sigma_{\mathrm{obs}}$, described as ``the empirical standard deviation of the test statistic computed over all the pixels under $H_0$ using adaptive windows.'' The following sentence then says that this scale is ``better matched to the variability of the observed SAR data.'' Since $\sigma_{\mathrm{obs}}$ is obtained from an $H_0$ Monte Carlo simulation rather than from each observed scene, I suggest clarifying this wording and the inferential role of the $H_0$-derived pooled scale used in Eq.~(15).
+\vspace{1em}
+
+It would also be helpful to state whether the adaptive calibration in Table~II and Eq.~(15) was recomputed for each $(L,\eta)$ pair used in the experiments. Section~III-G reports the adaptive null diagnostic for $\Gamma_{\mathrm{SAR}}(10,16)$ with $\eta = 3$, whereas the real-scene experiments use $L \in \{4,12,16,24\}$ and $\eta \in \{1,2,3,4\}$. Because the adaptive window selection depends on both $L$ and $\eta$, the null distribution of the adaptive statistic, and hence the calibration of the reported p-values, may differ across these settings if a single calibration is reused.
+
+\vspace{1em}
+A compact diagnostic of the final adaptive p-values under $H_0$, such as empirical rejection rates at 1\%, 5\%, and 10\%, or a check against a Uniform$(0,1)$ distribution, would strengthen the calibration argument. Such a diagnostic would be particularly important if a single calibration was reused across $L$ or $\eta$; if per-setting calibration was performed, a concise description of the calibration protocol and settings would likely be sufficient. Relatedly, the statement that moderate deviations in $L$ did not significantly affect the test outcome could be tied to the supporting sensitivity checks if those were performed.
+
+\end{reviewbox}
+
+\begin{responsebox}{Response}
+
+
+
+We thank Reviewer 2 for this observation. We agree that the previous wording could lead to ambiguity regarding the origin of the scale used in Eq.~(15).
+
+In the revised manuscript, we clarified that the p-value computation uses two components. First, the Monte Carlo simulation under $\mathcal H_0$ provides the window-dependent mean $\mu_{\mathcal H_0}(W_{ij})$. This centers each pixel according to its final selected adaptive window size $W_{ij}$.
+
+We also evaluated the fully window-dependent standardization
+\[
+z_{ij}=
+\frac{S_{ij}-\mu_{\mathcal H_0}(W_{ij})}
+{\sigma_{\mathcal H_0}(W_{ij})}.
+\]
+However, using $\sigma_{\mathcal H_0}(W_{ij})$ directly produced too many rejections in real SAR scenes, because this scale is estimated from homogeneous simulations and can be too small for real images. Therefore, the final rule keeps the window-dependent null mean but uses the empirical standard deviation of the observed statistic map:
+\[
+z_{ij}=
+\frac{S_{ij}-\mu_{\mathcal H_0}(W_{ij})}{s_{\mathrm{obs}}},
+\qquad
+p_{ij}=2\Phi(-|z_{ij}|).
+\]
+This produced more stable maps and better agreement with the ROI-based quantitative evaluation.
+
+We revised the manuscript to make clear that $\mu_{\mathcal H_0}(W_{ij})$ comes from the null simulation, whereas $s_{\mathrm{obs}}$ is computed from the observed adaptive statistic map.
+
+Regarding $L$ and $\eta$, we clarified that $L$ is a scene-level SAR parameter and is not estimated per pixel. For the Shannon/R\'enyi/Tsallis benchmark, the calibration corresponds to the Dublin configuration used in that experiment: $L=16$, $\eta=3$, and adaptive windows from $5\times5$ to $11\times11$. We also clarified that, for another scene or another pair $(L,\eta)$, the null calibration should be recomputed.
+
+
+
+
+\end{responsebox}
+
+
+
+\vspace{1em}
+
+\begin{reviewbox}{Comment 2}
+
+\textbf{Algebraic presentation of Eq. (8)}
+
+The decomposition in Eq.~(8), $T_\lambda(G^0_I) = T_\lambda(\Gamma_{\mathrm{SAR}}) + \Delta_\alpha$, does not appear to be algebraically consistent with Eq.~(7) and the Appendix as displayed. If $Q = \lambda(L-1)+1$ and $R$ denotes the $\alpha$-dependent exponent, subtracting Eq.~(7) from the direct Appendix form gives an excess term proportional to $\{\lambda^{-Q} - \exp(R)\}$, not $\{1 - \exp(R)\}$. Equivalently, if the $-Q \ln \lambda$ term is absorbed into the exponential prefactor, the $\alpha$-dependent bracket changes as well.
+
+The Appendix derivation and the R implementation appear to use the direct form $T = (1-I)/(\lambda-1)$. This appears to be purely a presentation issue rather than a problem with the experiments. I suggest revising Eq.~(8), or presenting $T_\lambda(G^0_I)$ directly, so that the displayed formula is consistent with Eq.~(7) and the Appendix.
+
+\end{reviewbox}
+
+\begin{responsebox}{Response}
+
+
+
+\end{responsebox}
+
+\vspace{1em}
+
+\begin{reviewbox}{Comment 3}
+
+\textbf{Scope of the revised claims}
+
+The Section~IV-E benchmark is carried out on the Dublin scene only, so claims such as ``strongest overall performance'' should be scoped accordingly. Likewise, ``does not depend on sensors and resolutions'' overstates the evidence; ``behaved consistently across the tested configurations'' would be more precise.
+
+\end{reviewbox}
+
+\begin{responsebox}{Response}
+
+
+\end{responsebox}
+
+\vspace{0.5cm}
+
+
+\end{document}
+
