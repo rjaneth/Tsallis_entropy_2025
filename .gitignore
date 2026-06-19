@@ -5,6 +5,7 @@
 /.luarc.json
 quarto-ieee.Rproj
 README.html
+Figures-R1/
 #template_files/
 #template.tex
 #template.html
@@ -101,3 +102,5 @@ R1-Alejandro.tex
 /R1-Alejandro_cache/pdf
 Submissions/R1/diffR0R1.pdf
 Submissions/R1/Responses/Responses-Reviewer2.pdf
+R2-Tsallis_entropy_sar.tex
+R2-Tsallis_entropy_sar_cache
