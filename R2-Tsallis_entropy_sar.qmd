@@ -221,9 +221,9 @@ The Tsallis entropy [@Tsallis1988] is a non-additive generalization of the Shan
 
 In this work, we propose a method that exploits the statistical properties of SAR imagery through the Tsallis entropy, whose non-extensive parameter $\lambda$ provides additional sensitivity to the heavy-tailed behavior commonly observed in SAR data.
 
-The resulting approach requires no retraining or hyperparameter tuning, does not depend on sensors and resolutions, and yields fully interpretable results. 
-The method offers an alternative when labeled data are scarce, interpretability is required, or computational resources are constrained.
-It can serve as a feature layer within explainable machine learning pipelines.
+In the experiments, the resulting approach required no labeled training data or supervised model retraining, behaved consistently across SAR scenes acquired by different sensors and with different spatial resolutions, and produced interpretable outputs.
+The method therefore offers an alternative when labeled data are scarce, interpretability is required, or computational resources are constrained.
+It can also serve as a feature layer within explainable machine learning pipelines.
 
 Our proposal revolves around a statistical test based on a nonparametric estimator of the Tsallis entropy to measure the statistical significance of departures from the fully-developed speckle hypothesis in SAR data. 
 The test compares the estimated Tsallis entropy with its theoretical value under the Gamma law, which occurs when the speckle is fully developed. To improve performance, we incorporate a bootstrap procedure that reduces bias in small samples. In addition, we embed the test within an adaptive windowing framework, inspired by the method of Park et al. [@Park1999]. Instead of relying on fixed-size sliding windows (e.g., $7 \times 7$), the adaptive procedure adjusts the window size locally: it enlarges in homogeneous regions to improve statistical precision, and shrinks in heterogeneous regions to avoid mixing different structures and to preserve local details.
@@ -298,27 +298,28 @@ T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr)=
   \frac{1}{\lambda-1}\,
   \exp\Bigl[
   (1-\lambda)\ln\mu
-  +(\lambda-1)\ln L\\
-  +\ln\Gamma\bigl(\lambda(L-1)+1\bigr)
+  +(\lambda-1)\ln L
+  +\ln\Gamma\bigl(\lambda(L-1)+1\bigr)\\
   -\lambda\ln\Gamma(L)
-  \Bigr] \\
-  {}\Bigl\{1-
-  \exp\bigl[
+  \Bigr]
+  {}\Bigl\{\exp\bigl[-\bigl(\lambda(L-1)+1\bigr)\ln\lambda\bigr]\\
+  -\exp\bigl[
   (1-\lambda)\ln(-\alpha-1)
-  +\lambda\ln\Gamma(L-\alpha)\\
-  -\lambda\ln\Gamma(-\alpha) 
-  +\ln\Gamma\bigl(\lambda(1-\alpha)-1\bigr)\\
+  +\lambda\ln\Gamma(L-\alpha)
+  -\lambda\ln\Gamma(-\alpha) \\
+  +\ln\Gamma\bigl(\lambda(1-\alpha)-1\bigr)
   -\ln\Gamma\bigl(\lambda(L-\alpha)\bigr)
   \bigr]\Bigr\}.
-\end{multline} <!-- where $T_\lambda(\mathcal{D}) = T_\lambda(Z)$ with $Z \sim \mathcal{D}$.  --> Equation \eqref{eq:GI0-Tsallis} highlights the relationship between the $\mathcal{G}^0_I$ and Gamma laws based on Tsallis entropy. It is proven in the [Appendix]().
+\end{multline} 
+Equation \eqref{eq:GI0-Tsallis} highlights the relationship between the $\mathcal{G}^0_I$ and Gamma laws based on Tsallis entropy. It is proven in the [Appendix]().
 
-Equation \eqref{eq:GI0-Tsallis} can be interpreted as: \begin{equation*}
-  T_\lambda\bigl(\mathcal{G}^0_I(\alpha, \mu, L)\bigr)
-  =
-  \underbrace{T_\lambda \bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr)}_{\text{baseline entropy}}
-  \hspace{1.8em} + \hspace{-1.8em}
-  \underbrace{\Delta_\alpha}_{\text{excess of entropy}}\hspace{-1.5em},
-\end{equation*} where the term $\Delta_\alpha>0$ measures the increase in entropy induced by the texture level, with the level controlled by the parameter $\alpha$. As $\alpha \to -\infty$ (fully-developed speckle), $\Delta_\alpha \to 0$ and \eqref{eq:GI0-Tsallis} reduces to the homogeneous case in \eqref{eq:gammasar-Tsallis}, i.e., $$
+Equation \eqref{eq:GI0-Tsallis} can be interpreted as: 
+\begin{equation*} 
+T_\lambda\bigl(\mathcal{G}^0_I(\alpha, \mu, L)\bigr) = \underbrace{T_\lambda \bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr)}_{\text{baseline entropy}} + \underbrace{\Delta_\lambda(\alpha,\mu,L)}_{\text{excess of entropy}}, 
+\end{equation*} 
+where $\Delta_\lambda(\alpha,\mu,L)$ measures the increase in entropy induced by the texture level, with the level controlled by the parameter $\alpha$.
+As $\alpha \to -\infty$ (fully-developed speckle), $\Delta_\lambda(\alpha,\mu,L) \to 0$ and \eqref{eq:GI0-Tsallis} reduces to the homogeneous case in \eqref{eq:gammasar-Tsallis}, i.e., 
+$$
 \lim_{\alpha \to -\infty} T_{\lambda}\bigl(\mathcal{G}^0_I(\alpha, \mu, L)\bigr) =  T_{\lambda}\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr).
 $$
 
@@ -393,7 +394,8 @@ p2 <- plot_tsallis(18, 0.85)
 (p1 | p2) + plot_layout(guides = "collect") & theme(legend.position = "bottom")
 ```
 
-For the highly heterogeneous case ($\alpha=-2$), entropy values are very similar for $L=5$ and $L=18$, since texture dominates over speckle. In contrast, in the homogeneous limit ($\alpha \to -\infty$), texture effects vanish and the entropy is mainly determined by speckle. With a low number of looks, speckle is strong and increases the uncertainty, which raises the entropy values. However, the curves for different $\alpha$ values appear more concentrated, since the contribution of texture to entropy is masked by the dominant speckle. As the number of looks increases, speckle is progressively reduced and entropy decreases. This reduction of speckle makes the entropy excess $\Delta_\alpha$ more evident, resulting in more separated curves across the values of $\alpha$.
+For the highly heterogeneous case ($\alpha=-2$), entropy values are very similar for $L=5$ and $L=18$, since texture dominates over speckle. In contrast, in the homogeneous limit ($\alpha \to -\infty$), texture effects vanish and the entropy is mainly determined by speckle. With a low number of looks, speckle is strong and increases the uncertainty, which raises the entropy values. However, the curves for different $\alpha$ values appear more concentrated, since the contribution of texture to entropy is masked by the dominant speckle. As the number of looks increases, speckle is progressively reduced and entropy decreases. 
+This reduction of speckle makes the texture-induced contribution $\Delta_\lambda(\alpha,\mu,L)$ more evident, resulting in more separated curves across the values of $\alpha$.
 
 ## Nonparametric Estimation of the Tsallis Entropy
 
@@ -1212,19 +1214,15 @@ $$ where $N_{\max}$ and $N_{\min}$ denote the maximum and minimum allowed window
 
 In homogeneous regions, where $C_{ij}\leq U_{ij}$, the window radius increases up to $N_{\max}$, enhancing speckle reduction and stabilizing the estimates. In heterogeneous regions, where $C_{ij}>U_{ij}$, the window radius decreases down to $N_{\min}$, preserving edges and preventing class mixing.
 
-Once the window radius $N_{ij}$ has been determined for pixel $(i,j)$, the corresponding sample is extracted and the proposed test in \eqref{eq-test-tsallis} is applied to obtain a local test value. This produces a map of statistics over the image.
+Once the window radius $N_{ij}$ has been determined for pixel $(i,j)$, the corresponding sample is extracted and the proposed test in&nbsp;\eqref{eq-test-tsallis} is applied to obtain a local test value. This produces a map of test statistics over the image.
 
-Because the final window size $W_{ij}$ is selected from the data, the null distribution of the adaptive statistic need not coincide exactly with that of a fixed-window statistic. For this reason, the adaptive case requires an additional null diagnostic and calibration analysis, described next.
-
-
+The behavior of this adaptive test statistic under $\mathcal H_0$ is examined in the next subsection.
 
 ## Test statistic behavior under the null hypothesis and adaptive windows {#sec:adaptive-null}
 
-Table&nbsp;\ref{tab:size-power-tsallis} relates the behavior of the test statistic 
-under the null hypothesis for windows of fixed size.
-Since the procedure is adaptive, the final window size $W_{ij}$ at position $(i,j)$ is selected from the data, and the test
-statistic behavior may be different.
-We verified that these distributions differ, and obtained the $p$-values under this realistic configuration.
+Table&nbsp;\ref{tab:size-power-tsallis} summarizes the behavior of the test statistic under the null hypothesis for windows of fixed size.
+Since the procedure is adaptive, the final window size $W_{ij}$ may vary across pixels, and the behavior of the test statistic may differ from the fixed-window case.
+We therefore examined the test statistic under $\mathcal H_0$ when the adaptive-window rule is used.
 
 For this purpose, we generated an image of size $1000\times1000$ under $\mathcal H_0$, i.e., with observations from iid $\Gamma_{\mathrm{SAR}}(10,16)$ random variables. 
 We used $\lambda=0.85$, 
@@ -1233,9 +1231,11 @@ and windows of size $W\in\{5,7,9,11\}$, with $\eta=3$.
 We left a guard region of five pixels and only applied the procedure to the interior region.
 This guard region allows every pixel in the interior region to use the largest possible window ($11\times11$ pixels), if needed.
 
-@tbl-null-calibration-adaptive reports summary statistics separately for each admissible window size $W$: the mean $\mu_{\mathcal H_0}(W)$ and standard deviation $\sigma_{\mathcal H_0}(W)$.
-With these values, we corrected the empirical distribution of the test statistic,
-cf.&nbsp;\eqref{eq:standar}, and obtained $p$-values adjusted for the adaptive window scheme.
+@tbl-null-calibration-adaptive gives summary statistics separately for each admissible window size $W$: the mean $\mu_{\mathcal H_0}(W)$ and standard deviation $\sigma_{\mathcal H_0}(W)$.
+These quantities summarize the behavior of the test statistic under $\mathcal H_0$ for the simulated homogeneous image and the adaptive-window setting considered here.
+
+In the final $p$-value computation, the window-dependent mean $\mu_{\mathcal H_0}(W)$ is used to center the test statistic according to the selected window size.
+The corresponding scale $\sigma_{\mathcal H_0}(W)$ is reported in the table, but it is not used directly in the final standardization; instead, Eq.&nbsp;\eqref{eq:standar} uses the observed scale defined below.
 
 ```{=latex}
 \begin{table}[hbt]
@@ -1274,28 +1274,136 @@ Moreover, the adaptive method in this experiment never selected windows of size 
 \end{figure}
 ```
 
+The $p$-values are computed pixelwise using empirical information about the test statistic under the null hypothesis.
+This requires estimates of the mean and standard deviation, that is, the location and scale, of the test statistic under $\mathcal H_0$.
+Since these quantities may change with the window size in the adaptive procedure, we estimated the window-dependent location $\mu_{\mathcal H_0}(W)$ separately for each admissible window size, $W\in\{5,7,9,11\}$.
 
-After estimating the null behavior of the statistic under adaptive windows, the statistic field was converted into $p$-values. 
-The null simulation was used to obtain the window-dependent mean $\mu_{\mathcal H_0}(W)$ for each admissible window size. 
-However, using the window-dependent standard deviation $\sigma_{\mathcal H_0}(W)$ directly produced overly aggressive standardization and excessive rejections in the SAR images. 
-Therefore, we used the following standardization:
+The corresponding window-dependent scale $\sigma_{\mathcal H_0}(W)$ was also estimated and reported in @tbl-null-calibration-adaptive.
+However, using this scale directly to standardize the test-statistic values of real SAR scenes produced excessive rejections in the $p$-value maps. 
+
+This indicated that the scale obtained from the homogeneous simulation was too small for the variability observed in real data.
+For this reason, we used a common observed scale, denoted by $\sigma_{\mathrm{obs}}$, computed as the empirical standard deviation of the test-statistic values $S_{ij}$ over the pixels of the image under analysis.
+
+We used the following standardization:
 \begin{equation}
 z_{ij}=
-\frac{S_{ij}-\mu_{\mathcal H_0}(W_{ij})}{s_{\mathrm{obs}}},
+\frac{S_{ij}-\mu_{\mathcal H_0}(W_{ij})}{\sigma_{\mathrm{obs}}},
 \label{eq:standar}
 \end{equation}
-where $S_{ij}$ is the statistic at pixel $(i,j)$, $W_{ij}$ is the final adaptive window selected at that pixel, and $s_{\mathrm{obs}}$ is the empirical standard deviation of the finite values of the observed statistic map. 
-Thus, the procedure keeps the null centering according to the selected window size, while using a common empirical scale for the processed scene. 
+where $S_{ij}$ is the test statistic at pixel $(i,j)$ and $W_{ij}$ is the final adaptive window selected at that pixel.
+Thus, the procedure keeps the location under $\mathcal H_0$ according to the selected window size, while using a common empirical scale for the processed scene.
+
 The adaptive $p$-values are then computed as
 $$
 p_{ij}=2\Phi\bigl(-|z_{ij}|\bigr).
 $$
 
-This calibration is configuration-dependent because the adaptive window rule depends on $L$ and $\eta$. 
-In the Dublin benchmark, the same configuration was used for Shannon, Renyi, and Tsallis, with $L=16$, $\eta=3$, and admissible windows from $5\times5$ to $11\times11$. 
-For another scene or another pair $(L,\eta)$, the null diagnostic and the window-dependent means should be recomputed.
+To assess the behavior of the final adaptive $p$-values under $\mathcal H_0$, we computed the $p$-value map for the simulated homogeneous image using the standardization in Eq.&nbsp;\eqref{eq:standar}.
+@fig-null-pvalue-uniform shows the histogram of the resulting $p$-values, together with the density of the Uniform$(0,1)$ distribution.
+The histogram is approximately flat, indicating that the adaptive $p$-values are consistent with the expected behavior under $\mathcal H_0$.
+```{r fig-null-pvalue-uniform, echo=FALSE, message=FALSE, warning=FALSE, fig.pos="hbt",  fig.cap="Histogram of the adaptive $p$-values under $\\mathcal H_0$ for the simulated homogeneous image. The dashed line indicates the density of the Uniform$(0,1)$ distribution.", out.width="\\linewidth"}
+
+diag_file <- "./Data/tsallis_null_adaptive_pvalue_diagnostic.RData"
+
+if (!file.exists(diag_file)) {
+  stop("Diagnostic file not found. Run compute_tsallis_null_adaptive_pvalue_diagnostic.R first.")
+}
+
+load(diag_file)
+
+hist_df <- data.frame(
+  p_value = pvalue_diagnostic$p_values
+)
+
+breaks_p <- seq(0, 1, length.out = 31)
+
+p_hist <- ggplot(hist_df, aes(x = p_value)) +
+  geom_histogram(
+    aes(y = after_stat(density)),
+    breaks = breaks_p,
+    closed = "right",
+    fill = "grey85",
+    color = "grey35",
+    linewidth = 0.25
+  ) +
+  geom_hline(
+    yintercept = 1,
+    linetype = "dashed",
+    linewidth = 0.8
+  ) +
+  scale_x_continuous(
+    limits = c(0, 1),
+    breaks = seq(0, 1, by = 0.2),
+    minor_breaks = NULL
+  ) +
+  scale_y_continuous(
+    minor_breaks = NULL
+  ) +
+  labs(
+    x = expression("Adaptive " * italic(p) * "-value under " * italic(H)[0]),
+    y = "Density"
+  ) +
+  theme_minimal(base_family = "serif", base_size = 13) +
+  theme(
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 12),
+    panel.grid.minor = element_blank()
+  )
+
+print(p_hist)
+```
 
 
+@tbl-null-pvalue-rejection gives the empirical rejection rates at the nominal levels \SI{1}{\percent}, \SI{5}{\percent}, and \SI{10}{\percent}. 
+Each rate was computed as the proportion of valid interior pixels whose adaptive $p$-value was smaller than the corresponding nominal level.
+For the $1000\times1000$ simulated image, the valid region was defined by excluding the boundary margin associated with the largest admissible adaptive window, $W_{\max}=11$.
+This corresponds to a margin of five pixels on each side, leaving $990\times990=980100$ valid interior pixels.
+These rates are close to the corresponding nominal levels, supporting the behavior of the proposed adaptive $p$-value computation.
+
+```{r}
+#| label: tbl-null-pvalue-rejection
+#| echo: false
+#| message: false
+#| warning: false
+#| results: 'asis'
+#| tbl-cap: "Empirical rejection rates of the adaptive $p$-values under $\\mathcal H_0$ for the simulated homogeneous image with $L=16$, $\\eta=3$, $\\lambda=0.85$, and adaptive windows."
+#| tbl-pos: "hbt"
+
+diag_file <- "./Data/tsallis_null_adaptive_pvalue_diagnostic.RData"
+
+if (!file.exists(diag_file)) {
+  stop("Diagnostic file not found. Run compute_tsallis_null_adaptive_pvalue_diagnostic.R first.")
+}
+
+load(diag_file)
+
+rejection_table <- pvalue_diagnostic$rejection_table
+table_pvalue_rejection <- data.frame(
+  "Nominal level" = c("\\SI{1}{\\percent}", "\\SI{5}{\\percent}", "\\SI{10}{\\percent}"),
+  "Empirical rejection rate" = sprintf("%.4f", rejection_table$empirical_rejection_rate),
+  "Valid pixels" = as.character(rejection_table$n_valid_pixels),
+  check.names = FALSE
+)
+
+knitr::kable(
+  table_pvalue_rejection,
+  format = "latex",
+  booktabs = TRUE,
+  align = "ccc",
+  escape = FALSE,
+  row.names = FALSE
+) %>%
+  row_spec(0, align = "c") %>%
+  kable_styling(latex_options = "scale_down", font_size = 9)
+```
+
+
+
+
+Since the adaptive window rule depends on the number of looks $L$ and on the smoothing parameter $\eta$, the quantities estimated under $\mathcal H_0$ must correspond to the same $(L,\eta)$ pair used to process the image.
+$L$ is determined by each SAR scene, whereas $\eta$ is the adaptive-window parameter evaluated in the analysis.
+Therefore, the values reported in @tbl-null-calibration-adaptive should not be interpreted as universal values for all scenes or all choices of $\eta$.
+The settings used for the real SAR scenes and for the comparative Shannon, Rényi, and Tsallis benchmark are reported in the experimental section, as discussed in Section&nbsp;\ref{sec:entropy-benchmark}
 
 # RESULTS {#sec:app}
 
@@ -1813,7 +1921,10 @@ In the $p$-value maps, dark-red tones ($p \approx 0$) concentrate on heterogeneo
 
 The effect of the smoothing parameter $\eta$ is particularly evident in the San Francisco scene $(L = 4)$ in Figure \ref{fig:sanfrancisco}, where speckle is strongest. The adaptive map with $\eta = 2$ provides the clearest separation between urban blocks, water, and intermediate textured areas. For larger values, such as $\eta = 3$ and $\eta = 4$, the maps become increasingly saturated in red because the window grows more often and tends to mix classes within the local window. This produces thicker building fronts and more detections in moderately textured zones, but with a visible loss of spatial precision.
 
-As $L$ increases (Munich, Dublin, Foggia), speckle decreases and the overall performance improves, yet the adaptive scheme still provides visible advantages: homogeneous areas become smoother while fine structures such as roads and field boundaries remain visible. Visual inspection suggests that $\eta$ values between $2$ and $3$ provide the most balanced results. With $\eta = 1$, the outcome is close to the fixed-window case, offering little improvement, whereas $\eta = 4$ tends to oversmooth the images, causing blurred edges and loss of fine details (see panels (j) in Figures \ref{fig:munich}–\ref{fig:foggia}).
+As $L$ increases in the Munich, Dublin, and Foggia scenes, speckle decreases and the resulting maps become visually cleaner.
+Even under these lower-speckle conditions, the adaptive scheme still provides visible advantages: homogeneous areas become smoother, while fine structures such as roads and field boundaries are better preserved.
+Visual inspection suggests that $\eta$ values between $2$ and $3$ provide the most balanced results.
+With $\eta = 1$, the outcome is close to the fixed-window case, offering little improvement, whereas $\eta = 4$ tends to oversmooth the images, causing blurred edges and loss of fine details (see panels (j) in Figures&nbsp;\ref{fig:munich}-\ref{fig:foggia}).
 
 These findings highlight the advantages of the adaptive approach, which better preserves heterogeneous features while enhancing the clarity of homogeneous areas, consistent with the behavior observed in the simulated experiment.
 
@@ -2067,21 +2178,27 @@ Regarding the decision threshold, a significance level of $0.05$ was adopted for
 
 ## Comparative Benchmark Between Entropy-Based Tests {#sec:entropy-benchmark}
 
-To compare the proposed Tsallis-based test with earlier entropy-based methods for SAR imagery, we carried out a benchmark against the Shannon  and Rényi-based tests.
+To compare the proposed Tsallis-based test with earlier entropy-based methods for SAR imagery, we carried out a comparison with the Shannon and Rényi-based tests.
 In particular, the Shannon-based test in&nbsp;[@Frery2024] and the Rényi-based test in&nbsp;[@Alpala2025] follow the same general approach to hypothesis testing, i.e.,  comparing a nonparametric entropy estimate with its theoretical value under the $\Gamma_{\mathrm{SAR}}$ model. 
 
 The present proposal extends that line by using the Tsallis entropy, whose parameter $\lambda$ provides additional flexibility to capture departures from homogeneity in heavy-tailed and highly textured SAR data.
 
 This comparison is relevant because the gain of the proposed method may come from three components: the entropy functional, the bootstrap correction, and the adaptive window-selection strategy. To separate these effects, we compared Shannon, Rényi, and Tsallis under the same protocol, considering fixed and adaptive windows, with and without bootstrap correction. The fixed window size was $7\times7$, and the adaptive range was $5\times5$ to $11\times11$.
 
-For the adaptive configurations in this benchmark, we used the refined calibration introduced in&nbsp;\eqref{eq:standar}, which preserves the window-dependent null centering while avoiding distortions that may arise when a purely null-based scale is used in real scenes. In the Dublin scene, this refinement produced only minor quantitative changes and left the substantive conclusions unchanged.
+For the adaptive configurations in this benchmark, we used the standardization introduced in&nbsp;\eqref{eq:standar}, which preserves the window-dependent centering under $\mathcal H_0$ while using an observed scale computed from the image under analysis.
+This procedure was applied separately to each entropy-based test, using the corresponding test-statistic values and the observed scale $\sigma_{\mathrm{obs}}$ for that method.
+The comparative benchmark was performed on the Dublin scene under a common setting for the Shannon, Rényi, and Tsallis tests, with $L=16$, $\eta=3$, and adaptive windows from $5\times5$ to $11\times11$.
+This scene is suitable for the comparison because it provides a clear contrast between homogeneous water areas and heterogeneous urban and harbor structures.
+In the Dublin scene, this observed-scale standardization slightly improved the quantitative metrics while leaving the substantive conclusions unchanged.
 
 For the single-threshold summaries, we report $F_1$, $\kappa$, and OA at the nominal decision level $p=0.05$, since the binary decision maps in the paper are obtained from the rule $p_{ij}<0.05$. 
 To verify that the conclusions are not driven by this single choice, we also performed a threshold sweep over $p$-thresholds from $0.01$ to $0.20$. 
 In contrast, the ROC curve and its area under the curve (AUC) are threshold-free, as they are computed from the continuous score map rather than from a single decision threshold.
 
-@tbl-dublin-main-benchmark reports the benchmark results. Two consistent trends are observed. 
-First, for all three entropies, the adaptive strategy improves the corresponding fixed-window configuration. Second, within both the fixed and adaptive settings, the Tsallis-based test provides the strongest overall performance. 
+@tbl-dublin-main-benchmark reports the benchmark results. Two consistent trends are observed.
+First, for all three entropies, the adaptive strategy improves the corresponding fixed-window configuration in the Dublin scene.
+Second, within both the fixed and adaptive settings, the Tsallis-based test achieved the best quantitative results in this Dublin benchmark.
+
 ```{=latex}
 \begin{table*}
 \footnotesize
@@ -2118,7 +2235,8 @@ First, for all three entropies, the adaptive strategy improves the corresponding
 The best configuration is the bootstrap-corrected adaptive Tsallis method, which achieved the highest AUC, $F_1(p=0.05)$, $\kappa(p=0.05)$, and OA$(p=0.05)$. 
 These results indicate that the improvement  is not explained only by adaptive windowing, since the Tsallis entropy itself also provides additional discriminatory power when combined with bootstrap correction and adaptive window selection.
 
-Figure&nbsp;\ref{fig:roc_entropy_benchmark} provides a threshold-free comparison through ROC curves. In both the fixed and adaptive settings, the Tsallis-based method outperforms the Shannon and Rényi-based alternatives, with the largest separation observed in the adaptive bootstrap-corrected case.
+Figure&nbsp;\ref{fig:roc_entropy_benchmark} provides a threshold-free comparison through ROC curves.
+For the Dublin scene, the Tsallis-based method showed a more favorable AUC profile than the Shannon and Rényi-based alternatives in both the fixed and adaptive settings, with the clearest separation observed in the adaptive bootstrap-corrected case.
 ```{=latex}
 \begin{figure}[hbt]
   \centering
@@ -2127,7 +2245,9 @@ Figure&nbsp;\ref{fig:roc_entropy_benchmark} provides a threshold-free comparison
   \label{fig:roc_entropy_benchmark}
 \end{figure}
 ```
-Figure&nbsp;\ref{fig:threshold_entropy_benchmark} shows the corresponding $F_1$ threshold sweep for $p$-thresholds from $0.01$ to $0.20$. The same ranking is observed across thresholds, with Tsallis performing best, followed by Rényi and Shannon.
+
+Figure&nbsp;\ref{fig:threshold_entropy_benchmark} shows the corresponding $F_1$ threshold sweep for $p$-thresholds from $0.01$ to $0.20$.
+For the Dublin scene, the Tsallis-based method achieved the best $F_1$ scores across the evaluated thresholds, followed by Rényi and Shannon.
 ```{=latex}
 \begin{figure}[hbt]
   \centering
@@ -2170,15 +2290,18 @@ The three methods consistently identify the main heterogeneous urban and harbor 
 \label{fig:dublin_qualitative_comparison}
 \end{figure*}
 ```
-These visual findings are consistent with the quantitative results in @tbl-dublin-main-benchmark, where the adaptive bootstrap Tsallis configuration attained the best overall performance.
+These visual findings are consistent with the quantitative results in @tbl-dublin-main-benchmark, where the adaptive bootstrap Tsallis configuration achieved the highest reported metrics in the Dublin-scene comparison.
 
 # Conclusions {#sec:conclusion}
 
 This work presented a statistical approach based on the Tsallis entropy to detect departures from fully-developed speckle in SAR images. The proposed framework combines a nonparametric entropy-based test, bootstrap bias correction, and adaptive window selection, yielding interpretable pixelwise $p$-value maps without requiring training data or explicit estimation of heterogeneous parametric models.
 
-Experiments with simulated and real SAR data showed that the method is effective in separating homogeneous and heterogeneous regions while preserving relevant spatial structures. The adaptive strategy improved the local balance between statistical stability and detail preservation, and the null diagnostic confirmed that the adaptive statistic remains well behaved under homogeneous conditions. The refined adaptive calibration based on window-dependent centering and observed-scale standardization provided a practical and stable formulation for real-scene inference.
+Experiments with simulated and real SAR data showed that the method is effective in separating homogeneous and heterogeneous regions while preserving relevant spatial structures.
+The adaptive strategy improved the local balance between statistical stability and detail preservation, and the analysis under $\mathcal H_0$ confirmed that the adaptive statistic remains well behaved under homogeneous conditions.
+The observed-scale standardization based on window-dependent centering provided a practical and stable formulation for real-scene inference.
 
-The comparative benchmark on a representative real SAR scene further clarified the contribution of the proposed method with respect to previous entropy-based approaches. Under a common evaluation protocol, adaptive windowing improved all three entropy-based detectors, while the bootstrap-corrected adaptive Tsallis configuration achieved the strongest overall performance among Shannon, Rényi, and Tsallis.
+The comparative evaluation on the Dublin SAR scene further clarified the contribution of the proposed method with respect to previous entropy-based approaches.
+Under a common evaluation protocol, adaptive windowing improved all three entropy-based detectors, while the bootstrap-corrected adaptive Tsallis configuration achieved the highest values for the reported metrics among Shannon, Rényi, and Tsallis in this benchmark.
 
 Although machine learning-based SAR classifiers are widely used, this framework offers a statistically grounded alternative that provides interpretable significance measures and requires no labeled data, making it suitable for rapid detection, screening, and scenarios with limited data availability.
 
@@ -2186,31 +2309,74 @@ Although machine learning-based SAR classifiers are widely used, this framework 
 
 Starting from the definition of the Tsallis entropy in \eqref{eq:tsallis} and the pdf that characterizes the $\mathcal{G}^0_I(\alpha,\gamma,L)$ model, Eq. \eqref{E:gi01}, define: \begin{equation*}
 I = \int_0^\infty \left[ f_{\mathcal{G}_I^0}(z) \right]^\lambda \,\mathrm{d}z,
-\end{equation*} which, after replacing the density, becomes \begin{equation*}
+\end{equation*} 
+which, after replacing the density, becomes \begin{equation*}
 I = \left[ \frac{L^L \Gamma(L - \alpha)}{\gamma^\alpha \Gamma(-\alpha) \Gamma(L)} \right]^\lambda 
 \int_0^\infty \frac{z^{\lambda(L-1)}}{(\gamma + Lz)^{\lambda(L - \alpha)}}\,\mathrm{d}z.
-\label{eq:J_initial}
-\end{equation*} Set $$
+\end{equation*} 
+Set 
+$$
 C \coloneqq \frac{L^L\,\Gamma(L-\alpha)}{\gamma^\alpha\,\Gamma(-\alpha)\,\Gamma(L)}.
 $$
 
-Using $t = \frac{Lz}{\gamma}$ (so that $z = \frac{\gamma t}{L}$ and $\mathrm{d}z = \frac{\gamma}{L}\,\mathrm{d}t$), we obtain \begin{align*}
+Using $t = \frac{Lz}{\gamma}$ (so that $z = \frac{\gamma t}{L}$ and $\mathrm{d}z = \frac{\gamma}{L}\,\mathrm{d}t$), we obtain 
+\begin{align*}
 I &= C^\lambda\,\frac{\gamma}{L}\!
 \int_0^\infty \frac{(\gamma t/L)^{\lambda(L-1)}}{[\gamma(1+t)]^{\lambda(L-\alpha)}}\,\mathrm{d}t \notag\\
 &= C^\lambda\,\frac{\gamma^{\,1+\lambda(\alpha-1)}}{L^{\,1+\lambda(L-1)}}\!
 \int_0^\infty t^{\lambda(L-1)}(1+t)^{-\lambda(L-\alpha)}\,\mathrm{d}t.
-\end{align*} By the Beta identity $B(a,b)=\int_0^\infty \tfrac{t^{a-1}}{(1+t)^{a+b}}\,\mathrm{d}t=\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$, with $$
+\end{align*} 
+By the Beta identity $B(a,b)=\int_0^\infty \tfrac{t^{a-1}}{(1+t)^{a+b}}\,\mathrm{d}t=\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$, 
+with 
+$$
 a=\lambda(L-1)+1,\qquad b=\lambda(1-\alpha)-1,
-$$ we obtain \begin{equation}
+$$ 
+we obtain 
+\begin{equation}
 I = \left[ \frac{\Gamma(L - \alpha)}{\Gamma(-\alpha) \Gamma(L)} \right]^\lambda 
 \frac{\gamma^{1-\lambda}}{L^{1-\lambda}} 
 \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}.
 \label{eq:J_beta1}
-\end{equation} To express $I$ in terms of the mean $\mu$, we use the relation $\gamma = -\mu(\alpha + 1)$, valid for $\alpha < -1$. Substituting into \eqref{eq:J_beta1} gives \begin{equation*}
+\end{equation} 
+To express $I$ in terms of the mean $\mu$, we use the relation $\gamma = -\mu(\alpha + 1)$, valid for $\alpha < -1$. Substituting into&nbsp;\eqref{eq:J_beta1} gives \begin{equation}
 I = [-\mu(\alpha + 1)]^{1-\lambda} L^{\lambda-1} 
 \left[ \frac{\Gamma(L - \alpha)}{\Gamma(-\alpha) \Gamma(L)} \right]^\lambda 
 \frac{\Gamma(a)\Gamma(b)}{\Gamma(\lambda(L - \alpha))}.
-\end{equation*} Finally, substituting this expression into \eqref{eq:tsallis}, and writing it in exponential–logarithmic form, we obtain the final expression for $T_\lambda\bigl(\mathcal{G}^0_I(\alpha, \mu, L)\bigr)$ in \eqref{eq:GI0-Tsallis}.
+\label{eq:I-GI0-Tsallis}
+\end{equation}
+Substituting&nbsp;\eqref{eq:I-GI0-Tsallis} into the definition
+$$
+T_\lambda=\frac{1-I}{\lambda-1},
+$$
+and writing the result in exponential--logarithmic form, we obtain the direct expression
+\begin{multline}
+\label{eq:GI0-Tsallis-direct}
+T_\lambda\bigl(\mathcal{G}^0_I(\alpha,\mu,L)\bigr)
+=
+\frac{1}{\lambda-1}
+\Bigl\{1-
+\exp\Bigl[
+(1-\lambda)\ln\mu
++(\lambda-1)\ln L\\
++(1-\lambda)\ln(-\alpha-1)
++\ln\Gamma\bigl(\lambda(L-1)+1\bigr)
+-\lambda\ln\Gamma(L)\\
++\lambda\ln\Gamma(L-\alpha)
+-\lambda\ln\Gamma(-\alpha)
++\ln\Gamma\bigl(\lambda(1-\alpha)-1\bigr)\\
+-\ln\Gamma\bigl(\lambda(L-\alpha)\bigr)
+\Bigr]\Bigr\}.
+\end{multline}
+The connection with the homogeneous $\Gamma_{\mathrm{SAR}}$ model follows by subtracting the entropy in&nbsp;\eqref{eq:gammasar-Tsallis} from the direct expression in&nbsp;\eqref{eq:GI0-Tsallis-direct}.
+This yields the decomposition reported in&nbsp;\eqref{eq:GI0-Tsallis}, namely
+\begin{equation*}
+T_\lambda\bigl(\mathcal{G}^0_I(\alpha,\mu,L)\bigr)
+=
+T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\mu,L)\bigr)
++
+\Delta_\lambda(\alpha,\mu,L).
+\end{equation*}
+
 
 # Computational Information {.unnumbered}
 

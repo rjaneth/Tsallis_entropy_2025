@@ -45,7 +45,7 @@
 % -------------------------------------------------------
 \usepackage{xcolor}
 \usepackage[many]{tcolorbox}
-
+\tcbuselibrary{breakable}
 % -------------------------------------------------------
 % References and links
 % -------------------------------------------------------
@@ -89,14 +89,22 @@
   colback = white!5!white,
   colframe = purple!75!black,
   fonttitle=\bfseries,
-  title=#1
+  title=#1,
+  breakable,
+  enhanced,
+  before skip=10pt,
+  after skip=10pt
 }
 
 \newtcolorbox{responsebox}[1]{
   colback = white!5!white,
   colframe = white!75!black,
   fonttitle=\bfseries,
-  title=#1
+  title=#1,
+  breakable,
+  enhanced,
+  before skip=10pt,
+  after skip=10pt
 }
 
 \newcommand{\assigned}[1]{\textcolor{blue}{\textbf{#1}}}
@@ -169,35 +177,37 @@ A compact diagnostic of the final adaptive p-values under $H_0$, such as empiric
 
 \begin{responsebox}{Response}
 
-
-
 We thank Reviewer 2 for this observation. We agree that the previous wording could lead to ambiguity regarding the origin of the scale used in Eq.~(15).
 
-In the revised manuscript, we clarified that the p-value computation uses two components. First, the Monte Carlo simulation under $\mathcal H_0$ provides the window-dependent mean $\mu_{\mathcal H_0}(W_{ij})$. This centers each pixel according to its final selected adaptive window size $W_{ij}$.
+In the revised manuscript, we clarified the role of the location and scale terms in the adaptive $p$-value computation.
+The simulation under $\mathcal H_0$ is used to estimate the window-dependent location, represented by the mean $\mu_{\mathcal H_0}(W)$, for each admissible window size $W\in\{5,7,9,11\}$.
 
-We also evaluated the fully window-dependent standardization
-\[
-z_{ij}=
-\frac{S_{ij}-\mu_{\mathcal H_0}(W_{ij})}
-{\sigma_{\mathcal H_0}(W_{ij})}.
-\]
-However, using $\sigma_{\mathcal H_0}(W_{ij})$ directly produced too many rejections in real SAR scenes, because this scale is estimated from homogeneous simulations and can be too small for real images. Therefore, the final rule keeps the window-dependent null mean but uses the empirical standard deviation of the observed statistic map:
-\[
-z_{ij}=
-\frac{S_{ij}-\mu_{\mathcal H_0}(W_{ij})}{s_{\mathrm{obs}}},
-\qquad
-p_{ij}=2\Phi(-|z_{ij}|).
-\]
-This produced more stable maps and better agreement with the ROI-based quantitative evaluation.
+We also clarified why the window-dependent scale, represented by $\sigma_{\mathcal H_0}(W)$, was not used directly.
+Although this quantity was estimated in Table~II and evaluated as an alternative, using the scale obtained from the simulated image under $\mathcal H_0$ to standardize real SAR scenes led to excessive rejections in the $p$-value maps.
+This indicated that such a scale was too small for the variability observed in real data.
+Therefore, we used $\sigma_{\mathrm{obs}}$, the empirical standard deviation computed from the map of observed test-statistic values for the image under analysis.
+This produced more stable $p$-value maps and better agreement with the ROI-based evaluation.
 
-We revised the manuscript to make clear that $\mu_{\mathcal H_0}(W_{ij})$ comes from the null simulation, whereas $s_{\mathrm{obs}}$ is computed from the observed adaptive statistic map.
+Following the reviewer's suggestion, we added a compact diagnostic of the adaptive $p$-values under $\mathcal H_0$.
+Specifically, we added Fig.~7, which shows the histogram of the resulting $p$-values for the simulated homogeneous image.
+The histogram is approximately flat and is consistent with the Uniform$(0,1)$ reference.
+We also added Table~III, which reports the empirical rejection rates at the nominal levels $1\%$, $5\%$, and $10\%$.
+These results support the behavior of the proposed adaptive $p$-value computation.
 
-Regarding $L$ and $\eta$, we clarified that $L$ is a scene-level SAR parameter and is not estimated per pixel. For the Shannon/R\'enyi/Tsallis benchmark, the calibration corresponds to the Dublin configuration used in that experiment: $L=16$, $\eta=3$, and adaptive windows from $5\times5$ to $11\times11$. We also clarified that, for another scene or another pair $(L,\eta)$, the null calibration should be recomputed.
+Regarding the dependence on $L$ and $\eta$, we clarified that the quantities estimated under $\mathcal H_0$ must correspond to the same $(L,\eta)$ pair used to process the image.
+The number of looks $L$ is determined by each SAR scene, whereas $\eta$ is the adaptive-window parameter evaluated in the analysis.
+Therefore, the values reported in Table~II should not be interpreted as universal values for all scenes or all choices of $\eta$.
 
+For the Shannon, R\'enyi, and Tsallis benchmark, we clarified that the comparison was performed only on the Dublin scene, with $L=16$ and $\eta=3$.
+For each entropy-based test, the corresponding quantities under $\mathcal H_0$ and the observed scale $\sigma_{\mathrm{obs}}$ were computed from its own test-statistic values.
+The Dublin scene provides a clear separation between homogeneous water areas and heterogeneous urban structures, allowing a controlled ROI-based comparison among the three entropy-based tests.
 
-
+These changes were incorporated in Section~III-G and Section~IV-E of the revised manuscript.
 
 \end{responsebox}
+
+
+
 
 
 
@@ -213,11 +223,80 @@ The Appendix derivation and the R implementation appear to use the direct form $
 
 \end{reviewbox}
 
+
 \begin{responsebox}{Response}
+We appreciate this detailed comment.  We agree with the reviewer that the displayed decomposition was not fully consistent with Eq.~(7) and with the direct expression derived in the Appendix.
 
+After revising the formula, we identified that the previous version of Eq.~(8) inadvertently omitted one term inside the bracket. In the previous version, the bracket was written in the form
+\begin{equation*}
+\{1-\exp[\cdots]\}.
+\end{equation*}
+However, the correct bracket is
+\begin{equation*}
+\left\{
+\exp\bigl[-\bigl(\lambda(L-1)+1\bigr)\ln\lambda\bigr]
+-
+\exp[\cdots]
+\right\}.
+\end{equation*}
+The added term
+\begin{equation*}
+\exp\bigl[-\bigl(\lambda(L-1)+1\bigr)\ln\lambda\bigr]
+\end{equation*}
+is equivalent to
+\begin{equation*}
+\lambda^{-[\lambda(L-1)+1]},
+\end{equation*}
+which corresponds to the factor $\lambda^{-Q}$ mentioned by the reviewer, with
+\begin{equation*}
+Q=\lambda(L-1)+1.
+\end{equation*}
 
+Accordingly, we corrected Eq.~(8) in the revised manuscript. The corrected expression is
+\begin{multline*}
+T_\lambda\bigl(\mathcal{G}^0_I(\alpha, \mu, L)\bigr)
+=
+T_\lambda\bigl(\Gamma_{\mathrm{SAR}}(\mu, L)\bigr)
++
+\frac{1}{\lambda-1}\,
+\exp\Bigl[
+(1-\lambda)\ln\mu
++(\lambda-1)\ln L
++\ln\Gamma\bigl(\lambda(L-1)+1\bigr)\\
+-\lambda\ln\Gamma(L)
+\Bigr]
+\Bigl\{
+\textcolor{blue}{\exp\bigl[-\bigl(\lambda(L-1)+1\bigr)\ln\lambda\bigr]}
+-
+\exp\bigl[
+(1-\lambda)\ln(-\alpha-1)
++\lambda\ln\Gamma(L-\alpha)
+-\lambda\ln\Gamma(-\alpha)\\
++\ln\Gamma\bigl(\lambda(1-\alpha)-1\bigr)
+-\ln\Gamma\bigl(\lambda(L-\alpha)\bigr)
+\bigr]
+\Bigr\}.
+\end{multline*}
+The term added in blue is the missing factor from the $\Gamma_{\mathrm{SAR}}$ entropy expression in Eq.~(7). 
+Its inclusion makes the decomposition in Eq.~(8) consistent with the direct expression derived in the Appendix and with the definition of the Tsallis entropy.
+
+We also changed the notation from $\Delta_\alpha$ to $\Delta_\lambda(\alpha,\mu,L)$, because the additional term depends not only on the texture parameter $\alpha$, but also on the mean intensity $\mu$, the number of looks $L$, and the entropy order $\lambda$.
+
+We emphasize that this correction affects only the algebraic presentation of the decomposition. 
+The computational implementation and the numerical experiments are unchanged, because the R code uses the direct expression obtained from
+\begin{equation*}
+T_\lambda=\frac{1-I}{\lambda-1},
+\end{equation*}
+which is now explicitly displayed in the Appendix.
+
+We used the exponential--logarithmic notation because it is consistent with the R implementation based on \texttt{log()} and \texttt{lgamma()}, and it improves numerical stability by avoiding the direct evaluation of large Gamma-function products.
+
+The decomposition of $T_\lambda\bigl(\mathcal{G}^0_I(\alpha,\mu,L)\bigr)$ remains important for the theoretical interpretation of the proposed approach. It shows that the homogeneous $\Gamma_{\mathrm{SAR}}$ model is recovered as the limiting case of the $\mathcal{G}^0_I$ model when $\alpha\to-\infty$, while the additional term $\Delta_\lambda(\alpha,\mu,L)$ represents the texture-induced entropy contribution associated with heterogeneity.
 
 \end{responsebox}
+
+
+
 
 \vspace{1em}
 
@@ -230,7 +309,9 @@ The Section~IV-E benchmark is carried out on the Dublin scene only, so claims su
 \end{reviewbox}
 
 \begin{responsebox}{Response}
-
+We revised the manuscript to better delimit the scope of the claims and to align the wording with the evidence provided by the experiments. 
+The comparative statements were reformulated more precisely, and the revised version now avoids overgeneralized expressions. 
+The corresponding changes have been incorporated into the corrected manuscript and highlighted in the new version.
 
 \end{responsebox}
 
