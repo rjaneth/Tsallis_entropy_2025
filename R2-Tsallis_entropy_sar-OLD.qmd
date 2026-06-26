@@ -1177,7 +1177,8 @@ table_combined_result <- knitr::kable(
   add_header_above(c(" " = 2, "Size" = 3,  "Power" = 3)) %>%
   collapse_rows(columns = 1:2, latex_hline = "major", valign = "middle") %>%
   row_spec(0, align = "c") %>%
-  kable_styling(latex_options = "scale_down", font_size = 10)
+  kable_styling(latex_options = "scale_down", font_size = 10) %>%
+  kable_styling(full_width = T)
 
 print(table_combined_result)
 ```
@@ -1625,7 +1626,8 @@ kable(SAR_data,
       caption = "Parameters of selected SAR images.",
       table.envir = "table", position = "hbt") %>%
   row_spec(0, align = "c") %>%
-  kable_styling(latex_options = "scale_down", font_size = 24) %>%
+  kable_styling(latex_options = "scale_down", font_size = 24) %>% 
+  kable_styling(full_width = TRUE) %>%
   column_spec(1, width = "4.0cm") %>%
   column_spec(2, width = "4.3cm") %>%
   column_spec(3, width = "1.5cm") %>%
@@ -1938,7 +1940,7 @@ In addition to the visual analysis presented, we measured execution times to ass
 #| message: false
 #| warning: false
 #| results: 'asis'
-#| tbl-cap: 'Execution times for heterogeneity detection using fixed and adaptive windows in minutes and seconds.'
+#| tbl-cap: 'Execution times for heterogeneity detection using fixed and adaptive windows.'
 #| tbl-pos: 'hbt'
 #library(kableExtra)
 Times_data <- data.frame(
@@ -2206,13 +2208,7 @@ Second, within both the fixed and adaptive settings, the Tsallis-based test achi
 %\resizebox{0.94\textwidth}{!}{%
 \begin{tabular}{ccccccc}
 \toprule
-\textbf{Entropy} 
-& \textbf{Bootstrap} 
-& \textbf{Window setting} 
-& \textbf{AUC} 
-& $\boldsymbol{F_1 \, (p=0.05)}$ 
-& $\boldsymbol{\kappa \, (p=0.05)}$ 
-& \textbf{OA} \, \boldsymbol{$(p=0.05)$} \\
+\textbf{Entropy} & \textbf{Bootstrap} & \textbf{Window setting} & \textbf{AUC} & $\boldsymbol{F_1\,(p=0.05)}$ & \textbf{$\kappa(p=0.05)$} & \textbf{OA$(p=0.05)$} \\
 \midrule
 \multirow{4}{*}{Shannon}
 & \xmark & Fixed $7\times7$   & 0.9509 & 0.4944 & 0.3660 & 0.7250 \\
