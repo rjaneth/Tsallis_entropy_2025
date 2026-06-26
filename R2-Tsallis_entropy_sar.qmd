@@ -1298,9 +1298,9 @@ p_{ij}=2\Phi\bigl(-|z_{ij}|\bigr).
 $$
 
 To assess the behavior of the final adaptive $p$-values under $\mathcal H_0$, we computed the $p$-value map for the simulated homogeneous image using the standardization in Eq.&nbsp;\eqref{eq:standar}.
-@fig-null-pvalue-uniform shows the histogram of the resulting $p$-values, together with the density of the Uniform$(0,1)$ distribution.
+@fig-null-pvalue-uniform shows the histogram of the resulting $p$-values, together with the density of the uniform distribution $\mathcal{U}[0,1]$.
 The histogram is approximately flat, indicating that the adaptive $p$-values are consistent with the expected behavior under $\mathcal H_0$.
-```{r fig-null-pvalue-uniform, echo=FALSE, message=FALSE, warning=FALSE, fig.pos="hbt",  fig.cap="Histogram of the adaptive $p$-values under $\\mathcal H_0$ for the simulated homogeneous image. The dashed line indicates the density of the Uniform$(0,1)$ distribution.", out.width="\\linewidth"}
+```{r fig-null-pvalue-uniform, echo=FALSE, message=FALSE, warning=FALSE, fig.pos="hbt",  fig.cap="Histogram of the adaptive $p$-values under $\\mathcal H_0$ for the simulated homogeneous image. The dashed line indicates the density of the uniform distribution $\\mathcal{U}[0,1]$.", out.width="\\linewidth"}
 
 diag_file <- "./Data/tsallis_null_adaptive_pvalue_diagnostic.RData"
 
@@ -2429,7 +2429,7 @@ His research interests include statistical information theory, inference for ran
 
 \begin{IEEEbiography}
 	[{\includegraphics[width=1.05in,clip]{Figures/AARey.png}}]{Andrea A. Rey} 
-was born in Mar del Plata, Argentina, in 1978. In 2002, she received a B.Sc. in Mathematics from the Universidad Nacional de Mar del Plata. Her Ph.D. degree was in Mathematics from the Universidad de Buenos Aires (UBA,  Argentina, 2009). Her research interests are data science, statistical computing, and machine learning, with signal and image analysis and applications.
+was born in Mar del Plata, Argentina, in 1978. In 2002, she received a B.Sc. in Mathematics from the Universidad Nacional de Mar del Plata (UNMDP,  Argentina, 2002). Her Ph.D. degree was in Mathematics from the Universidad de Buenos Aires (UBA,  Argentina, 2009). Her research interests are data science, statistical computing, and machine learning, with signal and image analysis and applications.
 Since July 2023, she has been a Full Professor at the Universidad Nacional de Hurlingham (UNAHUR), Argentina.
 Prof.\ Rey is also a member of the Laboratorio de Investigación y Desarrollo Experimental en Computación (LIDEC) at the UNAHUR. She has been serving as Associate Editor of the  IEEE Geoscience and Remote Sensing Society (GRSS)  since 2024.
 \end{IEEEbiography}
